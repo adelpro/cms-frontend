@@ -34,3 +34,32 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Environments
+
+### Branch → Environment Mapping
+- `master` → Production environment
+- `staging` → Staging environment (branch: staging)
+- `dev` → Development environment (branch: dev)
+
+### Setting Environment Variables via Netlify CLI
+
+First, authenticate and link your project:
+```bash
+npx netlify-cli login
+npx netlify-cli link
+```
+
+Then set environment variables for each context:
+```bash
+# Production (master branch)
+npx netlify-cli env:set NEXT_PUBLIC_BACKEND_URL https://api.example.com --context production
+
+# Staging (staging branch)
+npx netlify-cli env:set NEXT_PUBLIC_BACKEND_URL https://stg-api.example.com --context branch:staging
+
+# Development (dev branch)
+npx netlify-cli env:set NEXT_PUBLIC_BACKEND_URL https://dev-api.example.com --context branch:dev
+```
+
+**Note:** `NEXT_PUBLIC_*` variables are bundled at build time and exposed to the client. Server-only environment variables should not use the `NEXT_PUBLIC_` prefix.

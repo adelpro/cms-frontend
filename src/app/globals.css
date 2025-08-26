@@ -2,6 +2,8 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant rtl (&:is([dir="rtl"] *));
+@custom-variant ltr (&:is([dir="ltr"] *));
 
 @theme inline {
   --color-background: var(--background);
@@ -118,5 +120,202 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Global RTL/LTR Support using CSS Logical Properties */
+  html {
+    /* This ensures the direction is properly inherited */
+    direction: inherit;
+  }
+
+  /* Force RTL direction for all elements when HTML dir is rtl */
+  html[dir="rtl"] * {
+    direction: rtl;
+  }
+  
+  /* Force LTR direction for all elements when HTML dir is ltr */
+  html[dir="ltr"] * {
+    direction: ltr;
+  }
+  
+  /* Ensure text direction is inherited properly */
+  * {
+    text-align: inherit;
+  }
+  
+  /* Dark mode specific RTL improvements */
+  html[dir="rtl"].dark {
+    /* Ensure proper dark mode inheritance in RTL */
+  }
+  
+  /* Theme transition improvements */
+  html {
+    color-scheme: light dark;
+  }
+  
+  html.dark {
+    color-scheme: dark;
+  }
+  
+  /* Override any conflicting Tailwind or component styles */
+  html[dir="rtl"] .text-left {
+    text-align: right !important;
+  }
+  
+  html[dir="rtl"] .text-right {
+    text-align: left !important;
+  }
+  
+  html[dir="rtl"] .justify-start {
+    justify-content: flex-end !important;
+  }
+  
+  html[dir="rtl"] .justify-end {
+    justify-content: flex-start !important;
+  }
+  
+  /* Force margin and padding direction overrides */
+  html[dir="rtl"] .ml-auto {
+    margin-left: unset !important;
+    margin-right: auto !important;
+  }
+  
+  html[dir="rtl"] .mr-auto {
+    margin-right: unset !important;
+    margin-left: auto !important;
+  }
+  
+  /* Flex direction overrides for RTL */
+  html[dir="rtl"] .flex-row {
+    flex-direction: row-reverse !important;
+  }
+  
+  /* Float overrides */
+  html[dir="rtl"] .float-left {
+    float: right !important;
+  }
+  
+  html[dir="rtl"] .float-right {
+    float: left !important;
+  }
+  
+  /* Arabic font improvements */
+  .font-arabic {
+    font-family: "Geist Sans", "Noto Sans Arabic", "Cairo", "Tajawal", system-ui, sans-serif;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    letter-spacing: normal;
+  }
+  
+  /* Global text alignment based on direction */
+  body {
+    text-align: start; /* Logical property: left in LTR, right in RTL */
+  }
+  
+  /* Override Tailwind's directional classes with logical equivalents */
+  .text-start {
+    text-align: start !important;
+  }
+  
+  .text-end {
+    text-align: end !important;
+  }
+  
+  /* Flexbox logical direction support */
+  .flex-start {
+    justify-content: flex-start;
+  }
+  
+  .flex-end {
+    justify-content: flex-end;
+  }
+  
+  /* Comprehensive logical spacing utilities */
+  .ms-auto { margin-inline-start: auto; }
+  .me-auto { margin-inline-end: auto; }
+  
+  /* Padding logical properties */
+  .ps-1 { padding-inline-start: 0.25rem; }
+  .ps-2 { padding-inline-start: 0.5rem; }
+  .ps-3 { padding-inline-start: 0.75rem; }
+  .ps-4 { padding-inline-start: 1rem; }
+  .ps-6 { padding-inline-start: 1.5rem; }
+  .ps-8 { padding-inline-start: 2rem; }
+  
+  .pe-1 { padding-inline-end: 0.25rem; }
+  .pe-2 { padding-inline-end: 0.5rem; }
+  .pe-3 { padding-inline-end: 0.75rem; }
+  .pe-4 { padding-inline-end: 1rem; }
+  .pe-6 { padding-inline-end: 1.5rem; }
+  .pe-8 { padding-inline-end: 2rem; }
+  
+  .pt-4 { padding-block-start: 1rem; }
+  .pt-6 { padding-block-start: 1.5rem; }
+  .pb-4 { padding-block-end: 1rem; }
+  .pb-6 { padding-block-end: 1.5rem; }
+  
+  /* Margin logical properties */
+  .ms-1 { margin-inline-start: 0.25rem; }
+  .ms-2 { margin-inline-start: 0.5rem; }
+  .ms-3 { margin-inline-start: 0.75rem; }
+  .ms-4 { margin-inline-start: 1rem; }
+  .ms-6 { margin-inline-start: 1.5rem; }
+  .ms-8 { margin-inline-start: 2rem; }
+  
+  .me-1 { margin-inline-end: 0.25rem; }
+  .me-2 { margin-inline-end: 0.5rem; }
+  .me-3 { margin-inline-end: 0.75rem; }
+  .me-4 { margin-inline-end: 1rem; }
+  .me-6 { margin-inline-end: 1.5rem; }
+  .me-8 { margin-inline-end: 2rem; }
+  
+  /* Border logical properties */
+  .border-s {
+    border-inline-start: 1px solid var(--border);
+  }
+  
+  .border-e {
+    border-inline-end: 1px solid var(--border);
+  }
+  
+  /* Form elements direction-aware styling */
+  input, textarea, select {
+    text-align: start;
+  }
+  
+  /* Button content alignment */
+  button {
+    text-align: start;
+  }
+  
+  /* Ensure icons and content flow naturally with text direction */
+  .icon-start {
+    order: -1;
+  }
+  
+  .icon-end {
+    order: 1;
+  }
+  
+  /* List items alignment */
+  ul, ol {
+    text-align: start;
+  }
+  
+  /* Navigation and menu items */
+  nav ul {
+    list-style: none;
+    padding-inline-start: 0;
+  }
+  
+  /* Card and container logical spacing */
+  .container-padding {
+    padding-inline: 1rem;
+  }
+  
+  /* Responsive logical spacing */
+  @media (min-width: 768px) {
+    .container-padding {
+      padding-inline: 2rem;
+    }
   }
 }
