@@ -2,6 +2,8 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant rtl (&:is([dir="rtl"] *));
+@custom-variant ltr (&:is([dir="ltr"] *));
 
 @theme inline {
   --color-background: var(--background);
@@ -118,5 +120,43 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* RTL Support */
+  [dir="rtl"] {
+    direction: rtl;
+  }
+  
+  [dir="ltr"] {
+    direction: ltr;
+  }
+  
+  /* Arabic font improvements */
+  .font-arabic {
+    font-family: "Geist Sans", "Noto Sans Arabic", "Cairo", "Tajawal", system-ui, sans-serif;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  }
+  
+  /* RTL-specific styles for better Arabic text rendering */
+  [dir="rtl"] body {
+    text-align: right;
+  }
+  
+  [dir="rtl"] .text-left {
+    text-align: right;
+  }
+  
+  [dir="rtl"] .text-right {
+    text-align: left;
+  }
+  
+  /* Fix button alignment in RTL */
+  [dir="rtl"] button {
+    direction: rtl;
+  }
+  
+  /* Ensure proper spacing for Arabic text */
+  [dir="rtl"] * {
+    letter-spacing: normal;
   }
 }
