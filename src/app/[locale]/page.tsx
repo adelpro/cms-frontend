@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { getDictionary } from "@/lib/dictionaries";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { rtlClass } from "@/lib/rtl-utils";
+import { layoutPatterns } from "@/lib/logical-utils";
 import type { Locale } from "@/middleware";
 
 interface HomePageProps {
@@ -11,16 +11,11 @@ interface HomePageProps {
 export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params;
   const dict = await getDictionary(locale);
-  const isRTL = locale === 'ar';
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-8 p-8">
+    <div className="min-h-screen flex flex-col items-center justify-center gap-8 container-padding">
       {/* Header with title and language switcher */}
-      <div className={rtlClass(
-        "flex items-center gap-4", 
-        "flex items-center gap-4 flex-row-reverse", 
-        isRTL
-      )}>
+      <div className="flex items-center gap-4">
         <h1 className="text-4xl font-bold text-center">
           {dict.welcome}
         </h1>
@@ -32,12 +27,8 @@ export default async function HomePage({ params }: HomePageProps) {
         {dict.description}
       </p>
       
-      {/* Action buttons */}
-      <div className={rtlClass(
-        "flex gap-4", 
-        "flex gap-4 flex-row-reverse", 
-        isRTL
-      )}>
+      {/* Action buttons - automatically flow with text direction */}
+      <div className="flex gap-4">
         <Button variant="default" className="min-w-[120px]">
           {dict.getStarted}
         </Button>
@@ -46,21 +37,14 @@ export default async function HomePage({ params }: HomePageProps) {
         </Button>
       </div>
       
-      {/* Demo section to showcase RTL layout */}
-      <div className="mt-12 p-6 border rounded-lg max-w-2xl w-full">
-        <h2 className={rtlClass(
-          "text-xl font-semibold mb-4 text-left",
-          "text-xl font-semibold mb-4 text-right",
-          isRTL
-        )}>
-          {locale === 'ar' ? 'مثال على التخطيط' : 'Layout Example'}
+      {/* Demo section to showcase automatic RTL layout */}
+      <div className="mt-12 ps-6 pe-6 pt-6 pb-6 border rounded-lg max-w-2xl w-full">
+        <h2 className="text-xl font-semibold mb-4 text-start">
+          {locale === 'ar' ? 'مثال على التخطيط الذكي' : 'Smart Layout Example'}
         </h2>
         
-        <div className={rtlClass(
-          "flex justify-between items-center p-4 bg-muted rounded-md",
-          "flex justify-between items-center p-4 bg-muted rounded-md flex-row-reverse",
-          isRTL
-        )}>
+        {/* This layout automatically adapts to RTL/LTR */}
+        <div className={layoutPatterns.spaceBetween + " ps-4 pe-4 pt-4 pb-4 bg-muted rounded-md"}>
           <span className="font-medium">
             {locale === 'ar' ? 'النص الرئيسي' : 'Main Text'}
           </span>
@@ -69,15 +53,27 @@ export default async function HomePage({ params }: HomePageProps) {
           </Button>
         </div>
         
-        <div className={rtlClass(
-          "mt-4 text-sm text-muted-foreground text-left",
-          "mt-4 text-sm text-muted-foreground text-right",
-          isRTL
-        )}>
+        <div className="mt-4 text-sm text-muted-foreground text-start">
           {locale === 'ar' 
-            ? 'هذا مثال يوضح كيفية تكيف التخطيط مع اللغة العربية وتخطيط RTL'
-            : 'This example shows how the layout adapts to Arabic language and RTL direction'
+            ? 'هذا المثال يستخدم الخصائص المنطقية في CSS للتكيف التلقائي مع اتجاه النص'
+            : 'This example uses CSS logical properties to automatically adapt to text direction'
           }
+        </div>
+        
+        {/* Additional demo: Icon positioning */}
+        <div className="mt-6 space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="w-4 h-4 bg-primary rounded-full icon-start"></div>
+            <span className="text-start">
+              {locale === 'ar' ? 'أيقونة في البداية' : 'Icon at start'}
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-start">
+              {locale === 'ar' ? 'أيقونة في النهاية' : 'Icon at end'}
+            </span>
+            <div className="w-4 h-4 bg-secondary rounded-full icon-end"></div>
+          </div>
         </div>
       </div>
       
