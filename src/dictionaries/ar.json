@@ -18,5 +18,9 @@
   "edit": "تعديل",
   "delete": "حذف",
   "confirm": "تأكيد",
-  "close": "إغلاق"
+  "close": "إغلاق",
+  "darkMode": "الوضع المظلم",
+  "lightMode": "الوضع المضيء",
+  "toggleTheme": "تغيير المظهر",
+  "theme": "المظهر"
 }

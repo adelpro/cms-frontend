@@ -143,6 +143,20 @@
     text-align: inherit;
   }
   
+  /* Dark mode specific RTL improvements */
+  html[dir="rtl"].dark {
+    /* Ensure proper dark mode inheritance in RTL */
+  }
+  
+  /* Theme transition improvements */
+  html {
+    color-scheme: light dark;
+  }
+  
+  html.dark {
+    color-scheme: dark;
+  }
+  
   /* Override any conflicting Tailwind or component styles */
   html[dir="rtl"] .text-left {
     text-align: right !important;

@@ -22,6 +22,10 @@ export type Dictionary = {
   delete: string;
   confirm: string;
   close: string;
+  darkMode: string;
+  lightMode: string;
+  toggleTheme: string;
+  theme: string;
 };
 
 const dictionaries = {

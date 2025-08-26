@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { getDictionary } from "@/lib/dictionaries";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { layoutPatterns } from "@/lib/logical-utils";
 import type { Locale } from "@/middleware";
 
@@ -14,12 +15,15 @@ export default async function HomePage({ params }: HomePageProps) {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-8 container-padding">
-      {/* Header with title and language switcher */}
-      <div className="flex items-center gap-4">
+      {/* Header with title and controls */}
+      <div className="flex items-center gap-4 flex-wrap justify-center">
         <h1 className="text-4xl font-bold text-center">
           {dict.welcome}
         </h1>
-        <LanguageSwitcher currentLocale={locale} />
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher currentLocale={locale} />
+          <ThemeToggle />
+        </div>
       </div>
       
       {/* Description */}
@@ -37,10 +41,10 @@ export default async function HomePage({ params }: HomePageProps) {
         </Button>
       </div>
       
-      {/* Demo section to showcase automatic RTL layout */}
-      <div className="mt-12 ps-6 pe-6 pt-6 pb-6 border rounded-lg max-w-2xl w-full">
+      {/* Demo section to showcase automatic RTL layout and theming */}
+      <div className="mt-12 ps-6 pe-6 pt-6 pb-6 border rounded-lg max-w-2xl w-full bg-card">
         <h2 className="text-xl font-semibold mb-4 text-start">
-          {locale === 'ar' ? 'مثال على التخطيط الذكي' : 'Smart Layout Example'}
+          {locale === 'ar' ? 'مثال على التخطيط الذكي والمظاهر' : 'Smart Layout & Theming Example'}
         </h2>
         
         {/* This layout automatically adapts to RTL/LTR */}
@@ -55,8 +59,8 @@ export default async function HomePage({ params }: HomePageProps) {
         
         <div className="mt-4 text-sm text-muted-foreground text-start">
           {locale === 'ar' 
-            ? 'هذا المثال يستخدم الخصائص المنطقية في CSS للتكيف التلقائي مع اتجاه النص'
-            : 'This example uses CSS logical properties to automatically adapt to text direction'
+            ? 'هذا المثال يستخدم الخصائص المنطقية في CSS للتكيف التلقائي مع اتجاه النص والمظهر المظلم/المضيء'
+            : 'This example uses CSS logical properties and theme variables to automatically adapt to text direction and light/dark themes'
           }
         </div>
         

@@ -18,5 +18,9 @@
   "edit": "Edit",
   "delete": "Delete",
   "confirm": "Confirm",
-  "close": "Close"
+  "close": "Close",
+  "darkMode": "Dark Mode",
+  "lightMode": "Light Mode",
+  "toggleTheme": "Toggle Theme",
+  "theme": "Theme"
 }
