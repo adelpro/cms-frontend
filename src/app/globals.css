@@ -135,6 +135,10 @@
   }
   
   /* Minimal RTL overrides - only for essential Tailwind classes */
+html[dir="rtl"] * {
+  direction: rtl;
+}
+
   html[dir="rtl"] .text-left {
     text-align: right;
   }
