@@ -20,25 +20,8 @@ function getLocale(request: NextRequest): Locale {
     }
   }
 
-  // Check Accept-Language header with proper parsing
-  const acceptLanguage = request.headers.get('Accept-Language');
-  if (acceptLanguage) {
-    // Parse Accept-Language header properly
-    const languages = acceptLanguage
-      .split(',')
-      .map(lang => lang.trim().split(';')[0].split('-')[0])
-      .filter(Boolean);
-    
-    // Find first supported language, prioritizing Arabic
-    for (const lang of languages) {
-      if (lang === 'ar') return 'ar';
-    }
-    for (const lang of languages) {
-      if (isValidLocale(lang)) return lang as Locale;
-    }
-  }
-
-  // Default to Arabic
+  // ALWAYS default to Arabic - ignore browser language preferences
+  // This ensures Arabic is the true default language for the site
   return defaultLocale;
 }
 
