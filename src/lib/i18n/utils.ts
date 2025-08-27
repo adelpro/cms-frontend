@@ -1,4 +1,7 @@
-import { locales, defaultLocale, type Locale } from "@/middleware";
+import type { Locale } from './types';
+
+export const locales: readonly Locale[] = ['ar', 'en'] as const;
+export const defaultLocale: Locale = 'ar' as const;
 
 /**
  * Validates if a given string is a supported locale
@@ -35,7 +38,7 @@ export function unlocalizedPath(path: string): string {
 }
 
 /**
- * Gets locale from path
+ * Gets locale from path with validation
  */
 export function getLocaleFromPath(path: string): Locale | null {
   const segments = path.split('/');
@@ -74,4 +77,14 @@ export function formatNumber(num: number, locale: Locale): string {
  */
 export function formatDate(date: Date, locale: Locale): string {
   return new Intl.DateTimeFormat(locale === 'ar' ? 'ar-SA' : 'en-US').format(date);
+}
+
+/**
+ * Format currency based on locale
+ */
+export function formatCurrency(amount: number, locale: Locale, currency = 'SAR'): string {
+  return new Intl.NumberFormat(locale === 'ar' ? 'ar-SA' : 'en-US', {
+    style: 'currency',
+    currency,
+  }).format(amount);
 }
