@@ -53,8 +53,7 @@ src/
 ├── dictionaries/                 # Translation files (PROTECTED)
 │   ├── ar.json                   # Arabic translations (CRITICAL)
 │   └── en.json                   # English translations (CRITICAL)
-├── __tests__/                    # Test files
-│   └── **/*.test.ts              # Unit tests
+
 └── middleware.ts                 # Next.js middleware (CRITICAL - ROUTING)
 ```
 
@@ -83,12 +82,9 @@ src/
 // ✅ CORRECT
 components/language-switcher.tsx    // kebab-case for files
 lib/i18n/utils.ts                  // kebab-case for files
-__tests__/utils.test.ts            // kebab-case with .test suffix
-
 // ❌ INCORRECT
 components/LanguageSwitcher.tsx     // PascalCase not allowed
 lib/i18n/Utils.ts                  // PascalCase not allowed
-tests/utilsTest.ts                 // Wrong test naming
 ```
 
 ### **React Components**
@@ -351,38 +347,7 @@ const nextConfig: NextConfig = {
 };
 ```
 
-## 🧪 Testing Guidelines
 
-### **Test File Structure**
-```
-src/__tests__/
-├── lib/
-│   ├── i18n/
-│   │   └── utils.test.ts
-│   └── styles/
-│       └── logical.test.ts
-├── components/
-│   └── language-switcher.test.tsx
-└── app/
-    └── page.test.tsx
-```
-
-### **Test Naming**
-```typescript
-// ✅ CORRECT
-describe('I18n Utils', () => {
-  describe('isValidLocale', () => {
-    it('should validate Arabic locale', () => {
-      expect(isValidLocale('ar')).toBe(true);
-    });
-  });
-});
-
-// ❌ WRONG
-describe('utils', () => {           // Too vague
-  it('test1', () => {});            // Non-descriptive
-});
-```
 
 ## 📦 Dependency Management
 
@@ -474,11 +439,7 @@ if (!isValidLocale(userInput)) {
 - [ ] No circular dependencies
 - [ ] Proper error handling
 
-#### ✅ **Testing**
-- [ ] Unit tests written/updated
-- [ ] Tests pass successfully
-- [ ] Coverage maintained
-- [ ] Edge cases considered
+
 
 #### ✅ **Build & Lint**
 - [ ] `npm run build` succeeds
@@ -522,21 +483,20 @@ const isDark = document.body.classList.contains('dark'); // Use useTheme()
 1. **Plan**: Review architecture impact
 2. **Design**: Follow established patterns
 3. **Implement**: Use guidelines and conventions
-4. **Test**: Write comprehensive tests
-5. **Review**: Self-check against guidelines
-6. **Document**: Update relevant documentation
+4. **Review**: Self-check against guidelines
+5. **Document**: Update relevant documentation
 
 ### **Modifying Existing Features**
 1. **Understand**: Read existing code thoroughly
 2. **Preserve**: Maintain backward compatibility
 3. **Enhance**: Follow improvement patterns
-4. **Validate**: Test all affected areas
+4. **Validate**: Verify all affected areas work correctly
 5. **Document**: Update changed behavior
 
 ### **Emergency Fixes**
 1. **Assess**: Understand the urgency
 2. **Isolate**: Minimize change scope
-3. **Test**: Verify fix doesn't break core features
+3. **Validate**: Verify fix doesn't break core features
 4. **Document**: Explain the emergency change
 5. **Follow-up**: Plan proper solution if needed
 
