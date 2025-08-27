@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
-import { locales, type Locale } from "@/middleware";
+import { locales } from "@/lib/i18n/utils";
+import { isValidLocale } from "@/lib/i18n/utils";
+import type { Locale } from "@/lib/i18n/types";
 import { cn } from "@/lib/utils";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { direction } from "@/lib/styles/logical";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,15 +39,18 @@ export default async function RootLayout({
 }: RootLayoutProps) {
   const { locale } = await params;
   
-  // Validate locale
-  if (!locales.includes(locale as Locale)) {
+  // Validate locale with proper type safety
+  if (!isValidLocale(locale)) {
     notFound();
   }
 
-  const isRTL = locale === 'ar';
+  // Type assertion after validation
+  const validatedLocale = locale as Locale;
+  const isRTL = direction.isRTL(validatedLocale);
+  const dir = direction.getDir(validatedLocale);
 
   return (
-    <html lang={locale} dir={isRTL ? 'rtl' : 'ltr'} suppressHydrationWarning>
+    <html lang={validatedLocale} dir={dir} suppressHydrationWarning>
       <body
         className={cn(
           geistSans.variable,
@@ -53,12 +59,7 @@ export default async function RootLayout({
           isRTL && "font-arabic"
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider>
           {children}
         </ThemeProvider>
       </body>
