@@ -1,14 +1,7 @@
 "use client";
 
 import { createContext, useContext, ReactNode } from "react";
-import type { Dictionary } from "@/lib/dictionaries";
-import type { Locale } from "@/middleware";
-
-interface LocaleContextType {
-  locale: Locale;
-  dict: Dictionary;
-  isRTL: boolean;
-}
+import type { Dictionary, Locale, LocaleContextType } from "@/lib/i18n/types";
 
 const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 
@@ -36,11 +29,30 @@ export function useLocale() {
   return context;
 }
 
-// Utility hook for common translation patterns
+/**
+ * Enhanced translation hook with additional utilities
+ */
 export function useTranslation() {
-  const { dict } = useLocale();
+  const { dict, locale, isRTL } = useLocale();
   
   const t = (key: keyof Dictionary) => dict[key];
   
-  return { t, dict };
+  // Additional utilities
+  const formatMessage = (key: keyof Dictionary, values?: Record<string, string | number>) => {
+    let message = dict[key];
+    if (values) {
+      Object.entries(values).forEach(([placeholder, value]) => {
+        message = message.replace(`{${placeholder}}`, String(value));
+      });
+    }
+    return message;
+  };
+  
+  return { 
+    t, 
+    dict, 
+    locale, 
+    isRTL,
+    formatMessage,
+  };
 }

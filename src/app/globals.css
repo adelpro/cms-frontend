@@ -118,115 +118,53 @@
   * {
     @apply border-border outline-ring/50;
   }
+  
   body {
     @apply bg-background text-foreground;
+    text-align: start; /* Logical property: left in LTR, right in RTL */
   }
   
-  /* Global RTL/LTR Support using CSS Logical Properties */
-  html {
-    /* This ensures the direction is properly inherited */
-    direction: inherit;
-  }
-
-  /* Force RTL direction for all elements when HTML dir is rtl */
-  html[dir="rtl"] * {
-    direction: rtl;
-  }
-  
-  /* Force LTR direction for all elements when HTML dir is ltr */
-  html[dir="ltr"] * {
-    direction: ltr;
-  }
-  
-  /* Ensure text direction is inherited properly */
-  * {
-    text-align: inherit;
-  }
-  
-  /* Dark mode specific RTL improvements */
-  html[dir="rtl"].dark {
-    /* Ensure proper dark mode inheritance in RTL */
-  }
-  
-  /* Theme transition improvements */
+  /* Enhanced color scheme support */
   html {
     color-scheme: light dark;
+    direction: inherit;
   }
   
   html.dark {
     color-scheme: dark;
   }
   
-  /* Override any conflicting Tailwind or component styles */
+  /* Minimal RTL overrides - only for essential Tailwind classes */
   html[dir="rtl"] .text-left {
-    text-align: right !important;
+    text-align: right;
   }
   
   html[dir="rtl"] .text-right {
-    text-align: left !important;
+    text-align: left;
   }
   
   html[dir="rtl"] .justify-start {
-    justify-content: flex-end !important;
+    justify-content: flex-end;
   }
   
   html[dir="rtl"] .justify-end {
-    justify-content: flex-start !important;
+    justify-content: flex-start;
   }
   
-  /* Force margin and padding direction overrides */
-  html[dir="rtl"] .ml-auto {
-    margin-left: unset !important;
-    margin-right: auto !important;
-  }
-  
-  html[dir="rtl"] .mr-auto {
-    margin-right: unset !important;
-    margin-left: auto !important;
-  }
-  
-  /* Flex direction overrides for RTL */
-  html[dir="rtl"] .flex-row {
-    flex-direction: row-reverse !important;
-  }
-  
-  /* Float overrides */
-  html[dir="rtl"] .float-left {
-    float: right !important;
-  }
-  
-  html[dir="rtl"] .float-right {
-    float: left !important;
-  }
-  
-  /* Arabic font improvements */
+  /* Enhanced Arabic font support */
   .font-arabic {
     font-family: "Geist Sans", "Noto Sans Arabic", "Cairo", "Tajawal", system-ui, sans-serif;
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
     letter-spacing: normal;
   }
   
-  /* Global text alignment based on direction */
-  body {
-    text-align: start; /* Logical property: left in LTR, right in RTL */
-  }
-  
-  /* Override Tailwind's directional classes with logical equivalents */
+  /* Logical text alignment utilities */
   .text-start {
-    text-align: start !important;
+    text-align: start;
   }
   
   .text-end {
-    text-align: end !important;
-  }
-  
-  /* Flexbox logical direction support */
-  .flex-start {
-    justify-content: flex-start;
-  }
-  
-  .flex-end {
-    justify-content: flex-end;
+    text-align: end;
   }
   
   /* Comprehensive logical spacing utilities */
