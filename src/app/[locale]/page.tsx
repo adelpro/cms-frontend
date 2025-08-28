@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -44,6 +45,30 @@ export default async function HomePage({ params }: HomePageProps) {
           {dict.learnMore}
         </Button>
       </div>
+
+      {/* Auth Demo Links */}
+      <div className="mt-8 p-6 border rounded-lg bg-card">
+        <h3 className="text-lg font-semibold mb-4 text-center">
+          {validatedLocale === 'ar' ? 'تجربة نظام المصادقة' : 'Authentication Demo'}
+        </h3>
+        <div className={cn("flex flex-wrap justify-center", spacing.gapMd)}>
+          <Button asChild variant="default">
+            <Link href={`/${validatedLocale}/auth/login`}>
+              {validatedLocale === 'ar' ? 'تسجيل الدخول' : 'Login'}
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href={`/${validatedLocale}/auth/signup`}>
+              {validatedLocale === 'ar' ? 'إنشاء حساب' : 'Sign Up'}
+            </Link>
+          </Button>
+          <Button asChild variant="secondary">
+            <Link href={`/${validatedLocale}/auth/complete-profile?provider=google&firstName=John&lastName=Doe&email=john@example.com`}>
+              {validatedLocale === 'ar' ? 'إكمال الملف الشخصي (تجربة)' : 'Complete Profile (Demo)'}
+            </Link>
+          </Button>
+        </div>
+      </div>
       
       {/* Demo section to showcase automatic RTL layout and theming */}
       <div className="mt-12 ps-6 pe-6 pt-6 pb-6 border rounded-lg max-w-2xl w-full bg-card">
@@ -86,8 +111,10 @@ export default async function HomePage({ params }: HomePageProps) {
       </div>
       
       {/* Original test button */}
-      <Button variant="destructive" size="icon" className="mt-8">
-        ×
+      <Button variant="outline" className="mt-8" asChild>
+        <Link href={`/${validatedLocale}/dashboard`}>
+          {validatedLocale === 'ar' ? 'الذهاب إلى لوحة التحكم (يتطلب تسجيل الدخول)' : 'Go to Dashboard (requires login)'}
+        </Link>
       </Button>
     </div>
   );

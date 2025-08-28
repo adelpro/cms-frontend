@@ -39,11 +39,14 @@ export function useTranslation() {
   
   // Additional utilities
   const formatMessage = (key: keyof Dictionary, values?: Record<string, string | number>) => {
-    let message = dict[key];
-    if (values) {
+    const message = dict[key];
+    // Only format if message is a string
+    if (typeof message === 'string' && values) {
+      let stringMessage = message;
       Object.entries(values).forEach(([placeholder, value]) => {
-        message = message.replace(`{${placeholder}}`, String(value));
+        stringMessage = stringMessage.replace(`{${placeholder}}`, String(value));
       });
+      return stringMessage;
     }
     return message;
   };

@@ -25,6 +25,54 @@ export type Dictionary = {
   lightMode: string;
   toggleTheme: string;
   theme: string;
+  auth: {
+    loginTitle: string;
+    signupTitle: string;
+    loginWithGoogle: string;
+    loginWithGitHub: string;
+    email: string;
+    password: string;
+    login: string;
+    signup: string;
+    firstName: string;
+    lastName: string;
+    jobTitle: string;
+    jobTitlePlaceholder: string;
+    phoneNumber: string;
+    phoneNumberPlaceholder: string;
+    emailPlaceholder: string;
+    passwordPlaceholder: string;
+    noAccount: string;
+    alreadyHaveAccount: string;
+    register: string;
+    loginLink: string;
+    businessModel: string;
+    teamSize: string;
+    aboutYourself: string;
+    completeProfile: string;
+    profileCompletion: string;
+    required: string;
+    optional: string;
+    validation: {
+      emailRequired: string;
+      emailInvalid: string;
+      passwordRequired: string;
+      passwordMinLength: string;
+      firstNameRequired: string;
+      lastNameRequired: string;
+      jobTitleRequired: string;
+      phoneRequired: string;
+      phoneInvalid: string;
+      businessModelRequired: string;
+      teamSizeRequired: string;
+      aboutYourselfRequired: string;
+      fieldTooShort: string;
+      fieldTooLong: string;
+      loginFailed: string;
+      signupFailed: string;
+      networkError: string;
+    };
+  };
 };
 
 export interface LocaleContextType {
