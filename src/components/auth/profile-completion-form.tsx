@@ -91,24 +91,24 @@ export function ProfileCompletionForm({ dict, isSkippable = false }: ProfileComp
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-8">
         <h1 className={cn(
           typography.heading,
-          "text-2xl font-bold text-foreground"
+          "text-3xl lg:text-4xl font-bold text-foreground"
         )}>
           {dict.auth.completeProfileTitle}
         </h1>
-        <p className="text-sm text-muted-foreground mt-2">
+        <p className="text-base lg:text-lg text-muted-foreground mt-4">
           {dict.auth.completeProfileDescription}
         </p>
       </div>
 
       {/* Profile Completion Form */}
       <Card>
-        <CardContent className="pt-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <CardContent className="pt-8 lg:pt-10">
+          <form onSubmit={handleSubmit} className="space-y-8">
             {/* Show submit error */}
             {submitError && (
               <div className={cn(
@@ -120,7 +120,7 @@ export function ProfileCompletionForm({ dict, isSkippable = false }: ProfileComp
             )}
 
             {/* Project Information Section */}
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className={formLogical.fieldset}>
                 <Label htmlFor="businessModel" className={cn(formLogical.label, "text-lg")}>
                   {dict.auth.businessModelQuestion}
@@ -217,20 +217,21 @@ export function ProfileCompletionForm({ dict, isSkippable = false }: ProfileComp
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-3 justify-end">
+            <div className="flex flex-col sm:flex-row gap-4 justify-end pt-4">
               {isSkippable && (
                 <Button 
                   type="button" 
                   variant="outline" 
                   onClick={handleSkip}
                   disabled={isLoading}
+                  className="h-12 lg:h-14 text-base lg:text-lg min-w-[120px]"
                 >
                   {dict.ui.skip || 'تخطي'}
                 </Button>
               )}
               <Button
                 type="submit"
-                className="min-w-[150px]"
+                className="h-12 lg:h-14 text-base lg:text-lg min-w-[180px]"
                 disabled={isLoading}
               >
                 {isLoading ? dict.loading : dict.auth.saveAndContinue}

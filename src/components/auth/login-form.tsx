@@ -110,26 +110,26 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-8">
         <h1 className={cn(
           typography.heading,
-          "text-2xl font-bold text-foreground"
+          "text-3xl lg:text-4xl font-bold text-foreground"
         )}>
           {dict.auth.loginTitle}
         </h1>
       </div>
 
       {/* Social Login Buttons */}
-      <div className="space-y-3 mb-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <Button
           type="button"
           variant="outline"
           className={cn(
-            "w-full h-11",
+            "w-full h-12 lg:h-14",
             "bg-red-500 hover:bg-red-600 text-white border-red-500",
-            "flex items-center justify-center gap-3"
+            "flex items-center justify-center gap-3 text-base lg:text-lg"
           )}
           onClick={() => handleSocialLogin('google')}
         >
@@ -158,9 +158,9 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
           type="button"
           variant="outline"
           className={cn(
-            "w-full h-11",
+            "w-full h-12 lg:h-14",
             "bg-gray-900 hover:bg-gray-800 text-white border-gray-900",
-            "flex items-center justify-center gap-3"
+            "flex items-center justify-center gap-3 text-base lg:text-lg"
           )}
           onClick={() => handleSocialLogin('github')}
         >
@@ -182,7 +182,7 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
       </div>
 
       {/* Email/Password Form */}
-      <form onSubmit={handleEmailLogin} className="space-y-4">
+      <form onSubmit={handleEmailLogin} className="space-y-6">
         {/* Show submit error */}
         {submitError && (
           <div className={cn(
@@ -244,7 +244,7 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
 
         <Button
           type="submit"
-          className="w-full h-11"
+          className="w-full h-12 lg:h-14 text-base lg:text-lg"
           disabled={isLoading}
         >
           {isLoading ? dict.loading : dict.auth.login}

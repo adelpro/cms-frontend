@@ -21,14 +21,14 @@ export function AuthLayout({ children, locale, className }: AuthLayoutProps) {
     >
       <div 
         className={cn(
-          "w-full max-w-md",
+          "w-full max-w-2xl lg:max-w-3xl",
           responsive.paddingInlineResponsive
         )}
       >
         <div className={cn(
           "bg-card text-card-foreground rounded-xl border shadow-lg",
-          logical.paddingInline('6'),
-          "py-8 space-y-6"
+          "px-4 sm:px-6 md:px-8 lg:px-12",
+          "py-6 sm:py-8 lg:py-12 space-y-6"
         )}>
           {children}
         </div>

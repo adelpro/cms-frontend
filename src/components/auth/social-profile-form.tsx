@@ -136,25 +136,25 @@ export function SocialProfileForm({
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="text-center mb-6">
-        <div className="flex items-center justify-center gap-3 mb-4">
+      <div className="text-center mb-8">
+        <div className="flex items-center justify-center gap-4 mb-6">
           {providerIcon}
           <h1 className={cn(
             typography.heading,
-            "text-2xl font-bold text-foreground"
+            "text-3xl lg:text-4xl font-bold text-foreground"
           )}>
             {dict.auth.profileCompletion}
           </h1>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-base lg:text-lg text-muted-foreground">
           {dict.auth.completeProfile}
         </p>
       </div>
 
       {/* Profile Completion Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-8">
         {/* Show submit error */}
         {submitError && (
           <div className={cn(
@@ -165,7 +165,7 @@ export function SocialProfileForm({
           </div>
         )}
         {/* Name Fields - Pre-populated from social login */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className={formLogical.fieldset}>
             <Label htmlFor="firstName" className={formLogical.label}>
               {dict.auth.firstName}
@@ -200,7 +200,7 @@ export function SocialProfileForm({
         </div>
 
         {/* Project Information Section */}
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div className={formLogical.fieldset}>
             <Label htmlFor="projectDescription" className={cn(formLogical.label, "text-lg")}>
               {dict.auth.projectDescription}
@@ -290,7 +290,7 @@ export function SocialProfileForm({
 
         <Button
           type="submit"
-          className="w-full h-11"
+          className="w-full h-12 lg:h-14 text-base lg:text-lg"
           disabled={isLoading}
         >
           {isLoading ? dict.loading : dict.auth.completeProfile}
