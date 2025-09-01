@@ -37,7 +37,7 @@ interface PublisherProfileProps {
   locale: Locale;
 }
 
-export function PublisherProfile({ publisherId, dict, locale }: PublisherProfileProps) {
+export function PublisherProfile({ publisherId, locale }: PublisherProfileProps) {
   const [publisher, setPublisher] = useState<Publisher | null>(null);
   const [assets, setAssets] = useState<Asset[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);

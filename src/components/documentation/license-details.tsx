@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, ExternalLink, Info } from 'lucide-react';
 import type { Dictionary, Locale } from '@/lib/i18n/types';
-import { logical } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
 
 interface LicenseDetailsProps {
@@ -16,7 +15,7 @@ interface LicenseDetailsProps {
   locale: Locale;
 }
 
-export function LicenseDetails({ licenseId, dict, locale }: LicenseDetailsProps) {
+export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
   // Mock license data
   const license = {
     id: licenseId || 'cc-by',
@@ -37,7 +36,7 @@ export function LicenseDetails({ licenseId, dict, locale }: LicenseDetailsProps)
       'المسؤولية',
       'الضمان'
     ],
-    color: 'green' as const,
+    color: 'green' as 'green' | 'yellow' | 'red',
     officialUrl: 'https://creativecommons.org/licenses/by/4.0/'
   };
 
@@ -160,7 +159,7 @@ export function LicenseDetails({ licenseId, dict, locale }: LicenseDetailsProps)
             <h3 className="font-medium mb-3">كيفية الإسناد</h3>
             <div className="bg-muted/50 rounded-lg p-4">
               <p className="text-sm font-mono" dir="ltr">
-                "العنوان" by المؤلف مرخص تحت رخصة CC BY 4.0
+                &quot;العنوان&quot; by المؤلف مرخص تحت رخصة CC BY 4.0
               </p>
               <p className="text-xs text-muted-foreground mt-2">
                 يجب تضمين رابط إلى الرخصة ورابط إلى المصدر الأصلي

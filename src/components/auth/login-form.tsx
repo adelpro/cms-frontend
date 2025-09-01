@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/components/providers/auth-provider';
 import type { Dictionary, Locale } from '@/lib/i18n/types';
-import { formLogical, spacing, typography } from '@/lib/styles/logical';
+import { formLogical, typography } from '@/lib/styles/logical';
 import { validateLoginForm } from '@/lib/validations';
 import { loginUser, socialLogin } from '@/lib/auth';
 import { cn } from '@/lib/utils';

@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { logical } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
 import type { Dictionary } from '@/lib/i18n/types';

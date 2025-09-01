@@ -6,12 +6,12 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ChevronRight, Download, FileText, Eye, ArrowLeft } from 'lucide-react';
+import { Download, FileText, Eye, ArrowLeft } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { AccessRequestForm } from './access-request-form';
 import { LicenseCarousel } from './license-carousel';
 import type { Dictionary, Locale } from '@/lib/i18n/types';
-import { logical, spacing } from '@/lib/styles/logical';
+import { spacing } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/components/providers/auth-provider';
 
@@ -54,7 +54,7 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
       contentPreview: dict.mockData.assetContentPreview
     };
     setAsset(mockAsset);
-  }, [assetId]);
+  }, [assetId, dict.mockData.assetTitle, dict.mockData.assetDescription, dict.mockData.assetPublisher, dict.mockData.assetContentPreview]);
 
   const handleDownloadClick = () => {
     // Check if user is authenticated
@@ -66,7 +66,7 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
     setShowAccessRequest(true);
   };
 
-  const handleAccessRequestSubmit = (requestData: any) => {
+  const handleAccessRequestSubmit = () => {
     setShowAccessRequest(false);
     setShowLicenseCarousel(true);
   };

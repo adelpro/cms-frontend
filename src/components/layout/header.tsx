@@ -10,7 +10,6 @@ import { Bell, LogOut, Menu, X } from 'lucide-react';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { ThemeToggle } from '@/components/theme-toggle';
 import type { Dictionary, Locale } from '@/lib/i18n/types';
-import { logical } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
 
 interface HeaderProps {

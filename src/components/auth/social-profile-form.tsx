@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/components/providers/auth-provider';
 import type { Dictionary, Locale } from '@/lib/i18n/types';
-import { formLogical, spacing, typography } from '@/lib/styles/logical';
+import { formLogical, typography } from '@/lib/styles/logical';
 import { validateSocialProfileForm } from '@/lib/validations';
 import { completeProfile } from '@/lib/auth';
 import { cn } from '@/lib/utils';
@@ -66,7 +66,7 @@ export function SocialProfileForm({
     const validation = validateSocialProfileForm({
       projectDescription: formData.projectDescription,
       personalInfo: formData.personalInfo
-    }, dict);
+    });
     
     if (!validation.isValid) {
       const fieldErrors: Record<string, string> = {};
@@ -88,9 +88,11 @@ export function SocialProfileForm({
       };
       
       const profileData = {
-        projectDescription: formData.projectDescription,
-        projectLink: formData.projectLink,
-        personalInfo: formData.personalInfo
+        jobTitle: 'Research & Development', // Default based on project description
+        phoneNumber: '', // Optional field
+        businessModel: formData.projectDescription || 'Not specified',
+        teamSize: '1-5', // Default assumption for individual researchers
+        aboutYourself: formData.personalInfo
       };
       
       const response = await completeProfile(socialUserData, profileData);

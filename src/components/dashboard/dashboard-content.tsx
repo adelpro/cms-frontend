@@ -5,7 +5,7 @@ import { useAuth } from '@/components/providers/auth-provider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Dictionary, Locale } from '@/lib/i18n/types';
-import { logical, spacing, typography } from '@/lib/styles/logical';
+import { logical, typography } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
 
 interface DashboardContentProps {

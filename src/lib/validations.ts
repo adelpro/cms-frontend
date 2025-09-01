@@ -166,8 +166,7 @@ export const validateSocialProfileForm = (
   formData: {
     projectDescription?: string;
     personalInfo?: string;
-  },
-  dict: Dictionary
+  }
 ): ValidationResult => {
   const errors: ValidationError[] = [];
 

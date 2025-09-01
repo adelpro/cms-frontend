@@ -4,14 +4,13 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileText, Code, Book } from 'lucide-react';
 import type { Dictionary, Locale } from '@/lib/i18n/types';
-import { cn } from '@/lib/utils';
 
 interface ContentStandardsProps {
   dict: Dictionary;
   locale: Locale;
 }
 
-export function ContentStandards({ dict, locale }: ContentStandardsProps) {
+export function ContentStandards({ }: ContentStandardsProps) {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
       {/* Header */}
@@ -58,7 +57,7 @@ export function ContentStandards({ dict, locale }: ContentStandardsProps) {
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <h4 className="font-medium text-blue-900 mb-2">مثال:</h4>
               <p className="text-blue-800 text-sm font-mono" dir="ltr">
-                للوصول إلى الآية 2:255، استخدم getVerse('2:255')
+                للوصول إلى الآية 2:255، استخدم getVerse(&apos;2:255&apos;)
               </p>
             </div>
           </CardContent>
@@ -97,7 +96,7 @@ export function ContentStandards({ dict, locale }: ContentStandardsProps) {
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
               <h4 className="font-medium text-green-900 mb-2">مثال:</h4>
               <p className="text-green-800 text-sm font-mono" dir="ltr">
-                لاسترجاع كلمة "الله"، استخدم getWord("الله")
+                لاسترجاع كلمة &quot;الله&quot;، استخدم getWord(&quot;الله&quot;)
               </p>
             </div>
           </CardContent>
@@ -136,7 +135,7 @@ export function ContentStandards({ dict, locale }: ContentStandardsProps) {
             <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
               <h4 className="font-medium text-purple-900 mb-2">مثال:</h4>
               <p className="text-purple-800 text-sm font-mono" dir="ltr">
-                للوصول إلى تفسير للآية 2:255، استخدم getTafsir('2:255')
+                للوصول إلى تفسير للآية 2:255، استخدم getTafsir(&apos;2:255&apos;)
               </p>
             </div>
           </CardContent>

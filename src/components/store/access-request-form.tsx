@@ -10,7 +10,12 @@ import { cn } from '@/lib/utils';
 
 interface AccessRequestFormProps {
   assetTitle: string;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: {
+    assetTitle: string;
+    reason: string;
+    addedValue: string;
+    timestamp: string;
+  }) => void;
   onCancel: () => void;
   dict: Dictionary;
 }
