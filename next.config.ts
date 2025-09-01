@@ -7,12 +7,22 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react'],
   },
   
-  // Configure redirects to default to Arabic
+  // Configure redirects to default to Arabic store page
   async redirects() {
     return [
       {
         source: '/',
-        destination: '/ar',
+        destination: '/ar/store',
+        permanent: false,
+      },
+      {
+        source: '/ar',
+        destination: '/ar/store',
+        permanent: false,
+      },
+      {
+        source: '/en',
+        destination: '/en/store',
         permanent: false,
       },
     ];

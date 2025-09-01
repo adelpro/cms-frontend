@@ -193,6 +193,33 @@ className="pl-4 text-left" // Wrong! Not RTL-aware
 
 ### **Translation Management**
 
+#### **🚨 MANDATORY LOCALIZATION RULE**
+**ALL TEXT CONTENT MUST BE LOCALIZED - NO HARDCODED STRINGS ALLOWED**
+
+- ✅ **ALL user-facing text** must use dictionary translations
+- ✅ **ALL placeholders** must use dictionary translations  
+- ✅ **ALL error messages** must use dictionary translations
+- ✅ **ALL accessibility labels** must use dictionary translations
+- ✅ **ALL button labels** must use dictionary translations
+- ✅ **ALL form labels** must use dictionary translations
+
+#### ❌ **FORBIDDEN PRACTICES**
+```typescript
+// ❌ NEVER use hardcoded strings
+<Button>Download</Button>                    // Wrong!
+<input placeholder="Search..." />            // Wrong!
+<span>Loading...</span>                      // Wrong!
+throw new Error("Invalid input");           // Wrong!
+aria-label="Close dialog"                   // Wrong!
+
+// ✅ ALWAYS use translations
+<Button>{dict.actions.download}</Button>     // Correct!
+<input placeholder={dict.ui.searchPlaceholder} />  // Correct!
+<span>{dict.ui.loading}</span>              // Correct!
+throw new Error(dict.errors.invalidInput); // Correct!
+aria-label={dict.ui.closeDialog}           // Correct!
+```
+
 #### Adding New Translations
 ```json
 // 1. Add to src/dictionaries/ar.json
@@ -423,7 +450,10 @@ if (!isValidLocale(userInput)) {
 
 #### ✅ **Internationalization**
 - [ ] Uses Locale type correctly
-- [ ] No hardcoded strings (use translations)
+- [ ] **NO HARDCODED STRINGS ANYWHERE** (use translations)
+- [ ] ALL text uses dict.* pattern
+- [ ] ALL placeholders use dict.* pattern
+- [ ] ALL accessibility labels use dict.* pattern
 - [ ] RTL/LTR compatibility maintained
 - [ ] Logical properties used for styling
 
@@ -463,6 +493,12 @@ className="ml-4 text-left" // Use logical properties instead
 
 // ❌ NEVER import translations directly
 import ar from '@/dictionaries/ar.json'; // Use getDictionary() instead
+
+// ❌ NEVER use hardcoded strings - ALL TEXT MUST BE LOCALIZED
+const buttonText = "Download";              // Wrong!
+placeholder="Search..."                    // Wrong!
+<span>Loading...</span>                     // Wrong!
+throw new Error("Something went wrong");   // Wrong!
 
 // ❌ NEVER modify middleware without extreme caution
 // This file controls routing and security - requires careful review

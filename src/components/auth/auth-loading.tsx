@@ -7,7 +7,10 @@ interface AuthLoadingProps {
   message?: string;
 }
 
-export function AuthLoading({ message = "Loading..." }: AuthLoadingProps) {
+export function AuthLoading({ message }: AuthLoadingProps) {
+  // Fallback message since we can't use useTranslation here (AuthLoading is used in AuthProvider)
+  const displayMessage = message || "Loading...";
+  
   return (
     <div className={cn(
       "min-h-screen bg-background flex items-center justify-center",
@@ -15,7 +18,7 @@ export function AuthLoading({ message = "Loading..." }: AuthLoadingProps) {
     )}>
       <div className="text-center space-y-4">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-        <p className="text-muted-foreground text-sm">{message}</p>
+        <p className="text-muted-foreground text-sm">{displayMessage}</p>
       </div>
     </div>
   );

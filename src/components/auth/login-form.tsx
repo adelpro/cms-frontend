@@ -112,7 +112,7 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className={cn("text-center", spacing.blockMd)}>
+      <div className="text-center mb-6">
         <h1 className={cn(
           typography.heading,
           "text-2xl font-bold text-foreground"
@@ -122,7 +122,7 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
       </div>
 
       {/* Social Login Buttons */}
-      <div className={cn("space-y-3", spacing.blockSm)}>
+      <div className="space-y-3 mb-2">
         <Button
           type="button"
           variant="outline"
@@ -177,7 +177,7 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">OR</span>
+          <span className="bg-card px-2 text-muted-foreground">{dict.ui.or}</span>
         </div>
       </div>
 
@@ -237,9 +237,9 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
 
         {/* Demo login helper */}
         <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded-md">
-          <strong>{locale === 'ar' ? 'للتجربة' : 'For Demo'}:</strong><br />
-          {locale === 'ar' ? 'البريد الإلكتروني' : 'Email'}: test@example.com<br />
-          {locale === 'ar' ? 'كلمة المرور' : 'Password'}: password123
+          <strong>{dict.ui.forDemo}:</strong><br />
+          {dict.ui.demoEmail}: test@example.com<br />
+          {dict.ui.demoPassword}: password123
         </div>
 
         <Button
@@ -252,7 +252,7 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
       </form>
 
       {/* Register Link */}
-      <div className={cn("text-center", spacing.blockSm)}>
+      <div className="text-center mb-2">
         <p className="text-sm text-muted-foreground">
           {dict.auth.noAccount}{' '}
           <Link

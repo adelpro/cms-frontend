@@ -54,33 +54,29 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
     checkAuth();
   }, []);
 
-  // Handle route protection
+  // Handle route protection (very permissive - only handle auth pages and profile completion)
   useEffect(() => {
     if (isLoading) return;
 
     const isAuthRoute = pathname.includes('/auth/');
-    const isHomePage = pathname === `/${locale}` || pathname === `/${locale}/`;
     
     // If user is authenticated
     if (isAuthenticated && user) {
-      // If user needs to complete profile
-      if (requiresProfileCompletion && !pathname.includes('/auth/complete-profile')) {
+      // If user needs to complete profile and is trying to access dashboard specifically
+      if (requiresProfileCompletion && pathname.includes('/dashboard')) {
         router.replace(`/${locale}/auth/complete-profile?provider=${user.provider}&firstName=${user.firstName}&lastName=${user.lastName}&email=${user.email}`);
         return;
       }
       
-      // If profile is completed and user is on auth pages, redirect to dashboard/home
-      if (!requiresProfileCompletion && isAuthRoute) {
-        router.replace(`/${locale}/dashboard`);
+      // If profile is completed and user is on auth pages (except complete-profile), redirect to store
+      if (!requiresProfileCompletion && isAuthRoute && !pathname.includes('/complete-profile')) {
+        router.replace(`/${locale}/store`);
         return;
       }
     }
     
-    // If user is not authenticated and trying to access protected routes
-    if (!isAuthenticated && !isAuthRoute && !isHomePage) {
-      router.replace(`/${locale}/auth/login`);
-      return;
-    }
+    // Don't block any routes - let users navigate freely
+    // Authentication will be handled at the action level (download, etc.)
   }, [isAuthenticated, user, requiresProfileCompletion, pathname, locale, router, isLoading]);
 
   const login = (userData: User, token: string) => {
@@ -94,7 +90,7 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
     if (!userData.profileCompleted) {
       router.replace(`/${locale}/auth/complete-profile?provider=${userData.provider}&firstName=${userData.firstName}&lastName=${userData.lastName}&email=${userData.email}`);
     } else {
-      router.replace(`/${locale}/dashboard`);
+      router.replace(`/${locale}/store`);
     }
   };
 
@@ -103,7 +99,7 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
     setUser(null);
     setIsAuthenticated(false);
     setRequiresProfileCompletion(false);
-    router.replace(`/${locale}/auth/login`);
+    router.replace(`/${locale}/store`);
   };
 
   const updateUser = (userData: User) => {
@@ -124,7 +120,8 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
 
   // Show loading screen while checking authentication
   if (isLoading) {
-    return <AuthLoading message={locale === 'ar' ? 'جاري التحميل...' : 'Loading...'} />;
+    const loadingMessage = locale === 'ar' ? 'جاري التحميل...' : 'Loading...';
+    return <AuthLoading message={loadingMessage} />;
   }
 
   return (

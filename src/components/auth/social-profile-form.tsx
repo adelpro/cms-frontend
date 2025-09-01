@@ -31,11 +31,9 @@ export function SocialProfileForm({
   const [formData, setFormData] = useState({
     firstName: initialData?.firstName || '',
     lastName: initialData?.lastName || '',
-    jobTitle: '',
-    phoneNumber: '',
-    businessModel: '',
-    teamSize: '',
-    aboutYourself: ''
+    projectDescription: '',
+    projectLink: '',
+    personalInfo: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -66,11 +64,8 @@ export function SocialProfileForm({
     
     // Validate form
     const validation = validateSocialProfileForm({
-      jobTitle: formData.jobTitle,
-      phoneNumber: formData.phoneNumber,
-      businessModel: formData.businessModel,
-      teamSize: formData.teamSize,
-      aboutYourself: formData.aboutYourself
+      projectDescription: formData.projectDescription,
+      personalInfo: formData.personalInfo
     }, dict);
     
     if (!validation.isValid) {
@@ -93,11 +88,9 @@ export function SocialProfileForm({
       };
       
       const profileData = {
-        jobTitle: formData.jobTitle,
-        phoneNumber: formData.phoneNumber,
-        businessModel: formData.businessModel,
-        teamSize: formData.teamSize,
-        aboutYourself: formData.aboutYourself
+        projectDescription: formData.projectDescription,
+        projectLink: formData.projectLink,
+        personalInfo: formData.personalInfo
       };
       
       const response = await completeProfile(socialUserData, profileData);
@@ -143,7 +136,7 @@ export function SocialProfileForm({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className={cn("text-center", spacing.blockMd)}>
+      <div className="text-center mb-6">
         <div className="flex items-center justify-center gap-3 mb-4">
           {providerIcon}
           <h1 className={cn(
@@ -170,7 +163,7 @@ export function SocialProfileForm({
           </div>
         )}
         {/* Name Fields - Pre-populated from social login */}
-        <div className={cn("grid grid-cols-1 md:grid-cols-2", spacing.gapMd)}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className={formLogical.fieldset}>
             <Label htmlFor="firstName" className={formLogical.label}>
               {dict.auth.firstName}
@@ -204,115 +197,77 @@ export function SocialProfileForm({
           </div>
         </div>
 
-        {/* Job Title */}
-        <div className={formLogical.fieldset}>
-          <Label htmlFor="jobTitle" className={formLogical.label}>
-            {dict.auth.jobTitle}
-            <span className="text-red-500 ml-1">*</span>
-          </Label>
-          <Input
-            id="jobTitle"
-            type="text"
-            placeholder={dict.auth.jobTitlePlaceholder}
-            value={formData.jobTitle}
-            onChange={handleInputChange('jobTitle')}
-            className={cn(
-              formLogical.input,
-              errors.jobTitle && "border-destructive focus-visible:border-destructive"
+        {/* Project Information Section */}
+        <div className="space-y-4">
+          <div className={formLogical.fieldset}>
+            <Label htmlFor="projectDescription" className={cn(formLogical.label, "text-lg")}>
+              {dict.auth.projectDescription}
+              <span className="text-red-500 ml-1">*</span>
+            </Label>
+            <Textarea
+              id="projectDescription"
+              placeholder={dict.auth.projectDescriptionPlaceholder}
+              value={formData.projectDescription}
+              onChange={handleInputChange('projectDescription')}
+              required
+              className={cn(
+                formLogical.input,
+                "min-h-[100px] resize-none",
+                errors.projectDescription && "border-destructive focus-visible:border-destructive"
+              )}
+              aria-invalid={!!errors.projectDescription}
+              rows={4}
+            />
+            {errors.projectDescription && (
+              <p className={formLogical.errorText}>{errors.projectDescription}</p>
             )}
-            aria-invalid={!!errors.jobTitle}
-          />
-          {errors.jobTitle && (
-            <p className={formLogical.errorText}>{errors.jobTitle}</p>
-          )}
+          </div>
+
+          <div className={formLogical.fieldset}>
+            <Label htmlFor="projectLink" className={formLogical.label}>
+              {dict.auth.projectLink}
+            </Label>
+            <Input
+              id="projectLink"
+              type="url"
+              placeholder={dict.auth.projectLinkPlaceholder}
+              value={formData.projectLink}
+              onChange={handleInputChange('projectLink')}
+              className={cn(
+                formLogical.input,
+                errors.projectLink && "border-destructive focus-visible:border-destructive"
+              )}
+              aria-invalid={!!errors.projectLink}
+              dir="ltr"
+            />
+            {errors.projectLink && (
+              <p className={formLogical.errorText}>{errors.projectLink}</p>
+            )}
+          </div>
         </div>
 
-        {/* Phone Number */}
+        {/* Personal Information Section */}
         <div className={formLogical.fieldset}>
-          <Label htmlFor="phoneNumber" className={formLogical.label}>
-            {dict.auth.phoneNumber}
-            <span className="text-red-500 ml-1">*</span>
-          </Label>
-          <Input
-            id="phoneNumber"
-            type="tel"
-            placeholder={dict.auth.phoneNumberPlaceholder}
-            value={formData.phoneNumber}
-            onChange={handleInputChange('phoneNumber')}
-            className={cn(
-              formLogical.input,
-              errors.phoneNumber && "border-destructive focus-visible:border-destructive"
-            )}
-            aria-invalid={!!errors.phoneNumber}
-          />
-          {errors.phoneNumber && (
-            <p className={formLogical.errorText}>{errors.phoneNumber}</p>
-          )}
-        </div>
-
-        {/* Business Model */}
-        <div className={formLogical.fieldset}>
-          <Label htmlFor="businessModel" className={formLogical.label}>
-            {dict.auth.businessModel}
+          <Label htmlFor="personalInfo" className={cn(formLogical.label, "text-lg")}>
+            {dict.auth.personalInfo}
             <span className="text-red-500 ml-1">*</span>
           </Label>
           <Textarea
-            id="businessModel"
-            value={formData.businessModel}
-            onChange={handleInputChange('businessModel')}
-            className={cn(
-              "min-h-20",
-              errors.businessModel && "border-destructive focus-visible:border-destructive"
-            )}
-            rows={3}
-            aria-invalid={!!errors.businessModel}
-          />
-          {errors.businessModel && (
-            <p className={formLogical.errorText}>{errors.businessModel}</p>
-          )}
-        </div>
-
-        {/* Team Size */}
-        <div className={formLogical.fieldset}>
-          <Label htmlFor="teamSize" className={formLogical.label}>
-            {dict.auth.teamSize}
-            <span className="text-red-500 ml-1">*</span>
-          </Label>
-          <Input
-            id="teamSize"
-            type="text"
-            value={formData.teamSize}
-            onChange={handleInputChange('teamSize')}
+            id="personalInfo"
+            placeholder={dict.auth.personalInfoPlaceholder}
+            value={formData.personalInfo}
+            onChange={handleInputChange('personalInfo')}
+            required
             className={cn(
               formLogical.input,
-              errors.teamSize && "border-destructive focus-visible:border-destructive"
+              "min-h-[120px] resize-none",
+              errors.personalInfo && "border-destructive focus-visible:border-destructive"
             )}
-            aria-invalid={!!errors.teamSize}
+            aria-invalid={!!errors.personalInfo}
+            rows={5}
           />
-          {errors.teamSize && (
-            <p className={formLogical.errorText}>{errors.teamSize}</p>
-          )}
-        </div>
-
-        {/* About Yourself */}
-        <div className={formLogical.fieldset}>
-          <Label htmlFor="aboutYourself" className={formLogical.label}>
-            {dict.auth.aboutYourself}
-            <span className="text-red-500 ml-1">*</span>
-          </Label>
-          <Textarea
-            id="aboutYourself"
-            value={formData.aboutYourself}
-            onChange={handleInputChange('aboutYourself')}
-            className={cn(
-              "min-h-24",
-              errors.aboutYourself && "border-destructive focus-visible:border-destructive"
-            )}
-            rows={4}
-            aria-invalid={!!errors.aboutYourself}
-          />
-          {errors.aboutYourself && (
-            <p className={formLogical.errorText}>{errors.aboutYourself}</p>
+          {errors.personalInfo && (
+            <p className={formLogical.errorText}>{errors.personalInfo}</p>
           )}
         </div>
 

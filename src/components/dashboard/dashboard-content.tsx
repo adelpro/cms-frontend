@@ -1,5 +1,6 @@
 "use client";
 
+import Link from 'next/link';
 import { useAuth } from '@/components/providers/auth-provider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,20 +24,17 @@ export function DashboardContent({ dict, locale }: DashboardContentProps) {
     <div className={cn("min-h-screen bg-background", logical.paddingInline('4'), "py-8")}>
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
-        <div className={cn("flex justify-between items-center", spacing.blockMd)}>
+        <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className={cn(typography.heading, "text-3xl font-bold")}>
-              {locale === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
+              {dict.ui.dashboard}
             </h1>
             <p className="text-muted-foreground mt-2">
-              {locale === 'ar' 
-                ? `أهلاً وسهلاً، ${user.firstName} ${user.lastName}` 
-                : `Welcome, ${user.firstName} ${user.lastName}`
-              }
+              {dict.ui.welcomeUser.replace('{{name}}', `${user.firstName} ${user.lastName}`)}
             </p>
           </div>
           <Button variant="outline" onClick={logout}>
-            {locale === 'ar' ? 'تسجيل الخروج' : 'Logout'}
+            {dict.ui.logout}
           </Button>
         </div>
 
@@ -45,7 +43,7 @@ export function DashboardContent({ dict, locale }: DashboardContentProps) {
           <Card>
             <CardHeader>
               <CardTitle className={typography.heading}>
-                {locale === 'ar' ? 'معلومات الحساب' : 'Account Information'}
+                {dict.ui.accountInfo}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -74,30 +72,30 @@ export function DashboardContent({ dict, locale }: DashboardContentProps) {
           <Card>
             <CardHeader>
               <CardTitle className={typography.heading}>
-                {locale === 'ar' ? 'حالة الحساب' : 'Account Status'}
+                {dict.ui.accountStatus}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div>
-                <strong>{locale === 'ar' ? 'نوع الحساب' : 'Account Type'}:</strong>{' '}
+                <strong>{dict.ui.accountType}:</strong>{' '}
                 {user.provider === 'email' 
-                  ? (locale === 'ar' ? 'بريد إلكتروني' : 'Email')
+                  ? dict.ui.emailAccount
                   : user.provider === 'google'
                   ? 'Google'
                   : 'GitHub'
                 }
               </div>
               <div>
-                <strong>{locale === 'ar' ? 'حالة الملف الشخصي' : 'Profile Status'}:</strong>{' '}
+                <strong>{dict.ui.profileStatus}:</strong>{' '}
                 <span className={user.profileCompleted ? 'text-green-600' : 'text-orange-600'}>
                   {user.profileCompleted 
-                    ? (locale === 'ar' ? 'مكتمل' : 'Complete')
-                    : (locale === 'ar' ? 'غير مكتمل' : 'Incomplete')
+                    ? dict.ui.complete
+                    : dict.ui.incomplete
                   }
                 </span>
               </div>
               <div>
-                <strong>{locale === 'ar' ? 'تاريخ الانضمام' : 'Member Since'}:</strong>{' '}
+                <strong>{dict.ui.memberSince}:</strong>{' '}
                 {new Date().toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US')}
               </div>
             </CardContent>
@@ -108,23 +106,30 @@ export function DashboardContent({ dict, locale }: DashboardContentProps) {
         <Card>
           <CardHeader>
             <CardTitle className={typography.heading}>
-              {locale === 'ar' ? 'مرحباً بك في منصة المطورين' : 'Welcome to Developer Platform'}
+              {dict.ui.welcomeToPlatform}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className={cn(typography.paragraph, "text-muted-foreground")}>
-              {locale === 'ar' 
-                ? 'تم تسجيل دخولك بنجاح! يمكنك الآن الوصول إلى جميع ميزات المنصة والبدء في إنشاء مشاريعك.'
-                : 'You have successfully logged in! You can now access all platform features and start building your projects.'
-              }
+              {dict.ui.loginSuccessMessage}
             </p>
             
-            <div className="mt-6 flex gap-4">
-              <Button>
-                {locale === 'ar' ? 'ابدأ مشروع جديد' : 'Start New Project'}
+            <div className="mt-6 flex flex-wrap gap-4">
+              <Button asChild>
+                <Link href={`/${locale}/store`}>
+                  {dict.ui.assetStore}
+                </Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href={`/${locale}/documentation/standards`}>
+                  {dict.ui.usageStandardsLink}
+                </Link>
               </Button>
               <Button variant="outline">
-                {locale === 'ar' ? 'عرض المشاريع' : 'View Projects'}
+                {dict.ui.academy}
+              </Button>
+              <Button variant="outline">
+                {dict.ui.projects}
               </Button>
             </div>
           </CardContent>

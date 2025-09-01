@@ -24,8 +24,8 @@ const PHONE_REGEX = /^[\+]?[1-9][\d]{0,15}$/;
  * Validation utilities
  */
 export const validators = {
-  email: (value: string, dict: Dictionary): string | null => {
-    if (!value.trim()) {
+  email: (value: string | undefined, dict: Dictionary): string | null => {
+    if (!value || !value.trim()) {
       return dict.auth.validation.emailRequired;
     }
     if (!EMAIL_REGEX.test(value)) {
@@ -34,8 +34,8 @@ export const validators = {
     return null;
   },
 
-  password: (value: string, dict: Dictionary): string | null => {
-    if (!value) {
+  password: (value: string | undefined, dict: Dictionary): string | null => {
+    if (!value || !value.trim()) {
       return dict.auth.validation.passwordRequired;
     }
     if (value.length < 8) {
@@ -44,15 +44,15 @@ export const validators = {
     return null;
   },
 
-  required: (value: string, fieldName: keyof Dictionary['auth']['validation'], dict: Dictionary): string | null => {
-    if (!value.trim()) {
+  required: (value: string | undefined, fieldName: keyof Dictionary['auth']['validation'], dict: Dictionary): string | null => {
+    if (!value || !value.trim()) {
       return dict.auth.validation[fieldName];
     }
     return null;
   },
 
-  phone: (value: string, dict: Dictionary): string | null => {
-    if (!value.trim()) {
+  phone: (value: string | undefined, dict: Dictionary): string | null => {
+    if (!value || !value.trim()) {
       return dict.auth.validation.phoneRequired;
     }
     if (!PHONE_REGEX.test(value.replace(/\s/g, ''))) {
@@ -61,15 +61,15 @@ export const validators = {
     return null;
   },
 
-  minLength: (value: string, minLength: number, dict: Dictionary): string | null => {
-    if (value.trim().length < minLength) {
+  minLength: (value: string | undefined, minLength: number, dict: Dictionary): string | null => {
+    if (!value || value.trim().length < minLength) {
       return dict.auth.validation.fieldTooShort;
     }
     return null;
   },
 
-  maxLength: (value: string, maxLength: number, dict: Dictionary): string | null => {
-    if (value.trim().length > maxLength) {
+  maxLength: (value: string | undefined, maxLength: number, dict: Dictionary): string | null => {
+    if (!value || value.trim().length > maxLength) {
       return dict.auth.validation.fieldTooLong;
     }
     return null;
@@ -164,56 +164,25 @@ export const validateSignupForm = (
  */
 export const validateSocialProfileForm = (
   formData: {
-    jobTitle: string;
-    phoneNumber: string;
-    businessModel: string;
-    teamSize: string;
-    aboutYourself: string;
+    projectDescription?: string;
+    personalInfo?: string;
   },
   dict: Dictionary
 ): ValidationResult => {
   const errors: ValidationError[] = [];
 
-  // Job title validation
-  const jobTitleError = validators.required(formData.jobTitle, 'jobTitleRequired', dict);
-  if (jobTitleError) {
-    errors.push({ field: 'jobTitle', message: jobTitleError });
+  // Project description validation
+  if (!formData.projectDescription || !formData.projectDescription.trim()) {
+    errors.push({ field: 'projectDescription', message: 'يرجى ملء هذا الحقل' });
+  } else if (formData.projectDescription.trim().length < 10) {
+    errors.push({ field: 'projectDescription', message: 'يجب أن يكون الوصف أطول من 10 أحرف' });
   }
 
-  // Phone validation
-  const phoneError = validators.phone(formData.phoneNumber, dict);
-  if (phoneError) {
-    errors.push({ field: 'phoneNumber', message: phoneError });
-  }
-
-  // Business model validation
-  const businessModelError = validators.required(formData.businessModel, 'businessModelRequired', dict);
-  if (businessModelError) {
-    errors.push({ field: 'businessModel', message: businessModelError });
-  }
-
-  // Additional validation for business model length
-  const businessModelLengthError = validators.minLength(formData.businessModel, 10, dict);
-  if (businessModelLengthError) {
-    errors.push({ field: 'businessModel', message: businessModelLengthError });
-  }
-
-  // Team size validation
-  const teamSizeError = validators.required(formData.teamSize, 'teamSizeRequired', dict);
-  if (teamSizeError) {
-    errors.push({ field: 'teamSize', message: teamSizeError });
-  }
-
-  // About yourself validation
-  const aboutYourselfError = validators.required(formData.aboutYourself, 'aboutYourselfRequired', dict);
-  if (aboutYourselfError) {
-    errors.push({ field: 'aboutYourself', message: aboutYourselfError });
-  }
-
-  // Additional validation for about yourself length
-  const aboutYourselfLengthError = validators.minLength(formData.aboutYourself, 20, dict);
-  if (aboutYourselfLengthError) {
-    errors.push({ field: 'aboutYourself', message: aboutYourselfLengthError });
+  // Personal info validation
+  if (!formData.personalInfo || !formData.personalInfo.trim()) {
+    errors.push({ field: 'personalInfo', message: 'يرجى ملء هذا الحقل' });
+  } else if (formData.personalInfo.trim().length < 20) {
+    errors.push({ field: 'personalInfo', message: 'يجب أن يكون الوصف أطول من 20 حرف' });
   }
 
   return {

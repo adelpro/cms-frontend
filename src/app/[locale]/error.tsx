@@ -4,6 +4,9 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useParams } from "next/navigation";
+import { useTranslation } from "@/components/providers/locale-provider";
+import type { Locale } from "@/lib/i18n/types";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -11,6 +14,9 @@ interface ErrorProps {
 }
 
 export default function Error({ error, reset }: ErrorProps) {
+  const params = useParams();
+  const locale = (params?.locale || 'en') as Locale;
+  const { dict } = useTranslation();
   useEffect(() => {
     // Log the error to an error reporting service
     console.error('Application error:', error);
@@ -25,10 +31,10 @@ export default function Error({ error, reset }: ErrorProps) {
         
         <div className="space-y-2">
           <h1 className="text-2xl font-bold text-foreground">
-            Something went wrong
+            {dict.ui.somethingWentWrong}
           </h1>
           <p className="text-muted-foreground">
-            We apologize for the inconvenience. An unexpected error has occurred.
+            {dict.ui.errorDescription}
           </p>
         </div>
 
@@ -39,7 +45,7 @@ export default function Error({ error, reset }: ErrorProps) {
             </p>
             {error.digest && (
               <p className="text-xs text-muted-foreground mt-2">
-                Error ID: {error.digest}
+                {dict.ui.errorId} {error.digest}
               </p>
             )}
           </div>
@@ -51,14 +57,14 @@ export default function Error({ error, reset }: ErrorProps) {
             className={cn("gap-2")}
           >
             <RefreshCw className="h-4 w-4" />
-            Try again
+            {dict.ui.tryAgain}
           </Button>
           
           <Button
             variant="outline"
-            onClick={() => { window.location.href = '/'; }}
+            onClick={() => { window.location.href = `/${locale}`; }}
           >
-            Go home
+            {dict.ui.goHome}
           </Button>
         </div>
       </div>

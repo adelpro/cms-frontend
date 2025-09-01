@@ -116,7 +116,7 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className={cn("text-center", spacing.blockMd)}>
+      <div className="text-center mb-6">
         <h1 className={cn(
           typography.heading,
           "text-2xl font-bold text-foreground"
@@ -126,7 +126,7 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
       </div>
 
       {/* Social Signup Buttons */}
-      <div className={cn("space-y-3", spacing.blockSm)}>
+      <div className="space-y-3 mb-2">
         <Button
           type="button"
           variant="outline"
@@ -181,7 +181,7 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">OR</span>
+          <span className="bg-card px-2 text-muted-foreground">{dict.ui.or}</span>
         </div>
       </div>
 
@@ -198,7 +198,7 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
         )}
 
         {/* Name Fields */}
-        <div className={cn("grid grid-cols-1 md:grid-cols-2", spacing.gapMd)}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className={formLogical.fieldset}>
             <Label htmlFor="firstName" className={formLogical.label}>
               {dict.auth.firstName}
@@ -338,7 +338,7 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
       </form>
 
       {/* Login Link */}
-      <div className={cn("text-center", spacing.blockSm)}>
+      <div className="text-center mb-2">
         <p className="text-sm text-muted-foreground">
           {dict.auth.alreadyHaveAccount}{' '}
           <Link
