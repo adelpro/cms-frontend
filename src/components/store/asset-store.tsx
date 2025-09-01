@@ -51,7 +51,7 @@ export function AssetStore({ dict, locale }: AssetStoreProps) {
       description: asset.description,
       license: ['CC BY', 'CC BY-SA', 'CC0', 'CC BY-NC', 'CC BY-ND'][index] || 'CC BY',
       publisher: asset.publisher,
-      category: ['Translation', 'Tafsir', 'Quran Corpus', 'Quran Audio', 'Quran Illustration/Font'][index] || 'Translation',
+      category: ['Translation', 'Transliteration', 'Quran Corpus', 'Quran Audio', 'Quran Illustration/Font'][index] || 'Translation',
       licenseColor: (['green', 'yellow', 'green', 'yellow', 'yellow'][index] || 'green') as 'green' | 'yellow' | 'red'
     }));
     setAssets(mockAssets);

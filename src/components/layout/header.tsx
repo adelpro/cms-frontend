@@ -23,7 +23,7 @@ export function Header({ dict, locale }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navigation = [
-    { name: dict.header.home, href: `/${locale}/store`, icon: null },
+    { name: dict.header.home, href: `/${locale}`, icon: null },
     { name: dict.header.academy, href: `/${locale}/academy`, icon: null },
     { name: dict.header.projects, href: `/${locale}/projects`, icon: null },
     { name: dict.header.reports, href: `/${locale}/reports`, icon: null },
@@ -45,7 +45,7 @@ export function Header({ dict, locale }: HeaderProps) {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href={`/${locale}/store`} className="text-xl font-bold text-primary">
+            <Link href={`/${locale}`} className="text-xl font-bold text-primary">
               {dict.header.brand}
             </Link>
           </div>

@@ -166,7 +166,7 @@ export const signupUser = async (formData: {
     {
       jobTitle: formData.jobTitle,
       phoneNumber: formData.phoneNumber,
-      profileCompleted: true
+      profileCompleted: false // Profile completion is now a separate step
     }
   );
   
@@ -176,7 +176,8 @@ export const signupUser = async (formData: {
   return {
     success: true,
     token,
-    user
+    user,
+    requiresProfileCompletion: true
   };
 };
 
@@ -269,6 +270,42 @@ export const completeProfile = async (
 export const logoutUser = (): void => {
   tokenStorage.removeToken();
   userStorage.removeUser();
+};
+
+/**
+ * Complete user profile (for email signups)
+ */
+export const completeUserProfile = async (profileData: {
+  businessModel: string;
+  projectLink?: string;
+  teamSize: string;
+  aboutYourself: string;
+}): Promise<AuthResponse> => {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 1200));
+  
+  const currentUser = userStorage.getUser();
+  if (!currentUser) {
+    return {
+      success: false,
+      error: 'No user found'
+    };
+  }
+  
+  const token = generateFakeToken();
+  const updatedUser: User = {
+    ...currentUser,
+    profileCompleted: true
+  };
+  
+  tokenStorage.setToken(token);
+  userStorage.setUser(updatedUser);
+  
+  return {
+    success: true,
+    token,
+    user: updatedUser
+  };
 };
 
 /**

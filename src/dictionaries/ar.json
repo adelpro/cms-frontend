@@ -77,7 +77,14 @@
     "personalInfo": "أخبرنا المزيد عن نفسك وحجم فريقك حتى يتعرف عليك المجتمع بشكل أفضل",
     "personalInfoPlaceholder": "الإجابة على طلب التعريف بالذات",
     "completeProfileTitle": "أكمل معلومات ملفك الشخصي",
-    "completeProfileDescription": "ساعدنا في التعرف عليك أكثر لتوفير تجربة أفضل"
+    "completeProfileDescription": "ساعدنا في التعرف عليك أكثر لتوفير تجربة أفضل",
+    "saveAndContinue": "التخزين والإستمرار",
+    "businessModelQuestion": "ما هو نموذج عملك؟ هل ستجعله مدفوعاً؟ ما نموذج التسعير؟",
+    "teamSizeQuestion": "ما حجم فريقك؟",
+    "aboutYourselfQuestion": "أخبرنا المزيد عن نفسك حتى يتعرف عليك الناشر أكثر",
+    "businessModelPlaceholder": "الإجابة على سؤال نوع نموذج الأعمال",
+    "teamSizePlaceholder": "الإجابة على سؤال حجم الفريق؟",
+    "aboutYourselfPlaceholder": "الإجابة على طلب التعريف بالذات"
   },
   "store": {
     "title": "معرض الأصول والموارد",
@@ -275,6 +282,7 @@
     "somethingWentWrong": "حدث خطأ ما",
     "errorDescription": "نعتذر عن الإزعاج. حدث خطأ غير متوقع.",
     "errorId": "معرف الخطأ:",
-    "tryAgain": "إعادة المحاولة"
+    "tryAgain": "إعادة المحاولة",
+    "skip": "تخطي"
   }
 }

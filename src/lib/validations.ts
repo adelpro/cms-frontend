@@ -189,3 +189,54 @@ export const validateSocialProfileForm = (
     errors
   };
 };
+
+/**
+ * Profile completion form validation
+ */
+export const validateProfileCompletionForm = (
+  formData: {
+    businessModel: string;
+    projectLink?: string;
+    teamSize: string;
+    aboutYourself: string;
+  },
+  dict: Dictionary
+): ValidationResult => {
+  const errors: ValidationError[] = [];
+
+  // Business model validation
+  const businessModelError = validators.required(formData.businessModel, 'businessModelRequired', dict);
+  if (businessModelError) {
+    errors.push({ field: 'businessModel', message: businessModelError });
+  } else if (formData.businessModel.trim().length < 10) {
+    errors.push({ field: 'businessModel', message: dict.auth.validation.fieldTooShort });
+  }
+
+  // Project link validation (optional)
+  if (formData.projectLink && formData.projectLink.trim()) {
+    try {
+      new URL(formData.projectLink);
+    } catch {
+      errors.push({ field: 'projectLink', message: 'رابط غير صحيح' });
+    }
+  }
+
+  // Team size validation
+  const teamSizeError = validators.required(formData.teamSize, 'teamSizeRequired', dict);
+  if (teamSizeError) {
+    errors.push({ field: 'teamSize', message: teamSizeError });
+  }
+
+  // About yourself validation
+  const aboutYourselfError = validators.required(formData.aboutYourself, 'aboutYourselfRequired', dict);
+  if (aboutYourselfError) {
+    errors.push({ field: 'aboutYourself', message: aboutYourselfError });
+  } else if (formData.aboutYourself.trim().length < 20) {
+    errors.push({ field: 'aboutYourself', message: dict.auth.validation.fieldTooShort });
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
+};

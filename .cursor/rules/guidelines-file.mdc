@@ -1,3 +1,8 @@
+---
+alwaysApply: true
+---
+always follow these guidelines and keep an eye on each point:
+
 # Itqan CMS - Development Guidelines
 
 ## 📋 Overview
@@ -931,3 +936,7 @@ Following these guidelines ensures:
 - **Security** best practices
 
 **Any deviation from these guidelines requires explicit approval and documentation of the reasoning.**
+
+
+
+FYI: .temp folder is a folder that I store temporary items that we can use in the project like user-stories, auto-generated code, ...etc and

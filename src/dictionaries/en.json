@@ -77,7 +77,14 @@
     "personalInfo": "Tell us more about yourself and your team size so the community gets to know you better",
     "personalInfoPlaceholder": "Answer about introducing yourself",
     "completeProfileTitle": "Complete your profile information",
-    "completeProfileDescription": "Help us get to know you better to provide a better experience"
+    "completeProfileDescription": "Help us get to know you better to provide a better experience",
+    "saveAndContinue": "Save and Continue",
+    "businessModelQuestion": "What is your business model? Are you going to make it paid? Which pricing model?",
+    "teamSizeQuestion": "What is the size of your team?",
+    "aboutYourselfQuestion": "Tell us more about yourself so that the publisher gets to know you more",
+    "businessModelPlaceholder": "Answer about your business model type",
+    "teamSizePlaceholder": "Answer about team size question",
+    "aboutYourselfPlaceholder": "Answer about introducing yourself"
   },
   "store": {
     "title": "Asset Store",
@@ -275,6 +282,7 @@
     "somethingWentWrong": "Something went wrong",
     "errorDescription": "We apologize for the inconvenience. An unexpected error has occurred.",
     "errorId": "Error ID:",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "skip": "Skip"
   }
 }
