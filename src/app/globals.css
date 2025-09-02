@@ -112,7 +112,47 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
 }
+
+:root {
+  --main-50: #F0F5F2;
+  --main-100: #E0EBE6;
+  --main-200: #D1E1D9;
+  --main-300: #C2D7CC;
+  --main-400: #A3C3B3;
+  --main-500: #85A999;
+  --main-600: #669B80;
+  --main-700: #527C66;
+  --main-800: #3D5D4D;
+  --main-900: #293E33;
+  --main-950: #141F1A;
+
+  --sec-50: #E9ECEC;
+  --sec-100: #D3D9D8;
+  --sec-200: #BDC7C5;
+  --sec-300: #A7B4B1;
+  --sec-400: #7A8E8B;
+  --sec-500: #4E6964;
+  --sec-600: #22433D;
+  --sec-700: #1B3631;
+  --sec-800: #142825;
+  --sec-900: #0E1B18;
+  --sec-950: #070D0C;
+
+  --primary: var(--main-700);
+  --primary-foreground: var(--main-50);
+  --secondary: var(--sec-700);
+  --secondary-foreground: var(--sec-50);
+}
+
+.dark {
+  --primary: var(--main-400);
+  --primary-foreground: var(--main-950);
+  --secondary: var(--sec-400);
+  --secondary-foreground: var(--sec-950);
+}
+
 
 @layer base {
   * {
