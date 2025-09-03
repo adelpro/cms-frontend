@@ -24,11 +24,11 @@ export function Header({ dict, locale }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navigation = [
-    { name: dict.header.home, href: `/${locale}` },
+    // { name: dict.header.home, href: `/${locale}` },
+    { name: dict.header.store, href: `/${locale}/store` },
     { name: dict.header.academy, href: `/${locale}/academy` },
     { name: dict.header.projects, href: `/${locale}/projects` },
     { name: dict.header.reports, href: `/${locale}/reports` },
-    { name: dict.header.store, href: `/${locale}/store` },
   ];
 
   const isActive = (href: string) => {
@@ -45,8 +45,8 @@ export function Header({ dict, locale }: HeaderProps) {
   return (
     <>
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full h-16 border-b border-neutral-100 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto h-full px-4">
+      <header className="sticky top-0 z-50 w-full h-16 border-b border-neutral-100 bg-white">
+        <div className="max-width-container h-full px-4">
           <div className="flex h-full items-center justify-between">
             {/* Start Side - Logo and Navigation */}
             <div className="flex items-center gap-14">
