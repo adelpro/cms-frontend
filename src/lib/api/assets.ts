@@ -1,6 +1,12 @@
 import { env } from '@/lib/env';
 
-const API_BASE_URL = `${env.NEXT_PUBLIC_BACKEND_URL}/mock-api`;
+// Use local mock server for development, production API for production
+const API_BASE_URL = process.env.NODE_ENV === 'development' 
+  ? 'http://localhost:3001/mock-api'
+  : `${env.NEXT_PUBLIC_BACKEND_URL}/mock-api`;
+
+console.log('Assets API Base URL:', API_BASE_URL);
+console.log('NODE_ENV:', process.env.NODE_ENV);
 
 // API Types based on the contract
 export interface ApiLicense {
@@ -136,12 +142,27 @@ export async function getAssetDetails(
   assetId: number,
   token?: string
 ): Promise<ApiAssetDetailsResponse> {
-  const response = await fetch(`${API_BASE_URL}/assets/${assetId}`, {
+  const url = `${API_BASE_URL}/assets/${assetId}`;
+  console.log('Fetching asset details from:', url);
+  
+  const response = await fetch(url, {
     method: 'GET',
     headers: getAuthHeaders(token),
   });
 
-  return handleApiResponse<ApiAssetDetailsResponse>(response);
+  console.log('Asset details response status:', response.status);
+  console.log('Asset details response headers:', response.headers);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Asset details error response:', errorText);
+    throw new Error(`HTTP ${response.status}: ${errorText}`);
+  }
+
+  const data = await response.json();
+  console.log('Asset details response data:', data);
+  
+  return data;
 }
 
 export async function requestAssetAccess(
@@ -149,7 +170,7 @@ export async function requestAssetAccess(
   data: ApiAccessRequest,
   token: string
 ): Promise<ApiAccessRequestResponse> {
-  const response = await fetch(`${API_BASE_URL}/assets/${assetId}/request-access`, {
+  const response = await fetch(`${API_BASE_URL}/assets/${assetId}/request-access/`, {
     method: 'POST',
     headers: getAuthHeaders(token),
     body: JSON.stringify(data),

@@ -48,7 +48,7 @@ interface AssetDetailsType {
   title: string;
   description: string;
   thumbnail_url: string;
-  category: string;
+  category: 'mushaf' | 'tafsir' | 'recitation';
   license: {
     code: string;
     name: string;
@@ -106,24 +106,39 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
   const isRTL = direction.isRTL(locale);
 
   useEffect(() => {
-    loadAssetDetails();
-  }, [assetId]);
+    const fetchAsset = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const token = tokenStorage.getToken();
+        console.log('Loading asset details for ID:', assetId);
+        
+        const assetData = await getAssetDetails(parseInt(assetId), token || undefined);
+        console.log('Asset data received:', assetData);
+        
+        if (!assetData || !assetData.asset) {
+          console.error('No asset data received from API');
+          setError('No asset data received from API');
+          setAsset(null);
+          return;
+        }
+        
+        setAsset(assetData.asset);
+        console.log('Asset set successfully:', assetData.asset);
+      } catch (err) {
+        console.error('Error loading asset details:', err);
+        setError(err instanceof Error ? err.message : dict.api.errors.assetNotFound);
+        setAsset(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const loadAssetDetails = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      
-      const token = tokenStorage.getToken();
-      const assetData = await getAssetDetails(parseInt(assetId), token || undefined);
-      setAsset(assetData.asset);
-    } catch (err) {
-      console.error('Error loading asset details:', err);
-      setError(err instanceof Error ? err.message : dict.api.errors.assetNotFound);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    fetchAsset();
+  }, [assetId, dict.api.errors.assetNotFound]);
+
+
 
   const handleDownloadClick = () => {
     // Check if user is authenticated
@@ -203,6 +218,7 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
         <div className="text-center space-y-4">
           <RefreshCw className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
           <p className="text-muted-foreground">{dict.api.loading.loadingAssetDetails}</p>
+          <p className="text-sm text-muted-foreground">Loading asset ID: {assetId}</p>
         </div>
       </div>
     );
@@ -216,8 +232,18 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
           <h2 className="text-xl font-semibold text-foreground">
             {dict.api.errors.assetNotFound}
           </h2>
-          <p className="text-muted-foreground">{error}</p>
-          <Button onClick={loadAssetDetails} variant="outline">
+          <p className="text-muted-foreground">
+            {error || 'Asset data is missing'}
+          </p>
+          <div className="space-y-2">
+            <p className="text-sm text-muted-foreground">
+              Asset ID: {assetId}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Error: {error || 'No asset data'}
+            </p>
+          </div>
+          <Button onClick={() => window.location.reload()} variant="outline">
             {dict.ui.tryAgain}
           </Button>
         </div>
@@ -421,7 +447,6 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
                 onClick={handleDownloadClick}
                 size="lg"
                 className="mt-2 w-full justify-center bg-primary-600 hover:bg-primary-700 text-white cursor-pointer"
-                disabled={!asset.access.has_access}
               >
                 {asset.access.has_access ? dict.ui.downloadResource : dict.ui.requestAccess}
                 <CloudDownload className="h-4 w-4 ml-2" />

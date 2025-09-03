@@ -27,6 +27,8 @@ export type Dictionary = {
   theme: string;
   auth: {
     loginTitle: string;
+    loginSubtitle: string;
+    returnToWebsite: string;
     signupTitle: string;
     loginWithGoogle: string;
     loginWithGitHub: string;
@@ -38,6 +40,8 @@ export type Dictionary = {
     lastName: string;
     jobTitle: string;
     jobTitlePlaceholder: string;
+    title: string;
+    titlePlaceholder: string;
     phoneNumber: string;
     phoneNumberPlaceholder: string;
     emailPlaceholder: string;
@@ -61,6 +65,7 @@ export type Dictionary = {
       firstNameRequired: string;
       lastNameRequired: string;
       jobTitleRequired: string;
+      titleRequired: string;
       phoneRequired: string;
       phoneInvalid: string;
       businessModelRequired: string;

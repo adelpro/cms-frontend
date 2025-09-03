@@ -110,6 +110,8 @@ export const validateSignupForm = (
     lastName: string;
     email: string;
     password: string;
+    title: string;
+    phoneNumber: string;
   },
   dict: Dictionary
 ): ValidationResult => {
@@ -137,6 +139,18 @@ export const validateSignupForm = (
   const passwordError = validators.password(formData.password, dict);
   if (passwordError) {
     errors.push({ field: 'password', message: passwordError });
+  }
+
+  // Title validation
+  const titleError = validators.required(formData.title, 'titleRequired', dict);
+  if (titleError) {
+    errors.push({ field: 'title', message: titleError });
+  }
+
+  // Phone number validation
+  const phoneError = validators.phone(formData.phoneNumber, dict);
+  if (phoneError) {
+    errors.push({ field: 'phoneNumber', message: phoneError });
   }
 
   return {

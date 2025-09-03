@@ -153,15 +153,17 @@ export const signupUser = async (formData: {
   lastName: string;
   email: string;
   password: string;
+  title: string;
+  phoneNumber: string;
 }): Promise<AuthResponse> => {
   try {
-    // Combine first and last name for API
-    const name = `${formData.firstName} ${formData.lastName}`.trim();
-    
     const apiResponse: ApiAuthResponse = await apiRegisterUser({
       email: formData.email,
       password: formData.password,
-      name
+      first_name: formData.firstName,
+      last_name: formData.lastName,
+      title: formData.title,
+      phone_number: formData.phoneNumber
     });
     
     // Convert API user to internal user format

@@ -22,7 +22,9 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
     firstName: '',
     lastName: '',
     email: '',
-    password: ''
+    password: '',
+    title: '',
+    phoneNumber: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -273,6 +275,50 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
           />
           {errors.password && (
             <p className={formLogical.errorText}>{errors.password}</p>
+          )}
+        </div>
+
+        {/* Title */}
+        <div className={formLogical.fieldset}>
+          <Label htmlFor="title" className={formLogical.label}>
+            {dict.auth.title}
+          </Label>
+          <Input
+            id="title"
+            type="text"
+            placeholder={dict.auth.titlePlaceholder}
+            value={formData.title}
+            onChange={handleInputChange('title')}
+            className={cn(
+              formLogical.input,
+              errors.title && "border-destructive focus-visible:border-destructive"
+            )}
+            aria-invalid={!!errors.title}
+          />
+          {errors.title && (
+            <p className={formLogical.errorText}>{errors.title}</p>
+          )}
+        </div>
+
+        {/* Phone Number */}
+        <div className={formLogical.fieldset}>
+          <Label htmlFor="phoneNumber" className={formLogical.label}>
+            {dict.auth.phoneNumber}
+          </Label>
+          <Input
+            id="phoneNumber"
+            type="tel"
+            placeholder={dict.auth.phoneNumberPlaceholder}
+            value={formData.phoneNumber}
+            onChange={handleInputChange('phoneNumber')}
+            className={cn(
+              formLogical.input,
+              errors.phoneNumber && "border-destructive focus-visible:border-destructive"
+            )}
+            aria-invalid={!!errors.phoneNumber}
+          />
+          {errors.phoneNumber && (
+            <p className={formLogical.errorText}>{errors.phoneNumber}</p>
           )}
         </div>
 

@@ -6,13 +6,16 @@
 import { env } from '@/lib/env';
 
 // API base URL with mock-api prefix as required
-const API_BASE_URL = `${env.NEXT_PUBLIC_BACKEND_URL}/mock-api`;
+const API_BASE_URL = `${env.NEXT_PUBLIC_BACKEND_URL}/api/v1`;
 
 // API response types based on the contract
 export interface ApiUser {
   id: number;
   email: string;
-  name: string;
+  first_name: string;
+  last_name: string;
+  title?: string;
+  phone_number?: string;
   avatar_url?: string;
   bio?: string;
   organization?: string;
@@ -90,9 +93,12 @@ function getAuthHeaders(token?: string): HeadersInit {
 export async function registerUser(data: {
   email: string;
   password: string;
-  name: string;
+  first_name: string;
+  last_name: string;
+  title: string;
+  phone_number: string;
 }): Promise<ApiAuthResponse> {
-  const response = await fetch(`${API_BASE_URL}/auth/register`, {
+  const response = await fetch(`${API_BASE_URL}/auth/register/`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify(data),
@@ -108,7 +114,7 @@ export async function loginUser(data: {
   email: string;
   password: string;
 }): Promise<ApiAuthResponse> {
-  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+  const response = await fetch(`${API_BASE_URL}/auth/login/`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify(data),
@@ -136,7 +142,7 @@ export async function updateUserProfile(
   token: string, 
   data: ApiProfileUpdateRequest
 ): Promise<ApiProfileUpdateResponse> {
-  const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+  const response = await fetch(`${API_BASE_URL}/auth/profile/`, {
     method: 'PUT',
     headers: getAuthHeaders(token),
     body: JSON.stringify(data),
@@ -149,7 +155,7 @@ export async function updateUserProfile(
  * Refresh access token
  */
 export async function refreshToken(refreshToken: string): Promise<{ access_token: string }> {
-  const response = await fetch(`${API_BASE_URL}/auth/token/refresh`, {
+  const response = await fetch(`${API_BASE_URL}/auth/token/refresh/`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify({ refresh_token: refreshToken }),
@@ -162,7 +168,7 @@ export async function refreshToken(refreshToken: string): Promise<{ access_token
  * Logout user
  */
 export async function logoutUser(token: string): Promise<void> {
-  const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+  const response = await fetch(`${API_BASE_URL}/auth/logout/`, {
     method: 'POST',
     headers: getAuthHeaders(token),
   });
@@ -185,14 +191,13 @@ export function convertApiUserToUser(apiUser: ApiUser): {
   provider: 'email' | 'google' | 'github';
   profileCompleted: boolean;
 } {
-  const [firstName, ...lastNameParts] = apiUser.name.split(' ');
-  const lastName = lastNameParts.join(' ') || '';
-  
   return {
     id: apiUser.id.toString(),
     email: apiUser.email,
-    firstName,
-    lastName,
+    firstName: apiUser.first_name,
+    lastName: apiUser.last_name,
+    jobTitle: apiUser.title,
+    phoneNumber: apiUser.phone_number,
     provider: apiUser.auth_provider,
     profileCompleted: apiUser.profile_completed,
   };

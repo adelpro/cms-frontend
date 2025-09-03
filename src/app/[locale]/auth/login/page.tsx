@@ -41,6 +41,6 @@ export async function generateMetadata({ params }: LoginPageProps) {
 
   return {
     title: dict.auth.loginTitle,
-    description: dict.auth.loginTitle,
+    description: dict.auth.loginSubtitle,
   };
 }

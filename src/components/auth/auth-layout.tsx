@@ -1,6 +1,11 @@
 import type { Locale } from '@/lib/i18n/types';
 import { direction, logical, responsive } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { getDictionary } from '@/lib/i18n/dictionaries';
+import Link from 'next/link';
+import { Home } from 'lucide-react';
+import { LanguageSwitcher } from '../language-switcher';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -8,28 +13,44 @@ interface AuthLayoutProps {
   className?: string;
 }
 
-export function AuthLayout({ children, locale, className }: AuthLayoutProps) {
+export async function AuthLayout({ children, locale, className }: AuthLayoutProps) {
+  const dict = await getDictionary(locale);
 
   return (
     <div 
       className={cn(
-        "min-h-screen bg-background flex items-center justify-center",
-        logical.paddingInline('4'),
+        "min-h-screen bg-[#F8F8F8] flex flex-col",
         className
       )}
       dir={direction.getDir(locale)}
     >
-      <div 
-        className={cn(
-          "w-full max-w-2xl lg:max-w-3xl",
-          responsive.paddingInlineResponsive
-        )}
-      >
-        <div className={cn(
-          "bg-card text-card-foreground rounded-xl border shadow-lg",
-          "px-4 sm:px-6 md:px-8 lg:px-12",
-          "py-6 sm:py-8 lg:py-12 space-y-6"
-        )}>
+      {/* Dark grey top bar */}
+      <div className="h-16 flex items-center justify-between px-4">
+        <LanguageSwitcher currentLocale={locale} />
+        <Button
+          variant="ghost"
+          size="lg"
+          className="h-10 px-4  border-[#0A0A0A] border-[1.25px]"
+          asChild
+        >
+          <Link href={`/${locale}`}>
+            <span className="flex items-center gap-2">
+              <Home className="h-5 w-5" />
+              {dict.auth.returnToWebsite}
+            </span>
+          </Link>
+        </Button>
+      </div>
+
+      {/* Main content area */}
+      <div className="flex-1 flex items-center justify-center">
+        <div 
+          className={cn(
+            "w-full max-w-md",
+            logical.paddingInline('4'),
+            responsive.paddingInlineResponsive
+          )}
+        >
           {children}
         </div>
       </div>

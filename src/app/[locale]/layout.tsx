@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { LocaleProvider } from "@/components/providers/locale-provider";
-import { Header } from "@/components/layout/header";
 import { direction } from "@/lib/styles/logical";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { ConditionalHeader } from "@/components/layout/conditional-header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -67,7 +67,7 @@ export default async function RootLayout({
         <ThemeProvider>
           <LocaleProvider locale={validatedLocale} dict={dict}>
             <AuthProvider locale={validatedLocale}>
-              <Header dict={dict} locale={validatedLocale} />
+              <ConditionalHeader dict={dict} locale={validatedLocale} />
               {children}
             </AuthProvider>
           </LocaleProvider>
