@@ -1,12 +1,7 @@
 import { env } from '@/lib/env';
 
 // Use local mock server for development, production API for production
-const API_BASE_URL = process.env.NODE_ENV === 'development' 
-  ? 'http://localhost:3001/mock-api'
-  : `${env.NEXT_PUBLIC_BACKEND_URL}/mock-api`;
-
-console.log('Assets API Base URL:', API_BASE_URL);
-console.log('NODE_ENV:', process.env.NODE_ENV);
+const API_BASE_URL = `${env.NEXT_PUBLIC_BACKEND_URL}/mock-api`;
 
 // API Types based on the contract
 export interface ApiLicense {
