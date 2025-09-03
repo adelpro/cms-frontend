@@ -21,6 +21,73 @@ const users = [
 
 const tokens = new Map();
 
+// Mock assets data
+const assets = [
+  {
+    id: 1,
+    title: "Quran Uthmani",
+    description: "Quran Uthmani Description Summary",
+    thumbnail_url: "https://cdn.example.com/thumbnails/asset-1.jpg",
+    category: "mushaf",
+    license: {
+      code: "cc0",
+      name: "CC0 - Public Domain"
+    },
+    publisher: {
+      id: 1,
+      name: "Tafsir Center",
+      thumbnail_url: "https://cdn.example.com/publishers/publisher-1.jpg",
+      bio: "Dedicated to preserving Quranic texts",
+      verified: true
+    },
+    has_access: false,
+    download_count: 1250,
+    file_size: "2.5 MB"
+  },
+  {
+    id: 2,
+    title: "Tafsir Ibn Katheer",
+    description: "Tafsir Ibn Katheer Description Summary",
+    thumbnail_url: "https://cdn.example.com/thumbnails/asset-2.jpg",
+    category: "tafsir",
+    license: {
+      code: "cc-by-4.0",
+      name: "CC BY 4.0"
+    },
+    publisher: {
+      id: 1,
+      name: "Tafsir Center",
+      thumbnail_url: "https://cdn.example.com/publishers/publisher-1.jpg",
+      bio: "Dedicated to preserving Quranic texts",
+      verified: true
+    },
+    has_access: true,
+    download_count: 890,
+    file_size: "15.2 MB"
+  },
+  {
+    id: 3,
+    title: "Quran Recitation - Mishary Rashid",
+    description: "Beautiful recitation of the Holy Quran by Mishary Rashid Alafasy",
+    thumbnail_url: "https://cdn.example.com/thumbnails/asset-3.jpg",
+    category: "recitation",
+    license: {
+      code: "cc-by-nc-4.0",
+      name: "CC BY-NC 4.0"
+    },
+    publisher: {
+      id: 2,
+      name: "Quran Audio Foundation",
+      thumbnail_url: "https://cdn.example.com/publishers/publisher-2.jpg",
+      bio: "Specialized in high-quality Quranic audio",
+      verified: true
+    },
+    has_access: false,
+    download_count: 2100,
+    file_size: "45.8 MB"
+  }
+];
+
 // Generate JWT-like tokens
 function generateToken() {
   return 'mock_jwt_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -228,7 +295,153 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(204);
       res.end();
       
-    } else {
+    }
+    // Assets endpoints
+    else if (path === '/mock-api/assets' && req.method === 'GET') {
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      const query = parsedUrl.query;
+      
+      let filteredAssets = [...assets];
+      
+      // Apply category filter
+      if (query.category) {
+        filteredAssets = filteredAssets.filter(asset => asset.category === query.category);
+      }
+      
+      // Apply license filter
+      if (query.license_code) {
+        filteredAssets = filteredAssets.filter(asset => asset.license.code === query.license_code);
+      }
+      
+      // Set has_access based on authentication
+      const assetsWithAccess = filteredAssets.map(asset => ({
+        ...asset,
+        has_access: token && tokens.has(token) ? asset.has_access : false
+      }));
+      
+      res.writeHead(200);
+      res.end(JSON.stringify({
+        assets: assetsWithAccess
+      }));
+    }
+    else if (path.startsWith('/mock-api/assets/') && req.method === 'GET') {
+      const assetId = parseInt(path.split('/').pop());
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      
+      const asset = assets.find(a => a.id === assetId);
+      if (!asset) {
+        res.writeHead(404);
+        res.end(JSON.stringify({
+          error: {
+            code: 'NOT_FOUND',
+            message: 'Asset not found'
+          }
+        }));
+        return;
+      }
+      
+      // Create detailed asset response
+      const detailedAsset = {
+        ...asset,
+        snapshots: [
+          {
+            thumbnail_url: `https://cdn.example.com/snapshots/asset-${assetId}-1.jpg`,
+            title: "لقطة من المحتوى ١",
+            description: "كما هو مبين في اللقطة المرفقة ١ .. كلام"
+          },
+          {
+            thumbnail_url: `https://cdn.example.com/snapshots/asset-${assetId}-2.jpg`,
+            title: "لقطة من المحتوى ٢",
+            description: "كما هو مبين في اللقطة المرفقة ٢ .. كلام"
+          }
+        ],
+        resource: {
+          id: assetId + 4,
+          title: `${asset.title} Collection`,
+          description: `Collection of ${asset.title} in various formats`
+        },
+        technical_details: {
+          file_size: asset.file_size,
+          format: "json",
+          encoding: "UTF-8",
+          version: "1.0.0",
+          language: "ar"
+        },
+        stats: {
+          download_count: asset.download_count,
+          view_count: asset.download_count * 3,
+          created_at: "2024-01-15T10:30:00Z",
+          updated_at: "2024-01-20T14:20:00Z"
+        },
+        access: {
+          has_access: token && tokens.has(token) ? asset.has_access : false
+        }
+      };
+      
+      res.writeHead(200);
+      res.end(JSON.stringify({
+        asset: detailedAsset
+      }));
+    }
+    else if (path.startsWith('/mock-api/assets/') && path.endsWith('/request-access') && req.method === 'POST') {
+      const assetId = parseInt(path.split('/')[3]);
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      
+      if (!token || !tokens.has(token)) {
+        res.writeHead(401);
+        res.end(JSON.stringify({
+          error: {
+            code: 'UNAUTHORIZED',
+            message: 'Invalid or expired token'
+          }
+        }));
+        return;
+      }
+      
+      const body = await parseBody(req);
+      
+      res.writeHead(200);
+      res.end(JSON.stringify({
+        request_id: Math.floor(Math.random() * 1000) + 1,
+        status: "approved",
+        message: "Access request approved",
+        download_url: `/assets/${assetId}/download`
+      }));
+    }
+    else if (path.startsWith('/mock-api/assets/') && path.endsWith('/download') && req.method === 'GET') {
+      const assetId = parseInt(path.split('/')[3]);
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      
+      if (!token || !tokens.has(token)) {
+        res.writeHead(401);
+        res.end(JSON.stringify({
+          error: {
+            code: 'UNAUTHORIZED',
+            message: 'Invalid or expired token'
+          }
+        }));
+        return;
+      }
+      
+      const asset = assets.find(a => a.id === assetId);
+      if (!asset) {
+        res.writeHead(404);
+        res.end(JSON.stringify({
+          error: {
+            code: 'NOT_FOUND',
+            message: 'Asset not found'
+          }
+        }));
+        return;
+      }
+      
+      // Simulate file download
+      res.setHeader('Content-Type', 'application/octet-stream');
+      res.setHeader('Content-Disposition', `attachment; filename="${asset.title}.zip"`);
+      res.writeHead(200);
+      res.end('Mock file content for download');
+    }
+    else {
       res.writeHead(404);
       res.end(JSON.stringify({
         error: {
@@ -260,4 +473,8 @@ server.listen(PORT, () => {
   console.log('  PUT  /mock-api/auth/profile');
   console.log('  POST /mock-api/auth/token/refresh');
   console.log('  POST /mock-api/auth/logout');
+  console.log('  GET  /mock-api/assets');
+  console.log('  GET  /mock-api/assets/{id}');
+  console.log('  POST /mock-api/assets/{id}/request-access');
+  console.log('  GET  /mock-api/assets/{id}/download');
 });

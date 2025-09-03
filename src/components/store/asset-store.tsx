@@ -19,6 +19,9 @@ import {
 import type { Dictionary, Locale } from '@/lib/i18n/types';
 import { logical, spacing } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
+import { getAssets, convertApiAssetToAsset } from '@/lib/api/assets';
+import { useAuth } from '@/components/providers/auth-provider';
+import { tokenStorage } from '@/lib/auth';
 
 interface Asset {
   id: string;
@@ -29,6 +32,10 @@ interface Asset {
   category: string;
   licenseColor: 'green' | 'yellow' | 'red';
   type: 'translation' | 'tafsir' | 'audio';
+  thumbnail_url?: string;
+  has_access?: boolean;
+  download_count?: number;
+  file_size?: string;
 }
 
 interface AssetStoreProps {
@@ -37,6 +44,7 @@ interface AssetStoreProps {
 }
 
 export function AssetStore({ dict, locale }: AssetStoreProps) {
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedLicenses, setSelectedLicenses] = useState<string[]>([]);
@@ -44,22 +52,75 @@ export function AssetStore({ dict, locale }: AssetStoreProps) {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [isCategoryFilterOpen, setIsCategoryFilterOpen] = useState(false);
   const [isLicenseFilterOpen, setIsLicenseFilterOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const itemsPerPage = 10;
 
-  // Mock data
+  // Load assets from API
   useEffect(() => {
-    const mockAssets: Asset[] = dict.mockData.assets.map((asset, index): Asset => ({
-      id: (index + 1).toString(),
-      title: asset.title,
-      description: asset.description,
-      license: ['CC BY', 'CC BY-SA', 'CC0', 'CC BY-NC', 'CC BY-ND'][index] || 'CC BY',
-      publisher: asset.publisher,
-      category: ['Translation', 'Transliteration', 'Quran Corpus', 'Quran Audio', 'Quran Illustration/Font'][index] || 'Translation',
-      licenseColor: (['green', 'yellow', 'green', 'yellow', 'yellow'][index] || 'green') as 'green' | 'yellow' | 'red',
-      type: (['translation', 'tafsir', 'audio', 'audio', 'audio'][index] || 'translation') as 'translation' | 'tafsir' | 'audio'
-    }));
-    setAssets(mockAssets);
-  }, [dict.mockData.assets]);
+    const loadAssets = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const token = tokenStorage.getToken();
+        const filters: { category?: 'mushaf' | 'tafsir' | 'recitation'; license_code?: string } = {};
+        
+        // Apply category filter if selected
+        if (selectedCategories.length === 1) {
+          const categoryMap: { [key: string]: 'mushaf' | 'tafsir' | 'recitation' } = {
+            'Translation': 'mushaf',
+            'Tafsir': 'tafsir',
+            'Quran Audio': 'recitation'
+          };
+          const selectedCategory = selectedCategories[0];
+          if (categoryMap[selectedCategory]) {
+            filters.category = categoryMap[selectedCategory];
+          }
+        }
+        
+        // Apply license filter if selected
+        if (selectedLicenses.length === 1) {
+          const licenseMap: { [key: string]: string } = {
+            'CC0/ Public Domain': 'cc0',
+            'CC BY': 'cc-by-4.0',
+            'CC BY-SA': 'cc-by-sa-4.0',
+            'CC BY-ND': 'cc-by-nd-4.0',
+            'CC BY-NC': 'cc-by-nc-4.0',
+            'CC BY-NC-SA': 'cc-by-nc-sa-4.0',
+            'CC BY-NC-ND': 'cc-by-nc-nd-4.0'
+          };
+          const selectedLicense = selectedLicenses[0];
+          if (licenseMap[selectedLicense]) {
+            filters.license_code = licenseMap[selectedLicense];
+          }
+        }
+        
+        const response = await getAssets(token || undefined, filters);
+        const apiAssets = response.assets.map(convertApiAssetToAsset);
+        setAssets(apiAssets);
+      } catch (err) {
+        console.error('Failed to load assets:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load assets');
+        // Fallback to mock data on error
+        const mockAssets: Asset[] = dict.mockData.assets.map((asset, index): Asset => ({
+          id: (index + 1).toString(),
+          title: asset.title,
+          description: asset.description,
+          license: ['CC BY', 'CC BY-SA', 'CC0', 'CC BY-NC', 'CC BY-ND'][index] || 'CC BY',
+          publisher: asset.publisher,
+          category: ['Translation', 'Transliteration', 'Quran Corpus', 'Quran Audio', 'Quran Illustration/Font'][index] || 'Translation',
+          licenseColor: (['green', 'yellow', 'green', 'yellow', 'yellow'][index] || 'green') as 'green' | 'yellow' | 'red',
+          type: (['translation', 'tafsir', 'audio', 'audio', 'audio'][index] || 'translation') as 'translation' | 'tafsir' | 'audio'
+        }));
+        setAssets(mockAssets);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadAssets();
+  }, [selectedCategories, selectedLicenses, dict.mockData.assets]);
 
   const categories = [
     { key: 'Translation', label: dict.categories.translation },
@@ -236,7 +297,26 @@ export function AssetStore({ dict, locale }: AssetStoreProps) {
 
         {/* Assets Grid */}
         <div className="lg:col-span-3">
-          {filteredAssets.length === 0 ? (
+          {isLoading ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">{dict.api.loading.loadingAssets}</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground mb-4">{error}</p>
+              <Button 
+                onClick={() => {
+                  setError(null);
+                  setIsLoading(true);
+                  // Trigger reload by changing a dependency
+                  setCurrentPage(1);
+                }}
+                variant="outline"
+              >
+                Try Again
+              </Button>
+            </div>
+          ) : filteredAssets.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground">{dict.ui.noResultsFound}</p>
             </div>

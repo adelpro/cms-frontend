@@ -127,13 +127,24 @@ function getMinimalDictionary(): Dictionary {
         accessDenied: "Access denied",
         networkError: "Network error. Please check your connection",
         serverError: "Server error. Please try again later",
-        validationError: "Please check your input and try again"
+        validationError: "Please check your input and try again",
+        assetNotFound: "Asset not found",
+        accessRequestFailed: "Failed to request access",
+        downloadFailed: "Download failed"
       },
       success: {
         loginSuccess: "Login successful",
         signupSuccess: "Account created successfully",
         profileUpdated: "Profile updated successfully",
-        accessGranted: "Access granted successfully"
+        accessGranted: "Access granted successfully",
+        accessRequested: "Access request submitted successfully",
+        downloadStarted: "Download started successfully"
+      },
+      loading: {
+        loadingAssets: "Loading assets...",
+        loadingAssetDetails: "Loading asset details...",
+        requestingAccess: "Requesting access...",
+        downloading: "Downloading..."
       }
     },
     store: {
@@ -256,7 +267,17 @@ function getMinimalDictionary(): Dictionary {
       errorDescription: "We apologize for the inconvenience. An unexpected error has occurred.",
       errorId: "Error ID:",
       tryAgain: "Try again",
-      skip: "Skip"
+      skip: "Skip",
+      technicalDetails: "Technical Details",
+      fileSize: "File Size",
+      fileFormat: "File Format",
+      language: "Language",
+      version: "Version",
+      statistics: "Statistics",
+      downloads: "Downloads",
+      views: "Views",
+      rating: "Rating",
+      requestAccess: "Request Access"
     },
     mockData: {
       assetTitle: "Quran Translation",

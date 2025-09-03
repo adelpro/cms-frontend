@@ -18,6 +18,8 @@ import {
   ScrollText,
   SquareDashedMousePointer,
   Languages,
+  AlertCircle,
+  RefreshCw,
 } from "lucide-react";
 import {
   Dialog,
@@ -38,19 +40,51 @@ import type { Dictionary, Locale } from "@/lib/i18n/types";
 import { direction } from "@/lib/styles/logical";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
+import { getAssetDetails, downloadAsset, requestAssetAccess } from "@/lib/api/assets";
+import { tokenStorage } from "@/lib/auth";
 
 interface AssetDetailsType {
-  id: string;
+  id: number;
   title: string;
   description: string;
-  license: string;
-  publisher: string;
-  publisherId: string;
+  thumbnail_url: string;
   category: string;
-  icon?: string;
-  originalVersion?: string;
-  contentPreview: string;
-  contentPreviewImages: string[];
+  license: {
+    code: string;
+    name: string;
+  };
+  snapshots: Array<{
+    thumbnail_url: string;
+    title: string;
+    description: string;
+  }>;
+  publisher: {
+    id: number;
+    name: string;
+    thumbnail_url: string;
+    bio?: string;
+  };
+  resource: {
+    id: number;
+    title: string;
+    description: string;
+  };
+  technical_details: {
+    file_size: string;
+    format: string;
+    encoding: string;
+    version: string;
+    language: string;
+  };
+  stats: {
+    download_count: number;
+    view_count: number;
+    created_at: string;
+    updated_at: string;
+  };
+  access: {
+    has_access: boolean;
+  };
 }
 
 interface AssetDetailsProps {
@@ -63,32 +97,33 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
   const { user } = useAuth();
   const router = useRouter();
   const [asset, setAsset] = useState<AssetDetailsType | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showAccessRequest, setShowAccessRequest] = useState(false);
   const [showLicenseCarousel, setShowLicenseCarousel] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isRequestingAccess, setIsRequestingAccess] = useState(false);
   const isRTL = direction.isRTL(locale);
 
   useEffect(() => {
-    // Mock asset data
-    const mockAsset: AssetDetailsType = {
-      id: assetId,
-      title: dict.mockData.assetTitle,
-      description: dict.mockData.assetDescription,
-      license: "cc-by",
-      publisher: dict.mockData.assetPublisher,
-      publisherId: "publisher-1",
-      category: "Translation",
-      contentPreview: dict.mockData.assetContentPreview,
-      contentPreviewImages: dict.mockData.contentPreviewImages,
-    };
-    setAsset(mockAsset);
-  }, [
-    assetId,
-    dict.mockData.assetTitle,
-    dict.mockData.assetDescription,
-    dict.mockData.assetPublisher,
-    dict.mockData.assetContentPreview,
-    dict.mockData.contentPreviewImages,
-  ]);
+    loadAssetDetails();
+  }, [assetId]);
+
+  const loadAssetDetails = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      const token = tokenStorage.getToken();
+      const assetData = await getAssetDetails(parseInt(assetId), token || undefined);
+      setAsset(assetData.asset);
+    } catch (err) {
+      console.error('Error loading asset details:', err);
+      setError(err instanceof Error ? err.message : dict.api.errors.assetNotFound);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleDownloadClick = () => {
     // Check if user is authenticated
@@ -104,18 +139,106 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
     setShowAccessRequest(true);
   };
 
-  const handleAccessRequestSubmit = () => {
-    setShowAccessRequest(false);
-    setShowLicenseCarousel(true);
+  const handleAccessRequestSubmit = async (formData: { assetTitle: string; reason: string; addedValue: string; timestamp: string }) => {
+    if (!asset) return;
+    
+    try {
+      setIsRequestingAccess(true);
+      const token = tokenStorage.getToken();
+      if (!token) {
+        throw new Error(dict.api.errors.unauthorized);
+      }
+
+      // Transform form data to API format
+      const apiData = {
+        purpose: formData.reason,
+        intended_use: 'non-commercial' as const // Default to non-commercial
+      };
+
+      await requestAssetAccess(asset.id, apiData, token);
+      setShowAccessRequest(false);
+      setShowLicenseCarousel(true);
+    } catch (err) {
+      console.error('Error requesting access:', err);
+      setError(err instanceof Error ? err.message : dict.api.errors.accessRequestFailed);
+    } finally {
+      setIsRequestingAccess(false);
+    }
   };
 
-  if (!asset) {
+  const handleDownload = async () => {
+    if (!asset) return;
+    
+    try {
+      setIsDownloading(true);
+      const token = tokenStorage.getToken();
+      if (!token) {
+        throw new Error(dict.api.errors.unauthorized);
+      }
+
+      const blob = await downloadAsset(asset.id, token);
+      
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${asset.title}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      
+      setShowLicenseCarousel(false);
+    } catch (err) {
+      console.error('Error downloading asset:', err);
+      setError(err instanceof Error ? err.message : dict.api.errors.downloadFailed);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center">{dict.ui.loadingData}</div>
+        <div className="text-center space-y-4">
+          <RefreshCw className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
+          <p className="text-muted-foreground">{dict.api.loading.loadingAssetDetails}</p>
+        </div>
       </div>
     );
   }
+
+  if (error || !asset) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center space-y-4">
+          <AlertCircle className="h-12 w-12 mx-auto text-destructive" />
+          <h2 className="text-xl font-semibold text-foreground">
+            {dict.api.errors.assetNotFound}
+          </h2>
+          <p className="text-muted-foreground">{error}</p>
+          <Button onClick={loadAssetDetails} variant="outline">
+            {dict.ui.tryAgain}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const getLicenseColor = (licenseCode: string): 'green' | 'yellow' | 'red' => {
+    if (licenseCode === 'cc0' || licenseCode === 'cc-by') return 'green';
+    if (licenseCode === 'cc-by-sa' || licenseCode === 'cc-by-nd' || licenseCode === 'cc-by-nc') return 'yellow';
+    return 'red';
+  };
+
+  const getAssetType = (category: string): string => {
+    switch (category) {
+      case 'mushaf': return 'Mushaf';
+      case 'tafsir': return 'Tafsir';
+      case 'recitation': return 'Recitation';
+      default: return category;
+    }
+  };
 
   return (
     <div className="max-width-container px-4 py-8">
@@ -144,7 +267,7 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
                 className="flex items-center gap-2 px-3 py-1"
               >
                 <Languages size={24} />
-                <span>{asset.category}</span>
+                <span>{getAssetType(asset.category)}</span>
               </Badge>
             </div>
 
@@ -166,11 +289,11 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
               <div className="relative">
                 <Carousel className="w-full">
                   <CarouselContent>
-                    {asset.contentPreviewImages.map((image, index) => (
+                    {asset.snapshots.map((snapshot, index) => (
                       <CarouselItem key={index}>
                         <div className="flex justify-center">
                           <div className="w-full max-w-md h-48 bg-muted/50 rounded-lg flex items-center justify-center relative overflow-hidden">
-                            {/* Mock image placeholder with diagonal stripes */}
+                            {/* Image placeholder with diagonal stripes */}
                             <div className="absolute inset-0 bg-gradient-to-br from-muted/30 to-muted/60"></div>
                             <div
                               className="absolute inset-0"
@@ -186,7 +309,7 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
                             ></div>
                             <div className="relative z-10 text-muted-foreground text-center p-4">
                               <FileTextIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                              <p className="text-sm">Preview {index + 1}</p>
+                              <p className="text-sm">{snapshot.title}</p>
                             </div>
                           </div>
                         </div>
@@ -206,6 +329,58 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
                     )}
                   />
                 </Carousel>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Technical Details Section */}
+          <Card className="bg-transparent shadow-none">
+            <CardHeader className="p-0">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <FileText className="h-5 w-5" />
+                {dict.ui.technicalDetails}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0 pt-4">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="font-medium text-muted-foreground">{dict.ui.fileSize}:</span>
+                  <span className="ml-2">{asset.technical_details.file_size}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-muted-foreground">{dict.ui.fileFormat}:</span>
+                  <span className="ml-2">{asset.technical_details.format.toUpperCase()}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-muted-foreground">{dict.ui.language}:</span>
+                  <span className="ml-2">{asset.technical_details.language}</span>
+                </div>
+                <div>
+                  <span className="font-medium text-muted-foreground">{dict.ui.version}:</span>
+                  <span className="ml-2">{asset.technical_details.version}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Stats Section */}
+          <Card className="bg-transparent shadow-none">
+            <CardHeader className="p-0">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <MousePointer className="h-5 w-5" />
+                {dict.ui.statistics}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0 pt-4">
+              <div className="grid grid-cols-2 gap-4 text-center">
+                <div>
+                  <div className="text-2xl font-bold text-foreground">{asset.stats.download_count}</div>
+                  <div className="text-sm text-muted-foreground">{dict.ui.downloads}</div>
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-foreground">{asset.stats.view_count}</div>
+                  <div className="text-sm text-muted-foreground">{dict.ui.views}</div>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -246,8 +421,9 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
                 onClick={handleDownloadClick}
                 size="lg"
                 className="mt-2 w-full justify-center bg-primary-600 hover:bg-primary-700 text-white cursor-pointer"
+                disabled={!asset.access.has_access}
               >
-                {dict.ui.downloadResource}
+                {asset.access.has_access ? dict.ui.downloadResource : dict.ui.requestAccess}
                 <CloudDownload className="h-4 w-4 ml-2" />
               </Button>
             </CardContent>
@@ -263,11 +439,16 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
             </CardHeader>
             <CardContent>
               <Link
-                href={`/${locale}/publisher/${asset.publisherId}`}
+                href={`/${locale}/publisher/${asset.publisher.id}`}
                 className="text-muted-foreground hover:underline hover:text-primary text-base cursor-pointer"
               >
-                {asset.publisher}
+                {asset.publisher.name}
               </Link>
+              {asset.publisher.bio && (
+                <p className="text-sm text-muted-foreground mt-2">
+                  {asset.publisher.bio}
+                </p>
+              )}
             </CardContent>
           </Card>
 
@@ -280,24 +461,18 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-base">{dict.licenses.cc0}</p>
+              <p className="text-base">{asset.license.name}</p>
 
               <Badge
                 variant="outline"
                 className={cn(
                   "text-xs border-0 text-white h-6 px-2 w-fit",
-                  (asset.license === "cc-by" || asset.license === "cc0") &&
-                    "bg-emerald-500",
-                  (asset.license === "cc-by-sa" ||
-                    asset.license === "cc-by-nd" ||
-                    asset.license === "cc-by-nc") &&
-                    "bg-amber-500",
-                  (asset.license === "cc-by-nc-sa" ||
-                    asset.license === "cc-by-nc-nd") &&
-                    "bg-red-500"
+                  getLicenseColor(asset.license.code) === 'green' && "bg-emerald-500",
+                  getLicenseColor(asset.license.code) === 'yellow' && "bg-amber-500",
+                  getLicenseColor(asset.license.code) === 'red' && "bg-red-500"
                 )}
               >
-                {asset.license.toUpperCase().replace("-", " ")}
+                {asset.license.code.toUpperCase().replace("-", " ")}
               </Badge>
             </CardContent>
           </Card>
@@ -327,12 +502,8 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
           </DialogHeader>
           <LicenseCarousel
             assetTitle={asset.title}
-            license={asset.license}
-            onAccept={() => {
-              setShowLicenseCarousel(false);
-              // Handle download logic here
-              window.open("/mock-download.pdf", "_blank");
-            }}
+            license={asset.license.code}
+            onAccept={handleDownload}
             onCancel={() => setShowLicenseCarousel(false)}
             dict={dict}
           />

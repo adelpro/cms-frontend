@@ -95,13 +95,24 @@
       "accessDenied": "تم رفض الوصول",
       "networkError": "خطأ في الشبكة. تحقق من اتصالك",
       "serverError": "خطأ في الخادم. حاول مرة أخرى لاحقاً",
-      "validationError": "تحقق من إدخالك وحاول مرة أخرى"
+      "validationError": "تحقق من إدخالك وحاول مرة أخرى",
+      "assetNotFound": "لم يتم العثور على المورد",
+      "accessRequestFailed": "فشل في طلب الوصول",
+      "downloadFailed": "فشل التحميل"
     },
     "success": {
       "loginSuccess": "تم تسجيل الدخول بنجاح",
       "signupSuccess": "تم إنشاء الحساب بنجاح",
       "profileUpdated": "تم تحديث الملف الشخصي بنجاح",
-      "accessGranted": "تم منح الوصول بنجاح"
+      "accessGranted": "تم منح الوصول بنجاح",
+      "accessRequested": "تم إرسال طلب الوصول بنجاح",
+      "downloadStarted": "تم بدء التحميل بنجاح"
+    },
+    "loading": {
+      "loadingAssets": "جاري تحميل الموارد...",
+      "loadingAssetDetails": "جاري تحميل تفاصيل المورد...",
+      "requestingAccess": "جاري طلب الوصول...",
+      "downloading": "جاري التحميل..."
     }
   },
   "store": {
@@ -306,6 +317,16 @@
     "errorDescription": "نعتذر عن الإزعاج. حدث خطأ غير متوقع.",
     "errorId": "معرف الخطأ:",
     "tryAgain": "إعادة المحاولة",
-    "skip": "تخطي"
+    "skip": "تخطي",
+    "technicalDetails": "التفاصيل التقنية",
+    "fileSize": "حجم الملف",
+    "fileFormat": "صيغة الملف",
+    "language": "اللغة",
+    "version": "الإصدار",
+    "statistics": "الإحصائيات",
+    "downloads": "التحميلات",
+    "views": "المشاهدات",
+    "rating": "التقييم",
+    "requestAccess": "طلب الوصول"
   }
 }

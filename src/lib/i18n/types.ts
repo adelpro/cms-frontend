@@ -97,12 +97,23 @@ export type Dictionary = {
       networkError: string;
       serverError: string;
       validationError: string;
+      assetNotFound: string;
+      accessRequestFailed: string;
+      downloadFailed: string;
     };
     success: {
       loginSuccess: string;
       signupSuccess: string;
       profileUpdated: string;
       accessGranted: string;
+      accessRequested: string;
+      downloadStarted: string;
+    };
+    loading: {
+      loadingAssets: string;
+      loadingAssetDetails: string;
+      requestingAccess: string;
+      downloading: string;
     };
   };
   store: {
@@ -226,6 +237,16 @@ export type Dictionary = {
     errorId: string;
     tryAgain: string;
     skip: string;
+    technicalDetails: string;
+    fileSize: string;
+    fileFormat: string;
+    language: string;
+    version: string;
+    statistics: string;
+    downloads: string;
+    views: string;
+    rating: string;
+    requestAccess: string;
   };
   mockData: {
     assetTitle: string;
