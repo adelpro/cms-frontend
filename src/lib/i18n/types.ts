@@ -80,6 +80,13 @@ export type Dictionary = {
     personalInfoPlaceholder: string;
     completeProfileTitle: string;
     completeProfileDescription: string;
+    businessModelQuestion: string;
+    teamSizeQuestion: string;
+    aboutYourselfQuestion: string;
+    businessModelPlaceholder: string;
+    teamSizePlaceholder: string;
+    aboutYourselfPlaceholder: string;
+    saveAndContinue: string;
   };
   store: {
     title: string;
@@ -201,12 +208,14 @@ export type Dictionary = {
     errorDescription: string;
     errorId: string;
     tryAgain: string;
+    skip: string;
   };
   mockData: {
     assetTitle: string;
     assetDescription: string;
     assetPublisher: string;
     assetContentPreview: string;
+    contentPreviewImages: string[];
     assets: Array<{
       title: string;
       description: string;

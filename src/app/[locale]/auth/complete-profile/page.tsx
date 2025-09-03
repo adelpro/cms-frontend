@@ -23,7 +23,7 @@ export default async function CompleteProfilePage({ params, searchParams }: Page
   const isSkippable = skippable === 'true';
 
   return (
-    <AuthLayout dict={dict} locale={validatedLocale}>
+    <AuthLayout locale={validatedLocale}>
       <ProfileCompletionForm 
         dict={dict} 
         locale={validatedLocale}

@@ -110,7 +110,14 @@ function getMinimalDictionary(): Dictionary {
       personalInfo: "Tell us more about yourself and your team size so the community gets to know you better",
       personalInfoPlaceholder: "Answer about introducing yourself",
       completeProfileTitle: "Complete your profile information",
-      completeProfileDescription: "Help us get to know you better to provide a better experience"
+      completeProfileDescription: "Help us get to know you better to provide a better experience",
+      businessModelQuestion: "What is your business model? Are you going to make it paid? Which pricing model?",
+      teamSizeQuestion: "What is the size of your team?",
+      aboutYourselfQuestion: "Tell us more about yourself so that the publisher gets to know you more",
+      businessModelPlaceholder: "Answer about your business model type",
+      teamSizePlaceholder: "Answer about team size question",
+      aboutYourselfPlaceholder: "Answer about introducing yourself",
+      saveAndContinue: "Save and Continue"
     },
     store: {
       title: "Asset Store",
@@ -231,13 +238,19 @@ function getMinimalDictionary(): Dictionary {
       somethingWentWrong: "Something went wrong",
       errorDescription: "We apologize for the inconvenience. An unexpected error has occurred.",
       errorId: "Error ID:",
-      tryAgain: "Try again"
+      tryAgain: "Try again",
+      skip: "Skip"
     },
     mockData: {
       assetTitle: "Quran Translation",
       assetDescription: "A comprehensive and accurate translation of the Holy Quran in English, prepared by a team of specialists in Islamic studies and Arabic language. This translation includes brief interpretations and explanatory notes to help the reader understand the meanings better.",
       assetPublisher: "Islamic Translation Foundation",
       assetContentPreview: "As shown in the attached screenshot with the text that represents an aspect of the content that will be viewed in full within the file after obtaining access permission downloaded",
+      contentPreviewImages: [
+        "/mock-preview-1.jpg",
+        "/mock-preview-2.jpg",
+        "/mock-preview-3.jpg"
+      ],
       assets: [
         {
           title: "Quran Translation",
