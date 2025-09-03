@@ -119,6 +119,23 @@ function getMinimalDictionary(): Dictionary {
       aboutYourselfPlaceholder: "Answer about introducing yourself",
       saveAndContinue: "Save and Continue"
     },
+    api: {
+      errors: {
+        emailTaken: "Email already exists",
+        invalidCredentials: "Invalid email or password",
+        unauthorized: "Invalid or expired token",
+        accessDenied: "Access denied",
+        networkError: "Network error. Please check your connection",
+        serverError: "Server error. Please try again later",
+        validationError: "Please check your input and try again"
+      },
+      success: {
+        loginSuccess: "Login successful",
+        signupSuccess: "Account created successfully",
+        profileUpdated: "Profile updated successfully",
+        accessGranted: "Access granted successfully"
+      }
+    },
     store: {
       title: "Asset Store",
       searchPlaceholder: "Search resources...",

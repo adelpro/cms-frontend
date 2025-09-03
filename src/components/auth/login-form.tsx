@@ -121,7 +121,8 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
         </h1>
       </div>
 
-      {/* Social Login Buttons */}
+      {/* Social Login Buttons - Temporarily Commented Out */}
+      {/* 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <Button
           type="button"
@@ -157,11 +158,11 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
         <Button
           type="button"
           variant="outline"
-          className={cn(
-            "w-full h-12 lg:h-14",
-            "bg-gray-900 hover:bg-gray-800 text-white border-gray-900",
-            "flex items-center justify-center gap-3 text-base lg:text-lg"
-          )}
+                      className={cn(
+              "w-full h-12 lg:h-14",
+              "bg-gray-900 hover:bg-gray-800 text-white border-gray-900",
+              "flex items-center justify-center gap-3 text-base lg:text-lg"
+            )}
           onClick={() => handleSocialLogin('github')}
         >
           <svg className="size-5" fill="currentColor" viewBox="0 0 24 24">
@@ -170,16 +171,9 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
           {dict.auth.loginWithGitHub}
         </Button>
       </div>
+      */}
 
-      {/* Divider */}
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">{dict.ui.or}</span>
-        </div>
-      </div>
+      {/* Divider - Removed since social login is commented out */}
 
       {/* Email/Password Form */}
       <form onSubmit={handleEmailLogin} className="space-y-6">
@@ -235,12 +229,7 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
           )}
         </div>
 
-        {/* Demo login helper */}
-        <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded-md">
-          <strong>{dict.ui.forDemo}:</strong><br />
-          {dict.ui.demoEmail}: test@example.com<br />
-          {dict.ui.demoPassword}: password123
-        </div>
+        {/* Demo login helper - Removed for production API */}
 
         <Button
           type="submit"

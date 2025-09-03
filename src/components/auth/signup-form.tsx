@@ -21,8 +21,6 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    jobTitle: '',
-    phoneNumber: '',
     email: '',
     password: ''
   });
@@ -125,7 +123,8 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
         </h1>
       </div>
 
-      {/* Social Signup Buttons */}
+      {/* Social Signup Buttons - Temporarily Commented Out */}
+      {/* 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <Button
           type="button"
@@ -174,16 +173,9 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
           {dict.auth.loginWithGitHub}
         </Button>
       </div>
+      */}
 
-      {/* Divider */}
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">{dict.ui.or}</span>
-        </div>
-      </div>
+      {/* Divider - Removed since social signup is commented out */}
 
       {/* Signup Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -238,50 +230,6 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
               <p className={formLogical.errorText}>{errors.lastName}</p>
             )}
           </div>
-        </div>
-
-        {/* Job Title */}
-        <div className={formLogical.fieldset}>
-          <Label htmlFor="jobTitle" className={formLogical.label}>
-            {dict.auth.jobTitle}
-          </Label>
-          <Input
-            id="jobTitle"
-            type="text"
-            placeholder={dict.auth.jobTitlePlaceholder}
-            value={formData.jobTitle}
-            onChange={handleInputChange('jobTitle')}
-            className={cn(
-              formLogical.input,
-              errors.jobTitle && "border-destructive focus-visible:border-destructive"
-            )}
-            aria-invalid={!!errors.jobTitle}
-          />
-          {errors.jobTitle && (
-            <p className={formLogical.errorText}>{errors.jobTitle}</p>
-          )}
-        </div>
-
-        {/* Phone Number */}
-        <div className={formLogical.fieldset}>
-          <Label htmlFor="phoneNumber" className={formLogical.label}>
-            {dict.auth.phoneNumber}
-          </Label>
-          <Input
-            id="phoneNumber"
-            type="tel"
-            placeholder={dict.auth.phoneNumberPlaceholder}
-            value={formData.phoneNumber}
-            onChange={handleInputChange('phoneNumber')}
-            className={cn(
-              formLogical.input,
-              errors.phoneNumber && "border-destructive focus-visible:border-destructive"
-            )}
-            aria-invalid={!!errors.phoneNumber}
-          />
-          {errors.phoneNumber && (
-            <p className={formLogical.errorText}>{errors.phoneNumber}</p>
-          )}
         </div>
 
         {/* Email */}

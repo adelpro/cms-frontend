@@ -108,8 +108,6 @@ export const validateSignupForm = (
   formData: {
     firstName: string;
     lastName: string;
-    jobTitle: string;
-    phoneNumber: string;
     email: string;
     password: string;
   },
@@ -127,18 +125,6 @@ export const validateSignupForm = (
   const lastNameError = validators.required(formData.lastName, 'lastNameRequired', dict);
   if (lastNameError) {
     errors.push({ field: 'lastName', message: lastNameError });
-  }
-
-  // Job title validation
-  const jobTitleError = validators.required(formData.jobTitle, 'jobTitleRequired', dict);
-  if (jobTitleError) {
-    errors.push({ field: 'jobTitle', message: jobTitleError });
-  }
-
-  // Phone validation
-  const phoneError = validators.phone(formData.phoneNumber, dict);
-  if (phoneError) {
-    errors.push({ field: 'phoneNumber', message: phoneError });
   }
 
   // Email validation

@@ -87,6 +87,23 @@
     "aboutYourselfPlaceholder": "الإجابة على طلب التعريف بالذات",
     "saveAndContinue": "حفظ والمتابعة"
   },
+  "api": {
+    "errors": {
+      "emailTaken": "البريد الإلكتروني موجود بالفعل",
+      "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+      "unauthorized": "رمز غير صالح أو منتهي الصلاحية",
+      "accessDenied": "تم رفض الوصول",
+      "networkError": "خطأ في الشبكة. تحقق من اتصالك",
+      "serverError": "خطأ في الخادم. حاول مرة أخرى لاحقاً",
+      "validationError": "تحقق من إدخالك وحاول مرة أخرى"
+    },
+    "success": {
+      "loginSuccess": "تم تسجيل الدخول بنجاح",
+      "signupSuccess": "تم إنشاء الحساب بنجاح",
+      "profileUpdated": "تم تحديث الملف الشخصي بنجاح",
+      "accessGranted": "تم منح الوصول بنجاح"
+    }
+  },
   "store": {
     "title": "معرض الأصول والموارد",
     "searchPlaceholder": "البحث في الموارد...",

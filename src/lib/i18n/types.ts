@@ -88,6 +88,23 @@ export type Dictionary = {
     aboutYourselfPlaceholder: string;
     saveAndContinue: string;
   };
+  api: {
+    errors: {
+      emailTaken: string;
+      invalidCredentials: string;
+      unauthorized: string;
+      accessDenied: string;
+      networkError: string;
+      serverError: string;
+      validationError: string;
+    };
+    success: {
+      loginSuccess: string;
+      signupSuccess: string;
+      profileUpdated: string;
+      accessGranted: string;
+    };
+  };
   store: {
     title: string;
     searchPlaceholder: string;

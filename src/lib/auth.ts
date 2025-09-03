@@ -1,5 +1,12 @@
 "use client";
 
+import { 
+  loginUser as apiLoginUser, 
+  registerUser as apiRegisterUser,
+  convertApiUserToUser,
+  type ApiAuthResponse 
+} from '@/lib/api/auth';
+
 export interface User {
   id: string;
   email: string;
@@ -94,91 +101,106 @@ const generateFakeUser = (
 };
 
 /**
- * Simulate login API call
+ * Login user with email/password using real API
  */
 export const loginUser = async (email: string, password: string): Promise<AuthResponse> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  // Simulate validation (in real app, this would be server-side)
-  if (email === 'test@example.com' && password === 'password123') {
-    const token = generateFakeToken();
-    const user = generateFakeUser(email, 'Test', 'User', 'email', {
-      jobTitle: 'Software Engineer',
-      phoneNumber: '+1234567890',
-      profileCompleted: true
-    });
+  try {
+    const apiResponse: ApiAuthResponse = await apiLoginUser({ email, password });
     
-    tokenStorage.setToken(token);
+    // Convert API user to internal user format
+    const user = convertApiUserToUser(apiResponse.user);
+    
+    // Store tokens and user data
+    tokenStorage.setToken(apiResponse.access_token);
     userStorage.setUser(user);
     
     return {
       success: true,
-      token,
+      token: apiResponse.access_token,
       user
     };
+  } catch (error) {
+    console.error('Login API error:', error);
+    
+    // Handle specific API errors
+    if (error instanceof Error) {
+      if (error.message.includes('Invalid email or password')) {
+        return {
+          success: false,
+          error: 'Invalid credentials'
+        };
+      }
+      if (error.message.includes('Email already exists')) {
+        return {
+          success: false,
+          error: 'Email already exists'
+        };
+      }
+    }
+    
+    return {
+      success: false,
+      error: 'Network error. Please check your connection'
+    };
   }
-  
-  // Simulate different error scenarios
-  if (email === 'network@error.com') {
-    throw new Error('Network error');
-  }
-  
-  return {
-    success: false,
-    error: 'Invalid credentials'
-  };
 };
 
 /**
- * Simulate signup API call
+ * Signup user with email/password using real API
  */
 export const signupUser = async (formData: {
   firstName: string;
   lastName: string;
-  jobTitle: string;
-  phoneNumber: string;
   email: string;
   password: string;
 }): Promise<AuthResponse> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  
-  // Simulate email already exists error
-  if (formData.email === 'exists@example.com') {
+  try {
+    // Combine first and last name for API
+    const name = `${formData.firstName} ${formData.lastName}`.trim();
+    
+    const apiResponse: ApiAuthResponse = await apiRegisterUser({
+      email: formData.email,
+      password: formData.password,
+      name
+    });
+    
+    // Convert API user to internal user format
+    const user = convertApiUserToUser(apiResponse.user);
+    
+    // Store tokens and user data
+    tokenStorage.setToken(apiResponse.access_token);
+    userStorage.setUser(user);
+    
+    return {
+      success: true,
+      token: apiResponse.access_token,
+      user,
+      requiresProfileCompletion: !apiResponse.user.profile_completed
+    };
+  } catch (error) {
+    console.error('Signup API error:', error);
+    
+    // Handle specific API errors
+    if (error instanceof Error) {
+      if (error.message.includes('Email already exists')) {
+        return {
+          success: false,
+          error: 'Email already exists'
+        };
+      }
+      if (error.message.includes('Invalid input')) {
+        return {
+          success: false,
+          error: 'Please check your input and try again'
+        };
+      }
+    }
+    
     return {
       success: false,
-      error: 'Email already exists'
+      error: 'Network error. Please check your connection'
     };
   }
-  
-  // Simulate network error
-  if (formData.email === 'network@error.com') {
-    throw new Error('Network error');
-  }
-  
-  const token = generateFakeToken();
-  const user = generateFakeUser(
-    formData.email,
-    formData.firstName,
-    formData.lastName,
-    'email',
-    {
-      jobTitle: formData.jobTitle,
-      phoneNumber: formData.phoneNumber,
-      profileCompleted: false // Profile completion is now a separate step
-    }
-  );
-  
-  tokenStorage.setToken(token);
-  userStorage.setUser(user);
-  
-  return {
-    success: true,
-    token,
-    user,
-    requiresProfileCompletion: true
-  };
 };
 
 /**
