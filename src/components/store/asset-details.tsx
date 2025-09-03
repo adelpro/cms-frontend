@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Download, FileText, Eye, ArrowLeft } from 'lucide-react';
+import { Breadcrumb } from '@/components/ui/breadcrumb';
+import { Download, FileText, Eye } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { AccessRequestForm } from './access-request-form';
 import { LicenseCarousel } from './license-carousel';
@@ -80,16 +81,16 @@ export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="max-width-container px-4 py-8">
       {/* Breadcrumb */}
       <div className="mb-6">
-        <Link 
-          href={`/${locale}/store`}
-          className="flex items-center text-muted-foreground hover:text-primary transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4 ml-2" />
-          {dict.ui.backToResourcesList}
-        </Link>
+        <Breadcrumb 
+          items={[
+            { label: dict.header.home, href: `/${locale}` },
+            { label: dict.header.store, href: `/${locale}/store` },
+            { label: asset.title, isCurrentPage: true }
+          ]}
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
