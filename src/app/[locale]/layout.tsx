@@ -67,7 +67,9 @@ export default async function RootLayout({
           <NextIntlProvider locale={validatedLocale} messages={messages}>
             <AuthProvider locale={validatedLocale}>
               <ConditionalHeader locale={validatedLocale} />
-              {children}
+              <main>
+                {children}
+              </main>
             </AuthProvider>
           </NextIntlProvider>
         </ThemeProvider>

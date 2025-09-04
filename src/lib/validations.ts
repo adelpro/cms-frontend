@@ -1,14 +1,28 @@
+/**
+ * Validation error interface for form validation
+ */
 export interface ValidationError {
+  /** The field name that has the error */
   field: string;
+  /** The error message to display */
   message: string;
 }
 
+/**
+ * Validation result interface for form validation
+ */
 export interface ValidationResult {
+  /** Whether the validation passed */
   isValid: boolean;
+  /** Array of validation errors if any */
   errors: ValidationError[];
 }
 
-// Type for the translations function from next-intl
+/**
+ * Type for the translations function from next-intl
+ * @param key - The translation key to retrieve
+ * @returns The translated string
+ */
 type TranslationFunction = (key: string) => string;
 
 /**

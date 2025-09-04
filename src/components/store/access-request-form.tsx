@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import type { Dictionary } from '@/lib/i18n/types';
 import { formLogical } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface AccessRequestFormProps {
   assetTitle: string;
@@ -17,10 +17,10 @@ interface AccessRequestFormProps {
     timestamp: string;
   }) => void;
   onCancel: () => void;
-  dict: Dictionary;
 }
 
-export function AccessRequestForm({ assetTitle, onSubmit, onCancel, dict }: AccessRequestFormProps) {
+export function AccessRequestForm({ assetTitle, onSubmit, onCancel }: AccessRequestFormProps) {
+  const t = useTranslations();
   const [formData, setFormData] = useState({
     reason: '',
     addedValue: ''
@@ -42,11 +42,11 @@ export function AccessRequestForm({ assetTitle, onSubmit, onCancel, dict }: Acce
     const newErrors: { [key: string]: string } = {};
     
     if (!formData.reason.trim()) {
-      newErrors.reason = dict.ui.requiredFieldError;
+      newErrors.reason = t('ui.requiredFieldError');
     }
     
     if (!formData.addedValue.trim()) {
-      newErrors.addedValue = dict.ui.requiredFieldError;
+      newErrors.addedValue = t('ui.requiredFieldError');
     }
     
     setErrors(newErrors);
@@ -81,7 +81,7 @@ export function AccessRequestForm({ assetTitle, onSubmit, onCancel, dict }: Acce
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="text-center mb-6">
-        <h3 className="text-lg font-medium mb-2">{dict.ui.accessRequestTitle}</h3>
+        <h3 className="text-lg font-medium mb-2">{t('ui.accessRequestTitle')}</h3>
         <p className="text-sm text-muted-foreground">
           {assetTitle}
         </p>
@@ -90,12 +90,12 @@ export function AccessRequestForm({ assetTitle, onSubmit, onCancel, dict }: Acce
       <div className="space-y-4">
         <div className={formLogical.fieldset}>
           <Label htmlFor="reason" className={cn(formLogical.label, "text-base")}>
-            {dict.ui.accessRequestQuestion} {dict.ui.required}
+            {t('ui.accessRequestQuestion')} {t('common.required')}
           </Label>
           <Textarea
             id="reason"
             name="reason"
-            placeholder={dict.ui.accessRequestReason}
+            placeholder={t('ui.accessRequestReason')}
             value={formData.reason}
             onChange={handleChange}
             className={cn(
@@ -113,12 +113,12 @@ export function AccessRequestForm({ assetTitle, onSubmit, onCancel, dict }: Acce
 
         <div className={formLogical.fieldset}>
           <Label htmlFor="addedValue" className={cn(formLogical.label, "text-base")}>
-            {dict.ui.addedValueQuestion} {dict.ui.required}
+            {t('ui.addedValueQuestion')} {t('common.required')}
           </Label>
           <Textarea
             id="addedValue"
             name="addedValue"
-            placeholder={dict.ui.projectBenefit}
+            placeholder={t('ui.projectBenefit')}
             value={formData.addedValue}
             onChange={handleChange}
             className={cn(
@@ -142,14 +142,14 @@ export function AccessRequestForm({ assetTitle, onSubmit, onCancel, dict }: Acce
           onClick={onCancel}
           disabled={isLoading}
         >
-          {dict.ui.cancel}
+          {t('common.cancel')}
         </Button>
         <Button 
           type="submit" 
           disabled={isLoading}
           className="min-w-[100px]"
         >
-          {isLoading ? dict.ui.sending : dict.ui.continue}
+          {isLoading ? t('ui.sending') : t('common.continue')}
         </Button>
       </div>
     </form>

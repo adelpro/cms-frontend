@@ -1,40 +1,24 @@
-import { notFound } from 'next/navigation';
 import { AuthLayout } from '@/components/auth/auth-layout';
 import { LoginForm } from '@/components/auth/login-form';
-import { isValidLocale } from '@/i18n';
-import type { Locale } from '@/i18n';
+import { validateAndGetLocale, validateLocaleForMetadata } from '@/lib/locale-utils';
+import type { PageProps } from '@/lib/types';
 
-interface LoginPageProps {
-  params: Promise<{
-    locale: string;
-  }>;
-}
-
-export default async function LoginPage({ params }: LoginPageProps) {
-  const { locale } = await params;
-  
-  // Validate locale
-  if (!isValidLocale(locale)) {
-    notFound();
-  }
-  
-  const validatedLocale = locale as Locale;
+export default async function LoginPage({ params }: PageProps) {
+  const locale = await validateAndGetLocale(params);
 
   return (
-    <AuthLayout locale={validatedLocale}>
-      <LoginForm locale={validatedLocale} />
+    <AuthLayout locale={locale}>
+      <LoginForm locale={locale} />
     </AuthLayout>
   );
 }
 
-export async function generateMetadata({ params }: LoginPageProps) {
-  const { locale } = await params;
+export async function generateMetadata({ params }: PageProps) {
+  const locale = await validateLocaleForMetadata(params);
   
-  if (!isValidLocale(locale)) {
+  if (!locale) {
     return {};
   }
-  
-  const validatedLocale = locale as Locale;
 
   return {
     title: 'Login - Itqan CMS',

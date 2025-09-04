@@ -136,7 +136,7 @@ export async function getAssets(
 export async function getAssetDetails(
   assetId: number,
   token?: string
-): Promise<ApiAssetDetailsResponse> {
+): Promise<ApiAssetDetails> {
   const url = `${API_BASE_URL}/assets/${assetId}`;
   console.log('Fetching asset details from:', url);
   

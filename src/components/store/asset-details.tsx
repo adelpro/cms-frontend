@@ -8,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import {
-  Download,
   FileText,
   Eye,
   BookOpen,
@@ -98,12 +97,10 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
   const { user } = useAuth();
   const router = useRouter();
   const [asset, setAsset] = useState<AssetDetailsType | null>(null);
-  const [isLoading, setIsLoading] = true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showAccessRequest, setShowAccessRequest] = useState(false);
   const [showLicenseCarousel, setShowLicenseCarousel] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [isRequestingAccess, setIsRequestingAccess] = useState(false);
   const isRTL = direction.isRTL(locale);
 
   useEffect(() => {
@@ -118,18 +115,26 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
         const assetData = await getAssetDetails(parseInt(assetId), token || undefined);
         console.log('Asset data received:', assetData);
         
-        if (!assetData || !assetData.asset) {
+        if (!assetData) {
           console.error('No asset data received from API');
           setError('No asset data received from API');
           setAsset(null);
           return;
         }
         
-        setAsset(assetData.asset);
-        console.log('Asset set successfully:', assetData.asset);
+        // API now returns asset data directly
+        if (!assetData.id) {
+          console.error('Invalid asset data structure');
+          setError('Invalid asset data received from API');
+          setAsset(null);
+          return;
+        }
+        
+        setAsset(assetData);
+        console.log('Asset set successfully:', assetData);
       } catch (err) {
         console.error('Error loading asset details:', err);
-        setError(err instanceof Error ? err.message : dict.api.errors.assetNotFound);
+        setError(err instanceof Error ? err.message : t('ui.assetNotFound'));
         setAsset(null);
       } finally {
         setIsLoading(false);
@@ -137,7 +142,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
     };
 
     fetchAsset();
-  }, [assetId, dict.api.errors.assetNotFound]);
+  }, [assetId, t]);
 
 
 
@@ -159,10 +164,9 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
     if (!asset) return;
     
     try {
-      setIsRequestingAccess(true);
       const token = tokenStorage.getToken();
       if (!token) {
-        throw new Error(dict.api.errors.unauthorized);
+        throw new Error(t('ui.unauthorized'));
       }
 
       // Transform form data to API format
@@ -176,9 +180,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
       setShowLicenseCarousel(true);
     } catch (err) {
       console.error('Error requesting access:', err);
-      setError(err instanceof Error ? err.message : dict.api.errors.accessRequestFailed);
-    } finally {
-      setIsRequestingAccess(false);
+      setError(err instanceof Error ? err.message : t('ui.accessRequestFailed'));
     }
   };
 
@@ -186,10 +188,9 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
     if (!asset) return;
     
     try {
-      setIsDownloading(true);
       const token = tokenStorage.getToken();
       if (!token) {
-        throw new Error(dict.api.errors.unauthorized);
+        throw new Error(t('ui.unauthorized'));
       }
 
       const blob = await downloadAsset(asset.id, token);
@@ -207,9 +208,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
       setShowLicenseCarousel(false);
     } catch (err) {
       console.error('Error downloading asset:', err);
-      setError(err instanceof Error ? err.message : dict.api.errors.downloadFailed);
-    } finally {
-      setIsDownloading(false);
+      setError(err instanceof Error ? err.message : t('ui.downloadFailed'));
     }
   };
 
@@ -218,7 +217,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center space-y-4">
           <RefreshCw className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
-          <p className="text-muted-foreground">{dict.api.loading.loadingAssetDetails}</p>
+          <p className="text-muted-foreground">{t('ui.loadingAssetDetails')}</p>
           <p className="text-sm text-muted-foreground">Loading asset ID: {assetId}</p>
         </div>
       </div>
@@ -231,7 +230,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
         <div className="text-center space-y-4">
           <AlertCircle className="h-12 w-12 mx-auto text-destructive" />
           <h2 className="text-xl font-semibold text-foreground">
-            {dict.api.errors.assetNotFound}
+            {t('ui.assetNotFound')}
           </h2>
           <p className="text-muted-foreground">
             {error || 'Asset data is missing'}
@@ -245,7 +244,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
             </p>
           </div>
           <Button onClick={() => window.location.reload()} variant="outline">
-            {dict.ui.tryAgain}
+            {t('ui.tryAgain')}
           </Button>
         </div>
       </div>
@@ -273,8 +272,8 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
       <div className="mb-6">
         <Breadcrumb
           items={[
-            { label: dict.header.home, href: `/${locale}` },
-            { label: dict.header.store, href: `/${locale}/store` },
+            { label: t('navigation.home'), href: `/${locale}` },
+            { label: t('navigation.store'), href: `/${locale}/store` },
             { label: asset.title, isCurrentPage: true },
           ]}
         />
@@ -309,15 +308,16 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
             <CardHeader className="p-0">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Eye className="h-5 w-5" />
-                {dict.ui.contentPreview}
+                {t('ui.contentPreview')}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="relative">
                 <Carousel className="w-full">
                   <CarouselContent>
-                    {asset.snapshots.map((snapshot, index) => (
-                      <CarouselItem key={index}>
+                    {(Array.isArray(asset.snapshots) && asset.snapshots.length > 0) 
+                      ? asset.snapshots.map((snapshot, index) => (
+                        <CarouselItem key={index}>
                         <div className="flex justify-center">
                           <div className="w-full max-w-md h-48 bg-muted/50 rounded-lg flex items-center justify-center relative overflow-hidden">
                             {/* Image placeholder with diagonal stripes */}
@@ -341,7 +341,20 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
                           </div>
                         </div>
                       </CarouselItem>
-                    ))}
+                    ))
+                      : (
+                        <CarouselItem>
+                          <div className="flex justify-center">
+                            <div className="w-full max-w-md h-48 bg-muted/50 rounded-lg flex items-center justify-center relative overflow-hidden">
+                              <div className="absolute inset-0 bg-gradient-to-br from-muted/30 to-muted/60"></div>
+                              <div className="relative z-10 text-muted-foreground text-center p-4">
+                                <Eye className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                                <p className="text-sm">No preview available</p>
+                              </div>
+                            </div>
+                          </div>
+                        </CarouselItem>
+                      )}
                   </CarouselContent>
                   <CarouselPrevious
                     className={cn(
@@ -365,26 +378,26 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
             <CardHeader className="p-0">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <FileText className="h-5 w-5" />
-                {dict.ui.technicalDetails}
+                {t('ui.technicalDetails')}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0 pt-4">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="font-medium text-muted-foreground">{dict.ui.fileSize}:</span>
-                  <span className="ml-2">{asset.technical_details.file_size}</span>
+                  <span className="font-medium text-muted-foreground">{t('ui.fileSize')}:</span>
+                  <span className="ms-2">{asset.technical_details.file_size}</span>
                 </div>
                 <div>
-                  <span className="font-medium text-muted-foreground">{dict.ui.fileFormat}:</span>
-                  <span className="ml-2">{asset.technical_details.format.toUpperCase()}</span>
+                  <span className="font-medium text-muted-foreground">{t('ui.fileFormat')}:</span>
+                  <span className="ms-2">{asset.technical_details.format.toUpperCase()}</span>
                 </div>
                 <div>
-                  <span className="font-medium text-muted-foreground">{dict.ui.language}:</span>
-                  <span className="ml-2">{asset.technical_details.language}</span>
+                  <span className="font-medium text-muted-foreground">{t('ui.language')}:</span>
+                  <span className="ms-2">{asset.technical_details.language}</span>
                 </div>
                 <div>
-                  <span className="font-medium text-muted-foreground">{dict.ui.version}:</span>
-                  <span className="ml-2">{asset.technical_details.version}</span>
+                  <span className="font-medium text-muted-foreground">{t('ui.version')}:</span>
+                  <span className="ms-2">{asset.technical_details.version}</span>
                 </div>
               </div>
             </CardContent>
@@ -395,18 +408,18 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
             <CardHeader className="p-0">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <MousePointer className="h-5 w-5" />
-                {dict.ui.statistics}
+                {t('ui.statistics')}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0 pt-4">
               <div className="grid grid-cols-2 gap-4 text-center">
                 <div>
                   <div className="text-2xl font-bold text-foreground">{asset.stats.download_count}</div>
-                  <div className="text-sm text-muted-foreground">{dict.ui.downloads}</div>
+                  <div className="text-sm text-muted-foreground">{t('ui.downloads')}</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-foreground">{asset.stats.view_count}</div>
-                  <div className="text-sm text-muted-foreground">{dict.ui.views}</div>
+                  <div className="text-sm text-muted-foreground">{t('ui.views')}</div>
                 </div>
               </div>
             </CardContent>
@@ -420,7 +433,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <SquareDashedMousePointer size={24} />
-                {dict.ui.resourceActions}
+                {t('ui.resourceActions')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 flex flex-col gap-1">
@@ -429,8 +442,8 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
                   variant="ghost"
                   className="w-full justify-start cursor-pointer bg-neutral-100 hover:bg-neutral-200"
                 >
-                  <FileText className="h-4 w-4 ml-2" />
-                  {dict.ui.usageStandards}
+                  <FileText className="h-4 w-4 ms-2" />
+                  {t('ui.usageStandards')}
                 </Button>
               </Link>
 
@@ -439,8 +452,8 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
                   variant="ghost"
                   className="w-full justify-start cursor-pointer bg-neutral-100 hover:bg-neutral-200"
                 >
-                  <FileText className="h-4 w-4 ml-2" />
-                  {dict.store.viewLicense}
+                  <FileText className="h-4 w-4 ms-2" />
+                  {t('store.viewLicense')}
                 </Button>
               </Link>
 
@@ -449,8 +462,8 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
                 size="lg"
                 className="mt-2 w-full justify-center bg-primary-600 hover:bg-primary-700 text-white cursor-pointer"
               >
-                {asset.access.has_access ? dict.ui.downloadResource : dict.ui.requestAccess}
-                <CloudDownload className="h-4 w-4 ml-2" />
+                {asset.access.has_access ? t('ui.downloadResource') : t('ui.requestAccess')}
+                <CloudDownload className="h-4 w-4 ms-2" />
               </Button>
             </CardContent>
           </Card>
@@ -460,7 +473,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <BookOpen size={24} />
-                {dict.ui.publisherLabel}
+                {t('ui.publisherLabel')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -483,7 +496,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <ScrollText size={24} />
-                {dict.ui.licenseInfo}
+                {t('ui.licenseInfo')}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -509,13 +522,12 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
       <Dialog open={showAccessRequest} onOpenChange={setShowAccessRequest}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>{dict.ui.accessRequestTitle}</DialogTitle>
+            <DialogTitle>{t('ui.accessRequestTitle')}</DialogTitle>
           </DialogHeader>
           <AccessRequestForm
             assetTitle={asset.title}
             onSubmit={handleAccessRequestSubmit}
             onCancel={() => setShowAccessRequest(false)}
-            dict={dict}
           />
         </DialogContent>
       </Dialog>
@@ -524,14 +536,13 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
       <Dialog open={showLicenseCarousel} onOpenChange={setShowLicenseCarousel}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
-            <DialogTitle>{dict.ui.licenseTermsTitle}</DialogTitle>
+            <DialogTitle>{t('ui.licenseTermsTitle')}</DialogTitle>
           </DialogHeader>
           <LicenseCarousel
             assetTitle={asset.title}
             license={asset.license.code}
             onAccept={handleDownload}
             onCancel={() => setShowLicenseCarousel(false)}
-            dict={dict}
           />
         </DialogContent>
       </Dialog>

@@ -169,7 +169,7 @@ export function SocialProfileForm({
           <div className={formLogical.fieldset}>
             <Label htmlFor="firstName" className={formLogical.label}>
               {dict.auth.firstName}
-              <span className="text-xs text-muted-foreground ml-1">
+              <span className="text-xs text-muted-foreground ms-1">
                 ({dict.auth.optional})
               </span>
             </Label>
@@ -185,7 +185,7 @@ export function SocialProfileForm({
           <div className={formLogical.fieldset}>
             <Label htmlFor="lastName" className={formLogical.label}>
               {dict.auth.lastName}
-              <span className="text-xs text-muted-foreground ml-1">
+              <span className="text-xs text-muted-foreground ms-1">
                 ({dict.auth.optional})
               </span>
             </Label>
@@ -204,7 +204,7 @@ export function SocialProfileForm({
           <div className={formLogical.fieldset}>
             <Label htmlFor="projectDescription" className={cn(formLogical.label, "text-lg")}>
               {dict.auth.projectDescription}
-              <span className="text-red-500 ml-1">*</span>
+              <span className="text-red-500 ms-1">*</span>
             </Label>
             <Textarea
               id="projectDescription"
@@ -252,7 +252,7 @@ export function SocialProfileForm({
         <div className={formLogical.fieldset}>
           <Label htmlFor="personalInfo" className={cn(formLogical.label, "text-lg")}>
             {dict.auth.personalInfo}
-            <span className="text-red-500 ml-1">*</span>
+            <span className="text-red-500 ms-1">*</span>
           </Label>
           <Textarea
             id="personalInfo"

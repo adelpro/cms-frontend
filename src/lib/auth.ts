@@ -7,22 +7,41 @@ import {
   type ApiAuthResponse 
 } from '@/lib/api/auth';
 
+/**
+ * User interface for authenticated users
+ */
 export interface User {
+  /** Unique user identifier */
   id: string;
+  /** User's email address */
   email: string;
+  /** User's first name */
   firstName: string;
+  /** User's last name */
   lastName: string;
+  /** User's job title or role */
   jobTitle?: string;
+  /** User's phone number */
   phoneNumber?: string;
+  /** Authentication provider used */
   provider?: 'email' | 'google' | 'github';
+  /** Whether the user has completed their profile */
   profileCompleted: boolean;
 }
 
+/**
+ * Authentication response interface for login/signup operations
+ */
 export interface AuthResponse {
+  /** Whether the operation was successful */
   success: boolean;
+  /** Authentication token if successful */
   token?: string;
+  /** User data if successful */
   user?: User;
+  /** Error message if unsuccessful */
   error?: string;
+  /** Whether user needs to complete profile setup */
   requiresProfileCompletion?: boolean;
 }
 

@@ -157,7 +157,7 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
           href={`/${locale}/store`}
           className="flex items-center text-muted-foreground hover:text-primary transition-colors"
         >
-          <ArrowLeft className="h-4 w-4 ml-2" />
+          <ArrowLeft className="h-4 w-4 ms-2" />
           العودة إلى المتجر
         </Link>
       </div>

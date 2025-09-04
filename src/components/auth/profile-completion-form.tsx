@@ -125,7 +125,7 @@ export function ProfileCompletionForm({ locale, isSkippable = false }: ProfileCo
               <div className={formLogical.fieldset}>
                 <Label htmlFor="businessModel" className={cn(formLogical.label, "text-lg")}>
                   {t('profile.businessModel')}
-                  <span className="text-red-500 ml-1">*</span>
+                  <span className="text-red-500 ms-1">*</span>
                 </Label>
                 <Textarea
                   id="businessModel"
@@ -171,7 +171,7 @@ export function ProfileCompletionForm({ locale, isSkippable = false }: ProfileCo
               <div className={formLogical.fieldset}>
                 <Label htmlFor="teamSize" className={cn(formLogical.label, "text-lg")}>
                   {t('profile.teamSize')}
-                  <span className="text-red-500 ml-1">*</span>
+                  <span className="text-red-500 ms-1">*</span>
                 </Label>
                 <Input
                   id="teamSize"
@@ -196,7 +196,7 @@ export function ProfileCompletionForm({ locale, isSkippable = false }: ProfileCo
             <div className={formLogical.fieldset}>
               <Label htmlFor="aboutYourself" className={cn(formLogical.label, "text-lg")}>
                 {t('profile.aboutYourself')}
-                <span className="text-red-500 ml-1">*</span>
+                <span className="text-red-500 ms-1">*</span>
               </Label>
               <Textarea
                 id="aboutYourself"

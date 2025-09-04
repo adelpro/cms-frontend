@@ -1,134 +1,107 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { logical } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
-import type { Dictionary } from '@/lib/i18n/types';
+import { useTranslations } from 'next-intl';
 
 interface LicenseCarouselProps {
   assetTitle: string;
   license: string;
   onAccept: () => void;
   onCancel: () => void;
-  dict: Dictionary;
 }
 
-
-
-export function LicenseCarousel({ assetTitle, license, onAccept, onCancel, dict }: LicenseCarouselProps) {
-  // Build license content from dictionary
-  const licenseContent = `${dict.licenseContent.section1Title}
-
-${dict.licenseContent.section1Content}
-
-${dict.licenseContent.termsAndConditions}
-${dict.licenseContent.term1}
-${dict.licenseContent.term2}
-${dict.licenseContent.term3}
-
-${dict.licenseContent.violation}
-
-${dict.licenseContent.section2Title}
-
-${dict.licenseContent.section2Content}
-
-${dict.licenseContent.responsibilities}
-${dict.licenseContent.responsibility1}
-${dict.licenseContent.responsibility2}
-${dict.licenseContent.responsibility3}
-
-${dict.licenseContent.obligations}
-${dict.licenseContent.obligation1}
-${dict.licenseContent.obligation2}
-${dict.licenseContent.obligation3}
-
-${dict.licenseContent.section3Title}
-
-${dict.licenseContent.section3Content}
-
-${dict.ui.limitedWarranties}
-${dict.ui.resourceAsIs}
-${dict.ui.publisherNotLiable}
-
-${dict.licenseContent.disputeResolution}
-${dict.licenseContent.dispute1}
-${dict.licenseContent.dispute2}
-${dict.licenseContent.dispute3}
-
-${dict.licenseContent.section4Title}
-
-${dict.licenseContent.section4Content}`;
-
-  const [canAccept, setCanAccept] = useState(false);
-  const [hasScrolledToEnd, setHasScrolledToEnd] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const handleScroll = () => {
-    // If user has already scrolled to end once, keep button enabled
-    if (hasScrolledToEnd) {
-      return;
-    }
-
-    const element = scrollRef.current;
-    if (element) {
-      const { scrollTop, scrollHeight, clientHeight } = element;
-      const scrolledToEnd = scrollTop + clientHeight >= scrollHeight - 10; // 10px tolerance
-      
-      if (scrolledToEnd) {
-        setHasScrolledToEnd(true);
-        setCanAccept(true);
-      }
+export function LicenseCarousel({ assetTitle, license, onAccept, onCancel }: LicenseCarouselProps) {
+  const t = useTranslations();
+  const [hasReadToEnd, setHasReadToEnd] = useState(false);
+  
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
+    if (isAtBottom && !hasReadToEnd) {
+      setHasReadToEnd(true);
     }
   };
 
+  const licenseContent = `
+License Agreement for ${assetTitle}
+
+License Type: ${license.toUpperCase()}
+
+TERMS AND CONDITIONS
+
+1. GRANT OF LICENSE
+By downloading this resource, you agree to comply with the terms of the ${license} license.
+
+2. PERMITTED USES
+- You may use this resource for personal and commercial projects
+- You may modify and adapt the resource for your needs
+- You must provide appropriate attribution when required
+
+3. RESTRICTIONS
+- You may not redistribute the original files without permission
+- You may not claim ownership of the original work
+- Commercial use may require additional permissions
+
+4. WARRANTIES AND LIABILITY
+This resource is provided "as is" without warranties of any kind.
+The publisher is not liable for any damages arising from use of this resource.
+
+5. TERMINATION
+This license terminates automatically if you violate any terms.
+Upon termination, you must cease all use and delete all copies.
+
+By clicking "Accept", you acknowledge that you have read and agree to these terms.
+  `;
+
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h3 className="text-xl font-medium mb-2">{dict.ui.licenseReview}</h3>
+    <div className="max-w-4xl mx-auto">
+      <div className="text-center mb-6">
+        <h3 className="text-xl font-medium mb-2">{t('ui.licenseTermsTitle')}</h3>
         <p className="text-sm text-muted-foreground">
-          {assetTitle} - {dict.ui.licenseText} {license}
+          {assetTitle} - {license.toUpperCase()} {t('ui.licenseInfo')}
         </p>
       </div>
 
-      {/* Single Text Area with Vertical Scroll */}
-      <Card className="h-[400px]">
-        <CardContent className="p-6 h-full flex flex-col">
+      <Card className="mb-6">
+        <CardContent className="p-0">
           <div 
-            ref={scrollRef}
             className={cn(
-              "flex-1 overflow-y-auto leading-relaxed text-muted-foreground",
-              logical.textStart
+              "h-96 overflow-y-auto p-6 text-sm leading-relaxed",
+              logical.textAlign.start
             )}
             onScroll={handleScroll}
           >
-            <div className="whitespace-pre-line">
-              {licenseContent}
-            </div>
+            <pre className="whitespace-pre-wrap font-sans">{licenseContent}</pre>
           </div>
-
-          {!hasScrolledToEnd && (
-            <div className="text-center mt-4">
-              <p className="text-sm text-amber-600">
-                {dict.ui.pleaseReadFullContent}
-              </p>
+          
+          {!hasReadToEnd && (
+            <div className="text-center py-3 bg-muted/50 text-sm text-muted-foreground">
+              {t('ui.pleaseReadFullContent')}
             </div>
           )}
         </CardContent>
       </Card>
 
-      {/* Actions */}
-      <div className="flex justify-end gap-3">
-        <Button variant="outline" onClick={onCancel}>
-          {dict.cancel}
+      <div className={cn("flex gap-3", logical.flexDirection.row)}>
+        <Button 
+          type="button" 
+          variant="outline" 
+          onClick={onCancel}
+          className="flex-1"
+        >
+          {t('common.cancel')}
         </Button>
         <Button 
+          type="button"
           onClick={onAccept}
-          disabled={!canAccept}
-          className={cn(!canAccept && "opacity-50 cursor-not-allowed")}
+          disabled={!hasReadToEnd}
+          className="flex-1 bg-primary hover:bg-primary/90"
         >
-          {dict.confirm}
+          {t('common.confirm')}
         </Button>
       </div>
     </div>

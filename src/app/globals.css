@@ -13,6 +13,23 @@
   width: 100%;
 }
 
+/* Apply global max-width to main content areas */
+main {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Override for components that already have their own max-width constraints */
+main > div[class*="max-w-"],
+main > div[class*="container"] {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

@@ -116,7 +116,7 @@ export function Header({ locale }: HeaderProps) {
                  ) : (
                    /* Login Button for non-authenticated users */
                    <Link href={`/${locale}/auth/login`}>
-                     <Button variant="outline" size="sm" className="h-8 px-4">
+                     <Button variant="outline" size="sm" className="h-8 px-4 shadow-[0_10px_15px_-3px_rgba(0,0,0,0.06)]">
                        {t('auth.login')}
                      </Button>
                    </Link>
@@ -234,7 +234,7 @@ export function Header({ locale }: HeaderProps) {
                     }}
                     className="w-full justify-start border-red-600 text-red-600 hover:bg-red-600 hover:text-white"
                   >
-                    <LogOut className="h-4 w-4 mr-2" />
+                    <LogOut className="h-4 w-4 me-2" />
                     {t('auth.logout')}
                   </Button>
                </div>

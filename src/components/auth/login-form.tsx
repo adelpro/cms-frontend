@@ -1,16 +1,15 @@
 "use client";
 
-import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormField } from '@/components/ui/form-field';
+import { SubmitButton } from '@/components/ui/submit-button';
+import { FormError } from '@/components/ui/form-error';
 import { useAuth } from '@/components/providers/auth-provider';
+import { useForm } from '@/hooks/use-form';
 import type { Locale } from '@/i18n';
 import { validateLoginForm } from '@/lib/validations';
 import { loginUser } from '@/lib/auth';
-import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 
 interface LoginFormProps {
@@ -19,63 +18,31 @@ interface LoginFormProps {
 
 export function LoginForm({ locale }: LoginFormProps) {
   const t = useTranslations();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [submitError, setSubmitError] = useState<string>('');
-  
   const { login } = useAuth();
 
-  const handleInputChange = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: e.target.value
-    }));
-    
-    // Clear field error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({
-        ...prev,
-        [field]: ''
-      }));
-    }
-  };
-
-  const handleEmailLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitError('');
-    
-    // Validate form
-    const validation = validateLoginForm(formData, t);
-    if (!validation.isValid) {
-      const fieldErrors: Record<string, string> = {};
-      validation.errors.forEach(error => {
-        fieldErrors[error.field] = error.message;
-      });
-      setErrors(fieldErrors);
-      return;
-    }
-    
-    setIsLoading(true);
-    
-    try {
-      const response = await loginUser(formData.email, formData.password);
-      
-      if (response.success && response.user && response.token) {
-        login(response.user, response.token);
-      } else {
-        setSubmitError(response.error || t('errors.validationError'));
+  const {
+    formData,
+    errors,
+    isLoading,
+    submitError,
+    handleInputChange,
+    handleSubmit
+  } = useForm({
+    initialData: {
+      email: '',
+      password: ''
+    },
+    validate: validateLoginForm,
+    onSubmit: async (data) => {
+      const response = await loginUser(data.email, data.password);
+      return response;
+    },
+    onSuccess: (result) => {
+      if (result.user && result.token) {
+        login(result.user, result.token);
       }
-    } catch (error) {
-      console.error('Login error:', error);
-      setSubmitError(t('errors.networkError'));
-    } finally {
-      setIsLoading(false);
     }
-  };
+  });
 
   return (
     <div className="space-y-8">
@@ -101,66 +68,43 @@ export function LoginForm({ locale }: LoginFormProps) {
       </div>
 
       {/* Email/Password Form */}
-      <form onSubmit={handleEmailLogin} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
         {/* Show submit error */}
-        {submitError && (
-          <div className="p-3 rounded-md border bg-destructive/10 border-destructive/20 text-destructive text-sm text-center">
-            {submitError}
-          </div>
-        )}
+        <FormError message={submitError} />
 
-        <div className="space-y-2">
-          <Label htmlFor="email" className="block text-sm font-medium text-[#333333] text-start">
-            {t('auth.email')}
-          </Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder={t('forms.placeholders.email')}
-            value={formData.email}
-            onChange={handleInputChange('email')}
-            className={cn(
-              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-              errors.email && "border-destructive focus:ring-destructive"
-            )}
-            aria-invalid={!!errors.email}
-          />
-          {errors.email && (
-            <p className="text-destructive text-sm text-start">{errors.email}</p>
-          )}
-        </div>
+        <FormField
+          id="email"
+          name="email"
+          type="email"
+          label={t('auth.email')}
+          value={formData.email}
+          onChange={handleInputChange('email')}
+          error={errors.email}
+          placeholder={t('forms.placeholders.email')}
+          required
+        />
 
-        <div className="space-y-2">
-          <Label htmlFor="password" className="block text-sm font-medium text-[#333333] text-start">
-            {t('auth.password')}
-          </Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder={t('forms.placeholders.password')}
-            value={formData.password}
-            onChange={handleInputChange('password')}
-            className={cn(
-              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-              errors.password && "border-destructive focus:ring-destructive"
-            )}
-            aria-invalid={!!errors.password}
-          />
-          {errors.password && (
-            <p className="text-destructive text-sm text-start">{errors.password}</p>
-          )}
-        </div>
+        <FormField
+          id="password"
+          name="password"
+          type="password"
+          label={t('auth.password')}
+          value={formData.password}
+          onChange={handleInputChange('password')}
+          error={errors.password}
+          placeholder={t('forms.placeholders.password')}
+          required
+        />
 
-        <Button
-          type="submit"
-          className="w-full h-12 bg-[#2F504B] hover:bg-[#2F504B]/90 text-white rounded-md text-base font-medium flex items-center justify-center gap-2"
-          disabled={isLoading}
+        <SubmitButton
+          isLoading={isLoading}
+          loadingText={t('common.loading')}
+          className="w-full"
+          size="lg"
+          showArrow
         >
-          <span className="text-lg">←</span>
-          {isLoading ? t('common.loading') : t('auth.login')}
-        </Button>
+          {t('auth.login')}
+        </SubmitButton>
       </form>
 
       {/* Register Link */}
