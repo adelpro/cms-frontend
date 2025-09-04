@@ -7,28 +7,27 @@ import { Label } from '@/components/ui/label';
 import { formLogical } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
+import { requestAssetAccess } from '@/lib/api/assets';
+import { tokenStorage } from '@/lib/auth';
 
 interface AccessRequestFormProps {
+  assetId: number;
   assetTitle: string;
-  onSubmit: (data: {
-    assetTitle: string;
-    reason: string;
-    addedValue: string;
-    timestamp: string;
-  }) => void;
+  onSuccess: () => void;
   onCancel: () => void;
 }
 
-export function AccessRequestForm({ assetTitle, onSubmit, onCancel }: AccessRequestFormProps) {
+export function AccessRequestForm({ assetId, assetTitle, onSuccess, onCancel }: AccessRequestFormProps) {
   const t = useTranslations();
   const [formData, setFormData] = useState({
-    reason: '',
-    addedValue: ''
+    purpose: '',
+    intended_use: 'non-commercial' as 'commercial' | 'non-commercial'
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string>('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     
@@ -36,17 +35,22 @@ export function AccessRequestForm({ assetTitle, onSubmit, onCancel }: AccessRequ
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
+    
+    // Clear submit error when user makes changes
+    if (submitError) {
+      setSubmitError('');
+    }
   };
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
     
-    if (!formData.reason.trim()) {
-      newErrors.reason = t('ui.requiredFieldError');
+    if (!formData.purpose.trim()) {
+      newErrors.purpose = t('ui.requiredFieldError');
     }
     
-    if (!formData.addedValue.trim()) {
-      newErrors.addedValue = t('ui.requiredFieldError');
+    if (!formData.intended_use) {
+      newErrors.intended_use = t('ui.requiredFieldError');
     }
     
     setErrors(newErrors);
@@ -61,18 +65,29 @@ export function AccessRequestForm({ assetTitle, onSubmit, onCancel }: AccessRequ
     }
 
     setIsLoading(true);
+    setSubmitError('');
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      onSubmit({
-        assetTitle,
-        ...formData,
-        timestamp: new Date().toISOString()
-      });
+      const token = tokenStorage.getToken();
+      if (!token) {
+        throw new Error(t('ui.unauthorized'));
+      }
+
+      const response = await requestAssetAccess(assetId, {
+        purpose: formData.purpose,
+        intended_use: formData.intended_use
+      }, token);
+
+      // Handle success based on response status
+      if (response.status === 'approved') {
+        onSuccess();
+      } else {
+        // For pending requests, still call onSuccess to close form
+        onSuccess();
+      }
     } catch (error) {
       console.error('Access request error:', error);
+      setSubmitError(error instanceof Error ? error.message : t('ui.accessRequestFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -87,50 +102,58 @@ export function AccessRequestForm({ assetTitle, onSubmit, onCancel }: AccessRequ
         </p>
       </div>
 
+      {/* Show submit error */}
+      {submitError && (
+        <div className="p-3 rounded-md border bg-destructive/10 border-destructive/20 text-destructive text-sm text-center">
+          {submitError}
+        </div>
+      )}
+
       <div className="space-y-4">
         <div className={formLogical.fieldset}>
-          <Label htmlFor="reason" className={cn(formLogical.label, "text-base")}>
+          <Label htmlFor="purpose" className={cn(formLogical.label, "text-base")}>
             {t('ui.accessRequestQuestion')} {t('common.required')}
           </Label>
           <Textarea
-            id="reason"
-            name="reason"
+            id="purpose"
+            name="purpose"
             placeholder={t('ui.accessRequestReason')}
-            value={formData.reason}
+            value={formData.purpose}
             onChange={handleChange}
             className={cn(
               formLogical.input,
               "min-h-[100px] resize-none",
-              errors.reason && "border-destructive focus-visible:border-destructive"
+              errors.purpose && "border-destructive focus-visible:border-destructive"
             )}
             rows={4}
-            aria-invalid={!!errors.reason}
+            aria-invalid={!!errors.purpose}
           />
-          {errors.reason && (
-            <p className={formLogical.errorText}>{errors.reason}</p>
+          {errors.purpose && (
+            <p className={formLogical.errorText}>{errors.purpose}</p>
           )}
         </div>
 
         <div className={formLogical.fieldset}>
-          <Label htmlFor="addedValue" className={cn(formLogical.label, "text-base")}>
-            {t('ui.addedValueQuestion')} {t('common.required')}
+          <Label htmlFor="intended_use" className={cn(formLogical.label, "text-base")}>
+            {t('ui.intendedUseQuestion')} {t('common.required')}
           </Label>
-          <Textarea
-            id="addedValue"
-            name="addedValue"
-            placeholder={t('ui.projectBenefit')}
-            value={formData.addedValue}
+          <select
+            id="intended_use"
+            name="intended_use"
+            value={formData.intended_use}
             onChange={handleChange}
             className={cn(
               formLogical.input,
-              "min-h-[100px] resize-none",
-              errors.addedValue && "border-destructive focus-visible:border-destructive"
+              "h-10",
+              errors.intended_use && "border-destructive focus-visible:border-destructive"
             )}
-            rows={4}
-            aria-invalid={!!errors.addedValue}
-          />
-          {errors.addedValue && (
-            <p className={formLogical.errorText}>{errors.addedValue}</p>
+            aria-invalid={!!errors.intended_use}
+          >
+            <option value="non-commercial">{t('ui.nonCommercialUse')}</option>
+            <option value="commercial">{t('ui.commercialUse')}</option>
+          </select>
+          {errors.intended_use && (
+            <p className={formLogical.errorText}>{errors.intended_use}</p>
           )}
         </div>
       </div>

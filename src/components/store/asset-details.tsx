@@ -39,7 +39,7 @@ import type { Locale } from "@/i18n";
 import { direction } from "@/lib/styles/logical";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
-import { getAssetDetails, downloadAsset, requestAssetAccess } from "@/lib/api/assets";
+import { getAssetDetails, downloadAsset } from "@/lib/api/assets";
 import { tokenStorage } from "@/lib/auth";
 import { useTranslations } from "next-intl";
 
@@ -160,29 +160,6 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
     setShowAccessRequest(true);
   };
 
-  const handleAccessRequestSubmit = async (formData: { assetTitle: string; reason: string; addedValue: string; timestamp: string }) => {
-    if (!asset) return;
-    
-    try {
-      const token = tokenStorage.getToken();
-      if (!token) {
-        throw new Error(t('ui.unauthorized'));
-      }
-
-      // Transform form data to API format
-      const apiData = {
-        purpose: formData.reason,
-        intended_use: 'non-commercial' as const // Default to non-commercial
-      };
-
-      await requestAssetAccess(asset.id, apiData, token);
-      setShowAccessRequest(false);
-      setShowLicenseCarousel(true);
-    } catch (err) {
-      console.error('Error requesting access:', err);
-      setError(err instanceof Error ? err.message : t('ui.accessRequestFailed'));
-    }
-  };
 
   const handleDownload = async () => {
     if (!asset) return;
@@ -525,8 +502,12 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
             <DialogTitle>{t('ui.accessRequestTitle')}</DialogTitle>
           </DialogHeader>
           <AccessRequestForm
+            assetId={asset.id}
             assetTitle={asset.title}
-            onSubmit={handleAccessRequestSubmit}
+            onSuccess={() => {
+              setShowAccessRequest(false);
+              setShowLicenseCarousel(true);
+            }}
             onCancel={() => setShowAccessRequest(false)}
           />
         </DialogContent>
