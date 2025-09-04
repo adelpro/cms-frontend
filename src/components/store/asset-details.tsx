@@ -12,7 +12,6 @@ import {
   Eye,
   BookOpen,
   FileText as FileTextIcon,
-  MousePointer,
   CloudDownload,
   ScrollText,
   SquareDashedMousePointer,
@@ -39,7 +38,7 @@ import type { Locale } from "@/i18n";
 import { direction } from "@/lib/styles/logical";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
-import { getAssetDetails, downloadAsset, requestAssetAccess } from "@/lib/api/assets";
+import { getAssetDetails, downloadAsset, downloadOriginalResource } from "@/lib/api/assets";
 import { tokenStorage } from "@/lib/auth";
 import { useTranslations } from "next-intl";
 
@@ -160,29 +159,6 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
     setShowAccessRequest(true);
   };
 
-  const handleAccessRequestSubmit = async (formData: { assetTitle: string; reason: string; addedValue: string; timestamp: string }) => {
-    if (!asset) return;
-    
-    try {
-      const token = tokenStorage.getToken();
-      if (!token) {
-        throw new Error(t('ui.unauthorized'));
-      }
-
-      // Transform form data to API format
-      const apiData = {
-        purpose: formData.reason,
-        intended_use: 'non-commercial' as const // Default to non-commercial
-      };
-
-      await requestAssetAccess(asset.id, apiData, token);
-      setShowAccessRequest(false);
-      setShowLicenseCarousel(true);
-    } catch (err) {
-      console.error('Error requesting access:', err);
-      setError(err instanceof Error ? err.message : t('ui.accessRequestFailed'));
-    }
-  };
 
   const handleDownload = async () => {
     if (!asset) return;
@@ -208,6 +184,32 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
       setShowLicenseCarousel(false);
     } catch (err) {
       console.error('Error downloading asset:', err);
+      setError(err instanceof Error ? err.message : t('ui.downloadFailed'));
+    }
+  };
+
+  const handleDownloadOriginalResource = async () => {
+    if (!asset) return;
+    
+    try {
+      const token = tokenStorage.getToken();
+      if (!token) {
+        throw new Error(t('ui.unauthorized'));
+      }
+
+      const blob = await downloadOriginalResource(asset.resource.id, token);
+      
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${asset.resource.title}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('Error downloading original resource:', err);
       setError(err instanceof Error ? err.message : t('ui.downloadFailed'));
     }
   };
@@ -372,58 +374,6 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
               </div>
             </CardContent>
           </Card>
-
-          {/* Technical Details Section */}
-          {/* <Card className="bg-transparent shadow-none">
-            <CardHeader className="p-0">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <FileText className="h-5 w-5" />
-                {t('ui.technicalDetails')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-0 pt-4">
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="font-medium text-muted-foreground">{t('ui.fileSize')}:</span>
-                  <span className="ms-2">{asset.technical_details.file_size}</span>
-                </div>
-                <div>
-                  <span className="font-medium text-muted-foreground">{t('ui.fileFormat')}:</span>
-                  <span className="ms-2">{asset.technical_details.format.toUpperCase()}</span>
-                </div>
-                <div>
-                  <span className="font-medium text-muted-foreground">{t('ui.language')}:</span>
-                  <span className="ms-2">{asset.technical_details.language}</span>
-                </div>
-                <div>
-                  <span className="font-medium text-muted-foreground">{t('ui.version')}:</span>
-                  <span className="ms-2">{asset.technical_details.version}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card> */}
-
-          {/* Stats Section */}
-          {/* <Card className="bg-transparent shadow-none">
-            <CardHeader className="p-0">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <MousePointer className="h-5 w-5" />
-                {t('ui.statistics')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-0 pt-4">
-              <div className="grid grid-cols-2 gap-4 text-center">
-                <div>
-                  <div className="text-2xl font-bold text-foreground">{asset.stats.download_count}</div>
-                  <div className="text-sm text-muted-foreground">{t('ui.downloads')}</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-foreground">{asset.stats.view_count}</div>
-                  <div className="text-sm text-muted-foreground">{t('ui.views')}</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card> */}
         </div>
 
         {/* Sidebar - Right Side */}
@@ -447,7 +397,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
                 </Button>
               </Link>
 
-              <Link href={`/${locale}/license/${asset.id}`}>
+              <Link href={`/${locale}/license/${asset.license.code}`}>
                 <Button
                   variant="ghost"
                   className="w-full justify-start cursor-pointer bg-neutral-100 hover:bg-neutral-200"
@@ -458,11 +408,21 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
               </Link>
 
               <Button
+                onClick={handleDownloadOriginalResource}
+                variant="outline"
+                size="lg"
+                className="w-full justify-center cursor-pointer mt-2"
+              >
+                {t('ui.downloadOriginalResource')}
+                <CloudDownload className="h-4 w-4 ms-2" />
+              </Button>
+
+              <Button
                 onClick={handleDownloadClick}
                 size="lg"
-                className="mt-2 w-full justify-center bg-primary-600 hover:bg-primary-700 text-white cursor-pointer"
+                className="w-full justify-center bg-primary-600 hover:bg-primary-700 text-white cursor-pointer"
               >
-                {asset.access.has_access ? t('ui.downloadResource') : t('ui.requestAccess')}
+                {t('ui.downloadResource')}
                 <CloudDownload className="h-4 w-4 ms-2" />
               </Button>
             </CardContent>
@@ -525,8 +485,12 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
             <DialogTitle>{t('ui.accessRequestTitle')}</DialogTitle>
           </DialogHeader>
           <AccessRequestForm
+            assetId={asset.id}
             assetTitle={asset.title}
-            onSubmit={handleAccessRequestSubmit}
+            onSuccess={() => {
+              setShowAccessRequest(false);
+              setShowLicenseCarousel(true);
+            }}
             onCancel={() => setShowAccessRequest(false)}
           />
         </DialogContent>

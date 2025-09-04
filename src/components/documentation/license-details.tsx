@@ -1,13 +1,16 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, ExternalLink, Info } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Info, RefreshCw, AlertCircle } from 'lucide-react';
 import type { Locale } from '@/i18n';
 import { cn } from '@/lib/utils';
+import { getLicenseDetails, type ApiLicenseDetails } from '@/lib/api/assets';
+import { tokenStorage } from '@/lib/auth';
+import { useTranslations } from 'next-intl';
 
 interface LicenseDetailsProps {
   licenseId?: string;
@@ -15,29 +18,84 @@ interface LicenseDetailsProps {
 }
 
 export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
-  // Mock license data
-  const license = {
-    id: licenseId || 'cc-by',
-    name: 'CC BY',
-    fullName: 'Creative Commons Attribution 4.0 International',
-    description: 'هذه الرخصة تسمح للآخرين بتوزيع ومزج وتعديل والبناء على عملك، حتى تجارياً، طالما أنهم ينسبون العمل الأصلي إليك.',
-    permissions: [
-      'الاستخدام التجاري',
-      'التوزيع',
-      'التعديل',
-      'الاستخدام الخاص'
-    ],
-    conditions: [
-      'ذكر المصدر',
-      'الإشارة إلى التغييرات'
-    ],
-    limitations: [
-      'المسؤولية',
-      'الضمان'
-    ],
-    color: 'green' as 'green' | 'yellow' | 'red',
-    officialUrl: 'https://creativecommons.org/licenses/by/4.0/'
+  const t = useTranslations();
+  const [license, setLicense] = useState<ApiLicenseDetails | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string>('');
+
+  useEffect(() => {
+    const fetchLicenseData = async () => {
+      setIsLoading(true);
+      setError('');
+      
+      try {
+        const token = tokenStorage.getToken();
+        const licenseData = await getLicenseDetails(licenseId || 'cc-by', token || undefined);
+        setLicense(licenseData);
+      } catch (err) {
+        console.error('Error fetching license data:', err);
+        setError(err instanceof Error ? err.message : t('ui.licenseNotFound'));
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchLicenseData();
+  }, [licenseId, t]);
+
+  // Helper function to determine license color based on code
+  const getLicenseColor = (code: string): 'green' | 'yellow' | 'red' => {
+    const greenLicenses = ['cc0', 'cc-by-4.0'];
+    const yellowLicenses = ['cc-by-sa-4.0', 'cc-by-nd-4.0', 'cc-by-nc-4.0'];
+    const redLicenses = ['cc-by-nc-sa-4.0', 'cc-by-nc-nd-4.0'];
+    
+    if (greenLicenses.includes(code)) return 'green';
+    if (yellowLicenses.includes(code)) return 'yellow';
+    if (redLicenses.includes(code)) return 'red';
+    return 'green'; // default
   };
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto max-w-4xl px-4 py-8">
+        <div className="text-center space-y-4">
+          <RefreshCw className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
+          <p className="text-muted-foreground">{t('common.loading')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto max-w-4xl px-4 py-8">
+        <div className="text-center space-y-4">
+          <AlertCircle className="h-12 w-12 mx-auto text-destructive" />
+          <h2 className="text-xl font-semibold text-foreground">
+            {t('ui.licenseNotFound')}
+          </h2>
+          <p className="text-muted-foreground">{error}</p>
+          <Button onClick={() => window.location.reload()} variant="outline">
+            {t('ui.tryAgain')}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!license) {
+    return (
+      <div className="container mx-auto max-w-4xl px-4 py-8">
+        <div className="text-center space-y-4">
+          <AlertCircle className="h-12 w-12 mx-auto text-destructive" />
+          <h2 className="text-xl font-semibold text-foreground">
+            {t('ui.licenseNotFound')}
+          </h2>
+          <p className="text-muted-foreground">{t('ui.licenseNotFound')}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
@@ -48,7 +106,7 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
           className="flex items-center text-muted-foreground hover:text-primary transition-colors"
         >
           <ArrowLeft className="h-4 w-4 ms-2" />
-          العودة إلى المتجر
+          {t('ui.backToStore')}
         </Link>
       </div>
 
@@ -58,19 +116,19 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
           <Badge 
             variant="outline" 
             className={cn("text-lg px-4 py-2", {
-              'border-green-500 text-green-700 bg-green-50': license.color === 'green',
-              'border-yellow-500 text-yellow-700 bg-yellow-50': license.color === 'yellow',
-              'border-red-500 text-red-700 bg-red-50': license.color === 'red'
+              'border-green-500 text-green-700 bg-green-50': getLicenseColor(license.code) === 'green',
+              'border-yellow-500 text-yellow-700 bg-yellow-50': getLicenseColor(license.code) === 'yellow',
+              'border-red-500 text-red-700 bg-red-50': getLicenseColor(license.code) === 'red'
             })}
           >
-            {license.name}
+            {license.short_name}
           </Badge>
         </div>
         <h1 className="text-3xl font-bold mb-4">
-          {license.fullName}
+          {license.name}
         </h1>
         <p className="text-lg text-muted-foreground leading-relaxed">
-          {license.description}
+          {license.summary}
         </p>
       </div>
 
@@ -80,18 +138,24 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-green-700">
               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              يُسمح بـ
+              {t('ui.permissions')}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="space-y-3">
-              {license.permissions.map((permission, index) => (
-                <li key={index} className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm">{permission}</span>
-                </li>
-              ))}
-            </ul>
+            {license.permissions.length > 0 ? (
+              <ul className="space-y-3">
+                {license.permissions.map((permission, index) => (
+                  <li key={index} className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-sm">
+                      {typeof permission === 'string' ? permission : permission.label || permission.description || permission.key}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-muted-foreground text-sm">{t('ui.noPermissions')}</p>
+            )}
           </CardContent>
         </Card>
 
@@ -100,18 +164,24 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-blue-700">
               <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-              الشروط
+              {t('ui.conditions')}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="space-y-3">
-              {license.conditions.map((condition, index) => (
-                <li key={index} className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm">{condition}</span>
-                </li>
-              ))}
-            </ul>
+            {license.conditions.length > 0 ? (
+              <ul className="space-y-3">
+                {license.conditions.map((condition, index) => (
+                  <li key={index} className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span className="text-sm">
+                      {typeof condition === 'string' ? condition : condition.label || condition.description || condition.key}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-muted-foreground text-sm">{t('ui.noConditions')}</p>
+            )}
           </CardContent>
         </Card>
 
@@ -120,59 +190,87 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-red-700">
               <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-              القيود
+              {t('ui.limitations')}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="space-y-3">
-              {license.limitations.map((limitation, index) => (
-                <li key={index} className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-sm">{limitation}</span>
-                </li>
-              ))}
-            </ul>
+            {license.limitations.length > 0 ? (
+              <ul className="space-y-3">
+                {license.limitations.map((limitation, index) => (
+                  <li key={index} className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <span className="text-sm">
+                      {typeof limitation === 'string' ? limitation : limitation.label || limitation.description || limitation.key}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-muted-foreground text-sm">{t('ui.noLimitations')}</p>
+            )}
           </CardContent>
         </Card>
       </div>
+
+      {/* License Terms */}
+      {license.license_terms && license.license_terms.length > 0 && (
+        <Card className="mt-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Info className="h-5 w-5" />
+              {t('ui.licenseTerms')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {license.license_terms
+                .sort((a, b) => a.order - b.order)
+                .map((term, index) => (
+                  <div key={index} className="border-l-4 border-primary pl-4">
+                    <h4 className="font-medium mb-2">{term.title}</h4>
+                    <p className="text-muted-foreground text-sm">{term.description}</p>
+                  </div>
+                ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Detailed Information */}
       <Card className="mt-8">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Info className="h-5 w-5" />
-            تفاصيل إضافية
+            {t('ui.additionalDetails')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
-            <h3 className="font-medium mb-3">ملخص الرخصة</h3>
+            <h3 className="font-medium mb-3">{t('ui.licenseSummary')}</h3>
             <p className="text-muted-foreground leading-relaxed">
-              رخصة Creative Commons Attribution 4.0 International هي واحدة من أكثر الرخص المفتوحة انتشاراً. 
-              تسمح للمستخدمين بحرية كاملة في استخدام المحتوى بما في ذلك الاستخدام التجاري، 
-              مع شرط وحيد وهو ذكر المؤلف الأصلي. هذه الرخصة مثالية للمشاريع التي تريد أقصى قدر من الانتشار والاستخدام.
+              {license.full_text}
             </p>
           </div>
 
           <div>
-            <h3 className="font-medium mb-3">كيفية الإسناد</h3>
+            <h3 className="font-medium mb-3">{t('ui.howToAttribute')}</h3>
             <div className="bg-muted/50 rounded-lg p-4">
               <p className="text-sm font-mono" dir="ltr">
-                &quot;العنوان&quot; by المؤلف مرخص تحت رخصة CC BY 4.0
+                &quot;{t('ui.title')}&quot; by {t('ui.author')} {t('ui.licensedUnder')} {license.short_name}
               </p>
               <p className="text-xs text-muted-foreground mt-2">
-                يجب تضمين رابط إلى الرخصة ورابط إلى المصدر الأصلي
+                {t('ui.includeLicenseAndSourceLinks')}
               </p>
             </div>
           </div>
 
           <div>
-            <h3 className="font-medium mb-3">استخدامات شائعة</h3>
+            <h3 className="font-medium mb-3">{t('ui.commonUses')}</h3>
             <ul className="text-muted-foreground text-sm space-y-1">
-              <li>• المحتوى التعليمي والأكاديمي</li>
-              <li>• الترجمات والمحتوى المرجعي</li>
-              <li>• البيانات والمجموعات المفتوحة</li>
-              <li>• المشاريع التقنية مفتوحة المصدر</li>
+              <li>• {t('ui.educationalContent')}</li>
+              <li>• {t('ui.translationsAndReference')}</li>
+              <li>• {t('ui.openDataAndCollections')}</li>
+              <li>• {t('ui.openSourceProjects')}</li>
             </ul>
           </div>
         </CardContent>
@@ -182,19 +280,31 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
       <div className="flex gap-4 justify-center mt-6">
         <Button asChild>
           <a 
-            href={license.officialUrl} 
+            href={license.legal_code_url} 
             target="_blank" 
             rel="noopener noreferrer"
             className="flex items-center gap-2"
           >
             <ExternalLink className="h-4 w-4" />
-            عرض النص القانونی الكامل
+            {t('ui.viewFullLegalText')}
+          </a>
+        </Button>
+        
+        <Button variant="outline" asChild>
+          <a 
+            href={license.url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-2"
+          >
+            <ExternalLink className="h-4 w-4" />
+            {t('ui.viewLicensePage')}
           </a>
         </Button>
         
         <Button variant="outline" asChild>
           <Link href={`/${locale}/documentation/standards`}>
-            معايير الاستخدام
+            {t('ui.usageStandards')}
           </Link>
         </Button>
       </div>
