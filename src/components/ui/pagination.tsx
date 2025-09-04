@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -65,15 +66,16 @@ function PaginationPrevious({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const t = useTranslations();
   return (
     <PaginationLink
-      aria-label="Go to previous page"
+      aria-label={t('ui.goToPreviousPage')}
       size="sm"
       className={cn("gap-1 pe-2.5", className)}
       {...props}
     >
       <ChevronRightIcon className="h-4 w-4" />
-      <span>السابق</span>
+      <span>{t('common.previous')}</span>
     </PaginationLink>
   );
 }
@@ -82,14 +84,15 @@ function PaginationNext({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const t = useTranslations();
   return (
     <PaginationLink
-      aria-label="Go to next page"
+      aria-label={t('ui.goToNextPage')}
       size="sm"
       className={cn("gap-1 ps-2.5", className)}
       {...props}
     >
-      <span>التالي</span>
+      <span>{t('common.next')}</span>
       <ChevronLeftIcon className="h-4 w-4" />
     </PaginationLink>
   );

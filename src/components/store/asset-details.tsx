@@ -116,7 +116,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
         
         if (!assetData) {
           console.error('No asset data received from API');
-          setError('No asset data received from API');
+          setError(t('ui.noAssetDataReceived'));
           setAsset(null);
           return;
         }
@@ -124,7 +124,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
         // API now returns asset data directly
         if (!assetData.id) {
           console.error('Invalid asset data structure');
-          setError('Invalid asset data received from API');
+          setError(t('ui.invalidAssetDataStructure'));
           setAsset(null);
           return;
         }
