@@ -154,20 +154,29 @@ function getAuthHeaders(token?: string): HeadersInit {
 export async function getAssets(
   token?: string,
   filters?: {
-    category?: 'mushaf' | 'tafsir' | 'recitation';
-    license_code?: string;
+    category?: string; // Now supports comma-separated values like "mushaf,tafsir"
+    license_code?: string; // Now supports comma-separated values like "cc0,cc-by-4.0"
   }
 ): Promise<ApiAssetsResponse> {
-  const url = new URL(`${API_BASE_URL}/assets`);
+  // Manually construct query string to avoid URL encoding of commas
+  const queryParts: string[] = [];
   
   if (filters?.category) {
-    url.searchParams.append('category', filters.category);
+    queryParts.push(`category=${filters.category}`);
+    console.log('Category filter - Original:', filters.category);
   }
   if (filters?.license_code) {
-    url.searchParams.append('license_code', filters.license_code);
+    queryParts.push(`license_code=${filters.license_code}`);
+    console.log('License filter - Original:', filters.license_code);
   }
+  
+  // Construct URL with unencoded query string
+  const baseUrl = `${API_BASE_URL}/assets`;
+  const finalUrl = queryParts.length > 0 ? `${baseUrl}?${queryParts.join('&')}` : baseUrl;
+  
+  console.log('Final URL being sent:', finalUrl);
 
-  const response = await fetch(url.toString(), {
+  const response = await fetch(finalUrl, {
     method: 'GET',
     headers: getAuthHeaders(token),
   });

@@ -64,23 +64,25 @@ export function AssetStore({ locale }: AssetStoreProps) {
         setError(null);
         
         const token = tokenStorage.getToken();
-        const filters: { category?: 'mushaf' | 'tafsir' | 'recitation'; license_code?: string } = {};
+        const filters: { category?: string; license_code?: string } = {};
         
-        // Apply category filter if selected
-        if (selectedCategories.length === 1) {
-          const categoryMap: { [key: string]: 'mushaf' | 'tafsir' | 'recitation' } = {
-            'Translation': 'mushaf',
-            'Tafsir': 'tafsir',
-            'Quran Audio': 'recitation'
+        // Apply category filter if selected - support multiple categories
+        if (selectedCategories.length > 0) {
+          const categoryMap: { [key: string]: string } = {
+            'translation': 'mushaf',
+            'tafsir': 'tafsir',
+            'audio': 'recitation'
           };
-          const selectedCategory = selectedCategories[0];
-          if (categoryMap[selectedCategory]) {
-            filters.category = categoryMap[selectedCategory];
+          const mappedCategories = selectedCategories
+            .map(cat => categoryMap[cat])
+            .filter(Boolean); // Remove undefined values
+          if (mappedCategories.length > 0) {
+            filters.category = mappedCategories.join(',');
           }
         }
         
-        // Apply license filter if selected
-        if (selectedLicenses.length === 1) {
+        // Apply license filter if selected - support multiple licenses
+        if (selectedLicenses.length > 0) {
           const licenseMap: { [key: string]: string } = {
             'CC0/ Public Domain': 'cc0',
             'CC BY': 'cc-by-4.0',
@@ -90,12 +92,15 @@ export function AssetStore({ locale }: AssetStoreProps) {
             'CC BY-NC-SA': 'cc-by-nc-sa-4.0',
             'CC BY-NC-ND': 'cc-by-nc-nd-4.0'
           };
-          const selectedLicense = selectedLicenses[0];
-          if (licenseMap[selectedLicense]) {
-            filters.license_code = licenseMap[selectedLicense];
+          const mappedLicenses = selectedLicenses
+            .map(license => licenseMap[license])
+            .filter(Boolean); // Remove undefined values
+          if (mappedLicenses.length > 0) {
+            filters.license_code = mappedLicenses.join(',');
           }
         }
         
+        console.log('Sending filters to API:', filters);
         const response = await getAssets(token || undefined, filters);
         const apiAssets = response.assets.map(convertApiAssetToAsset);
         setAssets(apiAssets);
@@ -135,12 +140,9 @@ export function AssetStore({ locale }: AssetStoreProps) {
   }, [selectedCategories, selectedLicenses]);
 
   const categories = [
-    { key: 'Translation', label: t('categories.translation') },
-    { key: 'Transliteration', label: t('categories.transliteration') },
-    { key: 'Quran Corpus', label: t('categories.quranCorpus') },
-    { key: 'Quran Audio', label: t('categories.quranAudio') },
-    { key: 'Quran Illustration/Font', label: t('categories.quranIllustrationFont') },
-    { key: 'Tafsir', label: t('categories.tafsir') }
+    { key: 'translation', label: t('categories.translation') },
+    { key: 'tafsir', label: t('categories.tafsir') },
+    { key: 'audio', label: t('categories.quranAudio') }
   ];
 
   const licenses = [
@@ -153,13 +155,12 @@ export function AssetStore({ locale }: AssetStoreProps) {
     { id: 'cc-by-nc-nd', name: 'CC BY-NC-ND', label: t('licenses.ccByNcNd'), color: 'red' }
   ];
 
+  // Apply search filter on the client side (since search is not supported by API yet)
   const filteredAssets = assets.filter(asset => {
     const matchesSearch = asset.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          asset.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(asset.category);
-    const matchesLicense = selectedLicenses.length === 0 || selectedLicenses.includes(asset.license);
     
-    return matchesSearch && matchesCategory && matchesLicense;
+    return matchesSearch;
   });
 
   const totalPages = Math.ceil(filteredAssets.length / itemsPerPage);
