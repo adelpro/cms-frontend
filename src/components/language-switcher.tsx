@@ -3,9 +3,8 @@
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Languages } from "lucide-react";
-import { getOppositeLocale, localeNames } from "@/lib/i18n/utils";
-import type { Locale } from "@/lib/i18n/types";
-import { cn } from "@/lib/utils";
+import type { Locale } from "@/i18n";
+import { getOppositeLocale, localeNames } from "@/i18n";
 
 interface LanguageSwitcherProps {
   currentLocale: Locale;
@@ -31,14 +30,15 @@ export function LanguageSwitcher({ currentLocale }: LanguageSwitcherProps) {
   return (
     <Button
       variant="outline"
-      size="sm"
+      size="icon-sm"
       onClick={() => switchLanguage(otherLocale)}
-      className={cn("gap-2")}
+      className="relative shadow-[0_10px_15px_-3px_rgba(0,0,0,0.06)]"
+      title={`Switch to ${getLanguageLabel(otherLocale)}`}
       aria-label={`Switch to ${getLanguageLabel(otherLocale)}`}
     >
       <Languages className="h-4 w-4" />
-      <span className="text-sm">
-        {getLanguageLabel(otherLocale)}
+      <span className="sr-only">
+        Switch to {getLanguageLabel(otherLocale)}
       </span>
     </Button>
   );

@@ -1,4 +1,7 @@
+import createNextIntlPlugin from 'next-intl/plugin';
 import type { NextConfig } from "next";
+
+const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
 
 const nextConfig: NextConfig = {
   // Enable experimental features for better i18n support
@@ -7,12 +10,22 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['lucide-react'],
   },
   
-  // Configure redirects to default to Arabic
+  // Configure redirects to default to Arabic store page
   async redirects() {
     return [
       {
         source: '/',
-        destination: '/ar',
+        destination: '/ar/store',
+        permanent: false,
+      },
+      {
+        source: '/ar',
+        destination: '/ar/store',
+        permanent: false,
+      },
+      {
+        source: '/en',
+        destination: '/en/store',
         permanent: false,
       },
     ];
@@ -29,4 +42,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

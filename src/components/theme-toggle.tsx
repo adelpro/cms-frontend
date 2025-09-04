@@ -5,9 +5,11 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 export function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
+  const t = useTranslations();
   const [mounted, setMounted] = React.useState(false);
 
   // useEffect only runs on the client, so now we can safely show the UI
@@ -34,14 +36,14 @@ export function ThemeToggle() {
   return (
     <Button
       variant="outline"
-      size="icon"
+      size="icon-sm"
       onClick={toggleTheme}
-      className="relative"
+      className="relative shadow-[0_10px_15px_-3px_rgba(0,0,0,0.06)]"
     >
       <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
       <span className="sr-only">
-        {isDark ? "Switch to light mode" : "Switch to dark mode"}
+        {isDark ? t('theme.lightMode') : t('theme.darkMode')}
       </span>
     </Button>
   );

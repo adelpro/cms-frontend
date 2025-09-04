@@ -2,8 +2,33 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-@custom-variant rtl (&:is([dir="rtl"] *));
+@custom-variant rtl (&:is([dir="ltr"] *));
 @custom-variant ltr (&:is([dir="ltr"] *));
+
+/* Global max-width constraint for all pages */
+.max-width-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+/* Apply global max-width to main content areas */
+main {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Override for components that already have their own max-width constraints */
+main > div[class*="max-w-"],
+main > div[class*="container"] {
+  padding-left: 0;
+  padding-right: 0;
+}
 
 @theme inline {
   --color-background: var(--background);
@@ -114,6 +139,147 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+:root {
+  --main-50: #F0F5F2;
+  --main-100: #E0EBE6;
+  --main-200: #D1E1D9;
+  --main-300: #C2D7CC;
+  --main-400: #A3C3B3;
+  --main-500: #85A999;
+  --main-600: #669B80;
+  --main-700: #527C66;
+  --main-800: #3D5D4D;
+  --main-900: #293E33;
+  --main-950: #141F1A;
+
+  --sec-50: #E9ECEC;
+  --sec-100: #D3D9D8;
+  --sec-200: #BDC7C5;
+  --sec-300: #A7B4B1;
+  --sec-400: #7A8E8B;
+  --sec-500: #4E6964;
+  --sec-600: #22433D;
+  --sec-700: #1B3631;
+  --sec-800: #142825;
+  --sec-900: #0E1B18;
+  --sec-950: #070D0C;
+
+  /* Override shadcn colors with custom main and sec colors */
+  --primary: var(--main-700);
+  --primary-foreground: var(--main-50);
+  --secondary: var(--sec-700);
+  --secondary-foreground: var(--sec-50);
+  
+  /* Override default text color to neutral-950 */
+  --foreground: #0a0a0a;
+  --card-foreground: #0a0a0a;
+  --popover-foreground: #0a0a0a;
+  --muted-foreground: #525252;
+  
+  /* Override main body background to neutral-50 */
+  --background: #fafafa;
+  --card: #fafafa;
+  --popover: #fafafa;
+}
+
+.dark {
+  /* Override shadcn colors with custom main and sec colors for dark mode */
+  --primary: var(--main-400);
+  --primary-foreground: var(--main-950);
+  --secondary: var(--sec-400);
+  --secondary-foreground: var(--sec-950);
+  
+  /* Override default text color to neutral-50 for dark mode */
+  --foreground: #fafafa;
+  --card-foreground: #fafafa;
+  --popover-foreground: #fafafa;
+  --muted-foreground: #a3a3a3;
+}
+
+/* Override Tailwind primary colors with custom main colors */
+@layer base {
+  .bg-primary { background-color: var(--main-700) !important; }
+  .bg-primary-50 { background-color: var(--main-50) !important; }
+  .bg-primary-100 { background-color: var(--main-100) !important; }
+  .bg-primary-200 { background-color: var(--main-200) !important; }
+  .bg-primary-300 { background-color: var(--main-300) !important; }
+  .bg-primary-400 { background-color: var(--main-400) !important; }
+  .bg-primary-500 { background-color: var(--main-500) !important; }
+  .bg-primary-600 { background-color: var(--main-600) !important; }
+  .bg-primary-700 { background-color: var(--main-700) !important; }
+  .bg-primary-800 { background-color: var(--main-800) !important; }
+  .bg-primary-900 { background-color: var(--main-900) !important; }
+  .bg-primary-950 { background-color: var(--main-950) !important; }
+  
+  .text-primary { color: var(--main-700) !important; }
+  .text-primary-50 { color: var(--main-50) !important; }
+  .text-primary-100 { color: var(--main-100) !important; }
+  .text-primary-200 { color: var(--main-200) !important; }
+  .text-primary-300 { color: var(--main-300) !important; }
+  .text-primary-400 { color: var(--main-400) !important; }
+  .text-primary-500 { color: var(--main-500) !important; }
+  .text-primary-600 { color: var(--main-600) !important; }
+  .text-primary-700 { color: var(--main-700) !important; }
+  .text-primary-800 { color: var(--main-800) !important; }
+  .text-primary-900 { color: var(--main-900) !important; }
+  .text-primary-950 { color: var(--main-950) !important; }
+  
+  .border-primary { border-color: var(--main-700) !important; }
+  .border-primary-50 { border-color: var(--main-50) !important; }
+  .border-primary-100 { border-color: var(--main-100) !important; }
+  .border-primary-200 { border-color: var(--main-200) !important; }
+  .border-primary-300 { border-color: var(--main-300) !important; }
+  .border-primary-400 { border-color: var(--main-400) !important; }
+  .border-primary-500 { border-color: var(--main-500) !important; }
+  .border-primary-600 { border-color: var(--main-600) !important; }
+  .border-primary-700 { border-color: var(--main-700) !important; }
+  .border-primary-800 { border-color: var(--main-800) !important; }
+  .border-primary-900 { border-color: var(--main-900) !important; }
+  .border-primary-950 { border-color: var(--main-950) !important; }
+}
+
+/* Override Tailwind secondary colors with custom sec colors */
+@layer base {
+  .bg-secondary { background-color: var(--sec-700) !important; }
+  .bg-secondary-50 { background-color: var(--sec-50) !important; }
+  .bg-secondary-100 { background-color: var(--sec-100) !important; }
+  .bg-secondary-200 { background-color: var(--sec-200) !important; }
+  .bg-secondary-300 { background-color: var(--sec-300) !important; }
+  .bg-secondary-400 { background-color: var(--sec-400) !important; }
+  .bg-secondary-500 { background-color: var(--sec-500) !important; }
+  .bg-secondary-600 { background-color: var(--sec-600) !important; }
+  .bg-secondary-700 { background-color: var(--sec-700) !important; }
+  .bg-secondary-800 { background-color: var(--sec-800) !important; }
+  .bg-secondary-900 { background-color: var(--sec-900) !important; }
+  .bg-secondary-950 { background-color: var(--sec-950) !important; }
+  
+  .text-secondary { color: var(--sec-700) !important; }
+  .text-secondary-50 { color: var(--sec-50) !important; }
+  .text-secondary-100 { color: var(--sec-100) !important; }
+  .text-secondary-200 { color: var(--sec-200) !important; }
+  .text-secondary-300 { color: var(--sec-300) !important; }
+  .text-secondary-400 { color: var(--sec-400) !important; }
+  .text-secondary-500 { color: var(--sec-500) !important; }
+  .text-secondary-600 { color: var(--sec-600) !important; }
+  .text-secondary-700 { color: var(--sec-700) !important; }
+  .text-secondary-800 { color: var(--sec-800) !important; }
+  .text-secondary-900 { color: var(--sec-900) !important; }
+  .text-secondary-950 { color: var(--sec-950) !important; }
+  
+  .border-secondary { border-color: var(--sec-700) !important; }
+  .border-secondary-50 { border-color: var(--sec-50) !important; }
+  .border-secondary-100 { border-color: var(--sec-100) !important; }
+  .border-secondary-200 { border-color: var(--sec-200) !important; }
+  .border-secondary-300 { border-color: var(--sec-300) !important; }
+  .border-secondary-400 { border-color: var(--sec-400) !important; }
+  .border-secondary-500 { border-color: var(--sec-500) !important; }
+  .border-secondary-600 { border-color: var(--sec-600) !important; }
+  .border-secondary-700 { border-color: var(--sec-700) !important; }
+  .border-secondary-800 { border-color: var(--sec-800) !important; }
+  .border-secondary-900 { border-color: var(--sec-900) !important; }
+  .border-secondary-950 { border-color: var(--sec-950) !important; }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -203,7 +369,7 @@ html[dir="rtl"] * {
   .ms-6 { margin-inline-start: 1.5rem; }
   .ms-8 { margin-inline-start: 2rem; }
   
-  .me-1 { margin-inline-end: 0.25rem; }
+  .me-1 { margin-inline-end: 0.5rem; }
   .me-2 { margin-inline-end: 0.5rem; }
   .me-3 { margin-inline-end: 0.75rem; }
   .me-4 { margin-inline-end: 1rem; }
@@ -259,5 +425,27 @@ html[dir="rtl"] * {
     .container-padding {
       padding-inline: 2rem;
     }
+  }
+  
+  /* Line clamp utilities for text truncation */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
   }
 }

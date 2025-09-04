@@ -7,7 +7,7 @@
 
 import { type ClassValue } from "clsx";
 import { cn } from "@/lib/utils";
-import type { Locale } from "@/lib/i18n/types";
+import type { Locale } from "@/i18n";
 
 /**
  * Core logical property utilities

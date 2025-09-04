@@ -13,7 +13,19 @@ This document establishes the development standards, best practices, and guideli
 - **Security Priority**: Implement security best practices
 - **Accessibility**: Ensure WCAG compliance
 
-### 2. **Consistency Rules**
+### 2. **UI/UX Standards**
+- **shadcn/ui Only**: Use ONLY shadcn/ui components for UI implementation
+- **Tailwind CSS**: All styling must use Tailwind CSS classes
+- **Design System**: Maintain consistency with established design tokens
+- **Responsive Design**: Responsive design with proper breakpoint consistency
+
+### 3. **Localization Standards**
+- **Multilingual First**: ALL text content MUST be localized from day one
+- **No Single-Language Text**: NEVER use hardcoded strings in any language
+- **Translation-Driven Development**: Add translations before implementing UI
+- **Cultural Adaptation**: Consider RTL/LTR and cultural differences
+
+### 4. **Consistency Rules**
 - **Uniform Naming**: Follow established naming conventions
 - **Structured Organization**: Maintain clean file/folder hierarchy
 - **Code Style**: Use consistent formatting and patterns
@@ -193,6 +205,33 @@ className="pl-4 text-left" // Wrong! Not RTL-aware
 
 ### **Translation Management**
 
+#### **🚨 MANDATORY LOCALIZATION RULE**
+**ALL TEXT CONTENT MUST BE LOCALIZED - NO HARDCODED STRINGS ALLOWED**
+
+- ✅ **ALL user-facing text** must use dictionary translations
+- ✅ **ALL placeholders** must use dictionary translations  
+- ✅ **ALL error messages** must use dictionary translations
+- ✅ **ALL accessibility labels** must use dictionary translations
+- ✅ **ALL button labels** must use dictionary translations
+- ✅ **ALL form labels** must use dictionary translations
+
+#### ❌ **FORBIDDEN PRACTICES**
+```typescript
+// ❌ NEVER use hardcoded strings
+<Button>Download</Button>                    // Wrong!
+<input placeholder="Search..." />            // Wrong!
+<span>Loading...</span>                      // Wrong!
+throw new Error("Invalid input");           // Wrong!
+aria-label="Close dialog"                   // Wrong!
+
+// ✅ ALWAYS use translations
+<Button>{dict.actions.download}</Button>     // Correct!
+<input placeholder={dict.ui.searchPlaceholder} />  // Correct!
+<span>{dict.ui.loading}</span>              // Correct!
+throw new Error(dict.errors.invalidInput); // Correct!
+aria-label={dict.ui.closeDialog}           // Correct!
+```
+
 #### Adding New Translations
 ```json
 // 1. Add to src/dictionaries/ar.json
@@ -231,7 +270,262 @@ export function MyComponent() {
 }
 ```
 
-## 🎨 Styling Guidelines
+### **🔄 Translation-Driven Development Workflow**
+
+**CRITICAL: Translations MUST be added BEFORE implementing UI components**
+
+#### **Step 1: Plan Text Content**
+```typescript
+// ✅ CORRECT - Plan all text content first
+/*
+Required translations for UserProfile component:
+- profile.title: "User Profile" / "الملف الشخصي"
+- profile.editButton: "Edit Profile" / "تحرير الملف"
+- profile.avatarAlt: "User avatar" / "صورة المستخدم"
+- profile.avatarFallback: "U" / "م"
+- profile.saveButton: "Save Changes" / "حفظ التغييرات"
+- profile.cancelButton: "Cancel" / "إلغاء"
+*/
+```
+
+#### **Step 2: Add Translations to Dictionaries**
+```json
+// src/dictionaries/ar.json
+{
+  "profile": {
+    "title": "الملف الشخصي",
+    "editButton": "تحرير الملف",
+    "avatarAlt": "صورة المستخدم",
+    "avatarFallback": "م",
+    "saveButton": "حفظ التغييرات",
+    "cancelButton": "إلغاء"
+  }
+}
+
+// src/dictionaries/en.json
+{
+  "profile": {
+    "title": "User Profile",
+    "editButton": "Edit Profile", 
+    "avatarAlt": "User avatar",
+    "avatarFallback": "U",
+    "saveButton": "Save Changes",
+    "cancelButton": "Cancel"
+  }
+}
+```
+
+#### **Step 3: Update Type Definitions**
+```typescript
+// src/lib/i18n/types.ts
+export type Dictionary = {
+  // ... existing keys
+  profile: {
+    title: string;
+    editButton: string;
+    avatarAlt: string;
+    avatarFallback: string;
+    saveButton: string;
+    cancelButton: string;
+  };
+};
+```
+
+#### **Step 4: Implement UI with Translations**
+```typescript
+// ✅ CORRECT - UI implementation after translations are ready
+"use client";
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { useTranslation } from '@/hooks/use-translation';
+import { cn } from '@/lib/utils';
+import { logical } from '@/lib/styles/logical';
+
+export function UserProfile() {
+  const { t } = useTranslation();
+  
+  return (
+    <Card>
+      <CardHeader>
+        <h2 className={cn(logical.textStart)}>{t('profile.title')}</h2>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className={cn(logical.spaceBetween, "items-center")}>
+          <Avatar>
+            <AvatarImage src="/avatar.jpg" alt={t('profile.avatarAlt')} />
+            <AvatarFallback>{t('profile.avatarFallback')}</AvatarFallback>
+          </Avatar>
+          <div className="space-x-2">
+            <Button variant="outline">
+              {t('profile.cancelButton')}
+            </Button>
+            <Button>
+              {t('profile.saveButton')}
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ❌ FORBIDDEN - Implementing UI before translations
+export function UserProfile() {
+  return (
+    <Card>
+      <CardHeader>
+        <h2>User Profile</h2>  {/* Wrong! Hardcoded text */}
+      </CardHeader>
+      <CardContent>
+        <Button>Edit Profile</Button>  {/* Wrong! Hardcoded text */}
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+#### **Translation Workflow Checklist**
+- [ ] **Plan**: List all text content needed
+- [ ] **Translate**: Add to both `ar.json` and `en.json`
+- [ ] **Type**: Update type definitions
+- [ ] **Implement**: Build UI with translations
+- [ ] **Test**: Verify in both languages
+- [ ] **Review**: Check RTL/LTR compatibility
+
+## 🎨 UI Implementation Guidelines
+
+### **🚨 MANDATORY: shadcn/ui Components Only**
+
+**ALL UI components MUST be implemented using shadcn/ui. No custom UI components without explicit approval.**
+
+#### **✅ REQUIRED shadcn/ui Usage**
+```typescript
+// ✅ CORRECT - Use shadcn/ui components
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+
+// ✅ CORRECT - Component implementation
+export function UserProfile() {
+  const { t } = useTranslation();
+  
+  return (
+    <Card>
+      <CardHeader>
+        <h2>{t('profile.title')}</h2>
+      </CardHeader>
+      <CardContent>
+        <div className={cn(logical.spaceBetween, "gap-4")}>
+          <Avatar>
+            <AvatarImage src="/avatar.jpg" alt={t('profile.avatarAlt')} />
+            <AvatarFallback>{t('profile.avatarFallback')}</AvatarFallback>
+          </Avatar>
+          <Button variant="outline">
+            {t('profile.editButton')}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ❌ FORBIDDEN - Custom UI components
+const CustomButton = styled.button`...`;  // Wrong!
+const MyCard = ({ children }) => <div className="custom-card">...</div>; // Wrong!
+```
+
+#### **Adding New shadcn/ui Components**
+```bash
+# ✅ CORRECT - Add components via shadcn CLI
+npx shadcn@latest add button
+npx shadcn@latest add dialog
+npx shadcn@latest add form
+
+# ✅ CORRECT - Multiple components at once
+npx shadcn@latest add button input label card
+```
+
+#### **Component Customization Rules**
+```typescript
+// ✅ CORRECT - Extend shadcn/ui components with Tailwind
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
+export function CustomButton({ className, ...props }) {
+  return (
+    <Button 
+      className={cn(
+        "custom-additional-styles",
+        logical.paddingX('6'),
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+// ❌ FORBIDDEN - Completely custom components
+export function CustomButton() {
+  return <div className="my-custom-button">...</div>; // Wrong!
+}
+```
+
+### **🎨 Tailwind CSS - Exclusive Styling Solution**
+
+**ALL styling MUST use Tailwind CSS. No CSS modules, styled-components, or custom CSS allowed.**
+
+#### **✅ MANDATORY Tailwind Patterns**
+```typescript
+// ✅ CORRECT - Tailwind with logical properties
+import { logical, layoutPatterns, spacing } from '@/lib/styles/logical';
+
+className={cn(
+  "bg-background border border-border rounded-lg",
+  logical.paddingX('4'),
+  logical.paddingY('6'),
+  logical.marginStart('2'),
+  layoutPatterns.spaceBetween,
+  spacing.gapMd
+)}
+
+// ✅ CORRECT - Responsive design
+className={cn(
+  "flex flex-col",
+  "sm:flex-row sm:items-center",
+  "md:gap-6",
+  "lg:px-8"
+)}
+
+// ✅ CORRECT - Theme-aware styling
+className={cn(
+  "bg-background text-foreground",
+  "dark:bg-secondary dark:text-secondary-foreground",
+  "border-border hover:border-accent"
+)}
+```
+
+#### **❌ FORBIDDEN Styling Approaches**
+```typescript
+// ❌ NEVER use inline styles
+<div style={{ padding: '16px', color: 'red' }}>...</div>
+
+// ❌ NEVER use CSS modules
+import styles from './component.module.css';
+<div className={styles.container}>...</div>
+
+// ❌ NEVER use styled-components
+const StyledDiv = styled.div`
+  padding: 16px;
+  color: red;
+`;
+
+// ❌ NEVER use custom CSS classes without Tailwind
+<div className="my-custom-class">...</div>
+```
 
 ### **CSS Logical Properties - MANDATORY**
 
@@ -421,9 +715,24 @@ if (!isValidLocale(userInput)) {
 - [ ] Proper type guards implemented
 - [ ] Interface definitions updated
 
+#### ✅ **UI Implementation**
+- [ ] Uses ONLY shadcn/ui components
+- [ ] No custom UI components created
+- [ ] All styling uses Tailwind CSS classes
+- [ ] No inline styles or CSS modules
+- [ ] Proper responsive design implemented
+- [ ] Theme-aware styling applied
+
 #### ✅ **Internationalization**
 - [ ] Uses Locale type correctly
-- [ ] No hardcoded strings (use translations)
+- [ ] **NO HARDCODED STRINGS ANYWHERE** (use translations)
+- [ ] ALL text uses dict.* pattern
+- [ ] ALL placeholders use dict.* pattern
+- [ ] ALL accessibility labels use dict.* pattern
+- [ ] ALL button text uses dict.* pattern
+- [ ] ALL error messages use dict.* pattern
+- [ ] ALL tooltips use dict.* pattern
+- [ ] Translations added BEFORE UI implementation
 - [ ] RTL/LTR compatibility maintained
 - [ ] Logical properties used for styling
 
@@ -463,6 +772,22 @@ className="ml-4 text-left" // Use logical properties instead
 
 // ❌ NEVER import translations directly
 import ar from '@/dictionaries/ar.json'; // Use getDictionary() instead
+
+// ❌ NEVER use hardcoded strings - ALL TEXT MUST BE LOCALIZED
+const buttonText = "Download";              // Wrong!
+placeholder="Search..."                    // Wrong!
+<span>Loading...</span>                     // Wrong!
+throw new Error("Something went wrong");   // Wrong!
+title="Click here"                         // Wrong!
+aria-label="Close button"                 // Wrong!
+
+// ❌ NEVER use custom UI components
+<div className="custom-button">Click me</div>  // Wrong!
+const MyButton = () => <button>...</button>;  // Wrong!
+
+// ❌ NEVER use non-Tailwind styling
+<div style={{ color: 'red' }}>...</div>       // Wrong!
+import styles from './component.module.css';  // Wrong!
 
 // ❌ NEVER modify middleware without extreme caution
 // This file controls routing and security - requires careful review
@@ -515,31 +840,80 @@ import { getDictionary } from '@/lib/i18n/dictionaries';
 import { logical, layoutPatterns } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
 
-// Components
+// shadcn/ui Components (MANDATORY)
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+
+// Providers
 import { ThemeProvider } from '@/components/providers/theme-provider';
 ```
 
 ### **Common Patterns**
 ```typescript
-// Page component pattern
+// Page component pattern with shadcn/ui
 export default async function MyPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const validatedLocale = locale as Locale;
   const dict = await getDictionary(validatedLocale);
   
-  return <div>{dict.title}</div>;
+  return (
+    <Card>
+      <CardHeader>
+        <h1 className={cn(logical.textStart)}>{dict.title}</h1>
+      </CardHeader>
+      <CardContent>
+        <Button>{dict.actions.continue}</Button>
+      </CardContent>
+    </Card>
+  );
 }
 
-// Client component pattern
+// Client component pattern with shadcn/ui
 "use client";
 export function MyClientComponent() {
   const { t, locale, isRTL } = useTranslation();
   
   return (
     <div className={cn(logical.textStart)}>
-      {t('title')}
+      <Badge variant="secondary">{t('status.active')}</Badge>
+      <Input 
+        placeholder={t('form.searchPlaceholder')}
+        className={cn(logical.marginStart('2'))}
+      />
+      <Button variant="outline" size="sm">
+        {t('actions.search')}
+      </Button>
     </div>
+  );
+}
+
+// Form component pattern with shadcn/ui
+"use client";
+export function ContactForm() {
+  const { t } = useTranslation();
+  
+  return (
+    <Card>
+      <CardHeader>
+        <h2>{t('contact.title')}</h2>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div>
+          <Label htmlFor="email">{t('form.emailLabel')}</Label>
+          <Input 
+            id="email"
+            type="email"
+            placeholder={t('form.emailPlaceholder')}
+          />
+        </div>
+        <Button type="submit" className="w-full">
+          {t('form.submitButton')}
+        </Button>
+      </CardContent>
+    </Card>
   );
 }
 ```

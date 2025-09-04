@@ -1,10 +1,11 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { getDictionary } from "@/lib/i18n/dictionaries";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { layoutPatterns, typography, spacing } from "@/lib/styles/logical";
-import type { Locale } from "@/lib/i18n/types";
+import type { Locale } from "@/i18n";
 import { cn } from "@/lib/utils";
+import { getTranslations } from "next-intl/server";
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;
@@ -15,14 +16,14 @@ export default async function HomePage({ params }: HomePageProps) {
   
   // Validate and cast locale
   const validatedLocale = locale as Locale;
-  const dict = await getDictionary(validatedLocale);
+  const t = await getTranslations();
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-8 container-padding">
       {/* Header with title and controls */}
       <div className="flex items-center gap-4 flex-wrap justify-center">
         <h1 className="text-4xl font-bold text-center">
-          {dict.welcome}
+          {t('common.welcome')}
         </h1>
         <div className="flex items-center gap-2">
           <LanguageSwitcher currentLocale={validatedLocale} />
@@ -32,17 +33,41 @@ export default async function HomePage({ params }: HomePageProps) {
       
       {/* Description */}
       <p className={cn(typography.paragraph, "text-lg text-muted-foreground text-center max-w-md")}>
-        {dict.description}
+        {t('common.description')}
       </p>
       
       {/* Action buttons - automatically flow with text direction */}
       <div className={cn("flex", spacing.gapMd)}>
         <Button variant="default" className="min-w-[120px]">
-          {dict.getStarted}
+          {t('common.getStarted')}
         </Button>
         <Button variant="outline" className="min-w-[120px]">
-          {dict.learnMore}
+          {t('common.learnMore')}
         </Button>
+      </div>
+
+      {/* Auth Demo Links */}
+      <div className="mt-8 p-6 border rounded-lg bg-card">
+        <h3 className="text-lg font-semibold mb-4 text-center">
+          {validatedLocale === 'ar' ? 'تجربة نظام المصادقة' : 'Authentication Demo'}
+        </h3>
+        <div className={cn("flex flex-wrap justify-center", spacing.gapMd)}>
+          <Button asChild variant="default">
+            <Link href={`/${validatedLocale}/auth/login`}>
+              {validatedLocale === 'ar' ? 'تسجيل الدخول' : 'Login'}
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href={`/${validatedLocale}/auth/signup`}>
+              {validatedLocale === 'ar' ? 'إنشاء حساب' : 'Sign Up'}
+            </Link>
+          </Button>
+          <Button asChild variant="secondary">
+            <Link href={`/${validatedLocale}/auth/complete-profile?provider=google&firstName=John&lastName=Doe&email=john@example.com`}>
+              {validatedLocale === 'ar' ? 'إكمال الملف الشخصي (تجربة)' : 'Complete Profile (Demo)'}
+            </Link>
+          </Button>
+        </div>
       </div>
       
       {/* Demo section to showcase automatic RTL layout and theming */}
@@ -56,9 +81,9 @@ export default async function HomePage({ params }: HomePageProps) {
           <span className="font-medium">
             {validatedLocale === 'ar' ? 'النص الرئيسي' : 'Main Text'}
           </span>
-          <Button variant="secondary" size="sm">
-            {dict.edit}
-          </Button>
+                  <Button variant="secondary" size="sm">
+          {t('common.edit')}
+        </Button>
         </div>
         
         <div className="mt-4 text-sm text-muted-foreground text-start">
@@ -86,8 +111,10 @@ export default async function HomePage({ params }: HomePageProps) {
       </div>
       
       {/* Original test button */}
-      <Button variant="destructive" size="icon" className="mt-8">
-        ×
+      <Button variant="outline" className="mt-8" asChild>
+        <Link href={`/${validatedLocale}/dashboard`}>
+          {validatedLocale === 'ar' ? 'الذهاب إلى لوحة التحكم (يتطلب تسجيل الدخول)' : 'Go to Dashboard (requires login)'}
+        </Link>
       </Button>
     </div>
   );

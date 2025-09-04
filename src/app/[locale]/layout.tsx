@@ -2,12 +2,15 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
-import { locales } from "@/lib/i18n/utils";
-import { isValidLocale } from "@/lib/i18n/utils";
-import type { Locale } from "@/lib/i18n/types";
+import { locales, isValidLocale } from "@/i18n";
+import type { Locale } from "@/i18n";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { AuthProvider } from "@/components/providers/auth-provider";
+import { NextIntlProvider } from "@/components/providers/next-intl-provider";
 import { direction } from "@/lib/styles/logical";
+import { ConditionalHeader } from "@/components/layout/conditional-header";
+import { getMessages } from "@/i18n";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,6 +51,7 @@ export default async function RootLayout({
   const validatedLocale = locale as Locale;
   const isRTL = direction.isRTL(validatedLocale);
   const dir = direction.getDir(validatedLocale);
+  const messages = await getMessages(validatedLocale);
 
   return (
     <html lang={validatedLocale} dir={dir} suppressHydrationWarning>
@@ -60,7 +64,14 @@ export default async function RootLayout({
         )}
       >
         <ThemeProvider>
-          {children}
+          <NextIntlProvider locale={validatedLocale} messages={messages}>
+            <AuthProvider locale={validatedLocale}>
+              <ConditionalHeader locale={validatedLocale} />
+              <main>
+                {children}
+              </main>
+            </AuthProvider>
+          </NextIntlProvider>
         </ThemeProvider>
       </body>
     </html>
