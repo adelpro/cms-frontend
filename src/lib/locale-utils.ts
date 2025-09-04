@@ -3,8 +3,8 @@
  */
 
 import { notFound } from 'next/navigation';
-import { isValidLocale, type Locale } from '@/i18n';
-import type { PageProps, DynamicPageProps, ValidatedLocale } from './types';
+import { isValidLocale } from '@/i18n';
+import type { ValidatedLocale } from './types';
 
 /**
  * Validates locale from page params and returns validated locale or triggers 404

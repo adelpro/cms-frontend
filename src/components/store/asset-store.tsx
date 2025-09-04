@@ -349,7 +349,7 @@ export function AssetStore({ locale }: AssetStoreProps) {
                       )}
                       <Badge 
                         variant="outline"
-                        className={cn("w-fit text-xs border border-neutral-200")}
+                        className={cn("w-fit max-w-[130px] text-xs border border-neutral-200 truncate")}
                       >
                         {asset.license}
                       </Badge>

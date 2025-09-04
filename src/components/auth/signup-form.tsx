@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/components/providers/auth-provider';
 import type { Locale } from '@/i18n';
 import { validateSignupForm } from '@/lib/validations';
-import { signupUser, socialLogin } from '@/lib/auth';
+import { signupUser } from '@/lib/auth';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 
@@ -81,38 +81,6 @@ export function SignupForm({ locale }: SignupFormProps) {
     }
   };
 
-  const handleSocialSignup = async (provider: 'google' | 'github') => {
-    setIsLoading(true);
-    setSubmitError('');
-    
-    try {
-      // Simulate getting social data (in real app, this would come from OAuth)
-      const socialData = {
-        firstName: provider === 'google' ? 'John' : 'Jane',
-        lastName: provider === 'google' ? 'Doe' : 'Developer',
-        email: `user@${provider}.com`
-      };
-      
-      const response = await socialLogin(provider, socialData);
-      
-      if (response.success) {
-        if (response.requiresProfileCompletion && response.user) {
-          // User needs to complete profile - the AuthProvider will handle redirect
-          login(response.user, 'temp_token');
-        } else if (response.user && response.token) {
-          // User signup complete
-          login(response.user, response.token);
-        }
-      } else {
-        setSubmitError(response.error || t('errors.validationError'));
-      }
-    } catch (error) {
-      console.error('Social signup error:', error);
-      setSubmitError(t('errors.networkError'));
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div className="space-y-8">

@@ -374,7 +374,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
           </Card>
 
           {/* Technical Details Section */}
-          <Card className="bg-transparent shadow-none">
+          {/* <Card className="bg-transparent shadow-none">
             <CardHeader className="p-0">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <FileText className="h-5 w-5" />
@@ -401,10 +401,10 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
           {/* Stats Section */}
-          <Card className="bg-transparent shadow-none">
+          {/* <Card className="bg-transparent shadow-none">
             <CardHeader className="p-0">
               <CardTitle className="flex items-center gap-2 text-lg">
                 <MousePointer className="h-5 w-5" />
@@ -423,7 +423,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
 
         {/* Sidebar - Right Side */}

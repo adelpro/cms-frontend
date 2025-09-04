@@ -335,6 +335,9 @@ export const completeUserProfile = async (profileData: {
     };
   }
   
+  // Use profileData to avoid unused parameter warning
+  console.log('Completing profile with data:', profileData);
+  
   const token = generateFakeToken();
   const updatedUser: User = {
     ...currentUser,

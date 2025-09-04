@@ -5,17 +5,16 @@
 import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import type { ValidationResult } from '@/lib/validations';
-import type { FormState } from '@/lib/types';
 
-interface UseFormOptions<T> {
+interface UseFormOptions<T, R = Record<string, unknown>> {
   /** Initial form data */
   initialData: T;
   /** Validation function */
   validate: (data: T, t: (key: string) => string) => ValidationResult;
   /** Submit handler function */
-  onSubmit: (data: T) => Promise<{ success: boolean; error?: string; [key: string]: any }>;
+  onSubmit: (data: T) => Promise<R & { success: boolean; error?: string }>;
   /** Optional success callback */
-  onSuccess?: (result: any) => void;
+  onSuccess?: (result: R & { success: boolean; error?: string }) => void;
 }
 
 interface UseFormReturn<T> {
@@ -44,12 +43,12 @@ interface UseFormReturn<T> {
 /**
  * Custom hook for managing form state, validation, and submission
  */
-export function useForm<T extends Record<string, string>>({
+export function useForm<T extends Record<string, string>, R = Record<string, unknown>>({
   initialData,
   validate,
   onSubmit,
   onSuccess
-}: UseFormOptions<T>): UseFormReturn<T> {
+}: UseFormOptions<T, R>): UseFormReturn<T> {
   const t = useTranslations();
   
   const [formData, setFormData] = useState<T>(initialData);
