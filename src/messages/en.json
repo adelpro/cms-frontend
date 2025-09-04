@@ -25,7 +25,7 @@
     "home": "Home",
     "about": "About",
     "contact": "Contact",
-    "store": "Store",
+    "store": "Assets Store",
     "academy": "Academy",
     "projects": "Projects",
     "reports": "Reports",
@@ -101,11 +101,18 @@
     "personalInfo": "Tell us more about yourself and your team size so the community gets to know you better",
     "completeProfileTitle": "Complete your profile information",
     "completeProfileDescription": "Help us get to know you better to provide a better experience",
-    "saveAndContinue": "Save and Continue"
+    "saveAndContinue": "Save and Continue",
+    "projectQuestion": "What are you working on? Tell us about your project?",
+    "businessModelPlaceholder": "Answer to the business model type question",
+    "projectLinkLabel": "Add project link if available",
+    "teamSizePlaceholder": "Answer to the team size question?",
+    "personalInfoInstruction": "Tell us more about yourself and your team size so the community can get to know you better",
+    "selfIntroPlaceholder": "Answer to the self-introduction request",
+    "doItLater": "Later"
   },
   "store": {
     "title": "Asset Store",
-    "searchPlaceholder": "Search resources...",
+    "searchPlaceholder": "Search resources",
     "filters": "Resource Filters",
     "categories": "Resource Categories",
     "licenses": "Resource Licenses (CreativeCommons)",
@@ -141,7 +148,7 @@
     "ccByNcNd": "Attribution-NonCommercial-NoDerivs"
   },
   "ui": {
-    "searchInResources": "Search resources...",
+    "searchInResources": "Search resources",
     "noResultsFound": "No results found matching your search",
     "publisherLabel": "Publisher:",
     "categoryFilters": "Resource Categories",

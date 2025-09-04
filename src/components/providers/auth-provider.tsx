@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { useRouter, usePathname } from 'next/navigation';
 import type { User } from '@/lib/auth';
 import { checkAuthStatus, logoutUser, tokenStorage, userStorage } from '@/lib/auth';
-import type { Locale } from '@/lib/i18n/types';
+import type { Locale } from '@/i18n';
 import { AuthLoading } from '@/components/auth/auth-loading';
 
 interface AuthContextType {

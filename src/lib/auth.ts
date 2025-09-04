@@ -319,7 +319,7 @@ export const logoutUser = (): void => {
  * Complete user profile (for email signups)
  */
 export const completeUserProfile = async (profileData: {
-  businessModel: string;
+  projectDescription: string;
   projectLink?: string;
   teamSize: string;
   aboutYourself: string;

@@ -3,8 +3,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { logical } from '@/lib/styles/logical';
-import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 
 interface LicenseCarouselProps {
@@ -69,10 +67,7 @@ By clicking "Accept", you acknowledge that you have read and agree to these term
       <Card className="mb-6">
         <CardContent className="p-0">
           <div 
-            className={cn(
-              "h-96 overflow-y-auto p-6 text-sm leading-relaxed",
-              logical.textAlign.start
-            )}
+            className="h-96 overflow-y-auto p-6 text-sm leading-relaxed text-start"
             onScroll={handleScroll}
           >
             <pre className="whitespace-pre-wrap font-sans">{licenseContent}</pre>
@@ -86,7 +81,7 @@ By clicking "Accept", you acknowledge that you have read and agree to these term
         </CardContent>
       </Card>
 
-      <div className={cn("flex gap-3", logical.flexDirection.row)}>
+      <div className="flex gap-3">
         <Button 
           type="button" 
           variant="outline" 

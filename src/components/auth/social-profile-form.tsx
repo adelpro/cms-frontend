@@ -6,14 +6,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/components/providers/auth-provider';
-import type { Dictionary, Locale } from '@/lib/i18n/types';
+import type { Locale } from '@/i18n';
+import { useTranslations } from 'next-intl';
 import { formLogical, typography } from '@/lib/styles/logical';
 import { validateSocialProfileForm } from '@/lib/validations';
 import { completeProfile } from '@/lib/auth';
 import { cn } from '@/lib/utils';
 
 interface SocialProfileFormProps {
-  dict: Dictionary;
   locale: Locale;
   provider: 'google' | 'github';
   initialData?: {
@@ -24,10 +24,10 @@ interface SocialProfileFormProps {
 }
 
 export function SocialProfileForm({ 
-  dict, 
   provider, 
   initialData 
 }: SocialProfileFormProps) {
+  const t = useTranslations();
   const [formData, setFormData] = useState({
     firstName: initialData?.firstName || '',
     lastName: initialData?.lastName || '',
@@ -66,7 +66,7 @@ export function SocialProfileForm({
     const validation = validateSocialProfileForm({
       projectDescription: formData.projectDescription,
       personalInfo: formData.personalInfo
-    });
+    }, t);
     
     if (!validation.isValid) {
       const fieldErrors: Record<string, string> = {};
@@ -100,11 +100,11 @@ export function SocialProfileForm({
       if (response.success && response.user && response.token) {
         login(response.user, response.token);
       } else {
-        setSubmitError(response.error || dict.auth.validation.signupFailed);
+        setSubmitError(response.error || t('errors.validationError'));
       }
     } catch (error) {
       console.error('Profile completion error:', error);
-      setSubmitError(dict.auth.validation.networkError);
+      setSubmitError(t('errors.networkError'));
     } finally {
       setIsLoading(false);
     }
@@ -145,11 +145,11 @@ export function SocialProfileForm({
             typography.heading,
             "text-3xl lg:text-4xl font-bold text-foreground"
           )}>
-            {dict.auth.profileCompletion}
+            {t('auth.profileCompletion')}
           </h1>
         </div>
         <p className="text-base lg:text-lg text-muted-foreground">
-          {dict.auth.completeProfile}
+          {t('auth.completeProfile')}
         </p>
       </div>
 
@@ -168,9 +168,9 @@ export function SocialProfileForm({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className={formLogical.fieldset}>
             <Label htmlFor="firstName" className={formLogical.label}>
-              {dict.auth.firstName}
+              {t('auth.firstName')}
               <span className="text-xs text-muted-foreground ms-1">
-                ({dict.auth.optional})
+                ({t('common.optional')})
               </span>
             </Label>
             <Input
@@ -184,9 +184,9 @@ export function SocialProfileForm({
 
           <div className={formLogical.fieldset}>
             <Label htmlFor="lastName" className={formLogical.label}>
-              {dict.auth.lastName}
+              {t('auth.lastName')}
               <span className="text-xs text-muted-foreground ms-1">
-                ({dict.auth.optional})
+                ({t('common.optional')})
               </span>
             </Label>
             <Input
@@ -203,12 +203,12 @@ export function SocialProfileForm({
         <div className="space-y-6">
           <div className={formLogical.fieldset}>
             <Label htmlFor="projectDescription" className={cn(formLogical.label, "text-lg")}>
-              {dict.auth.projectDescription}
+              {t('profile.projectDescription')}
               <span className="text-red-500 ms-1">*</span>
             </Label>
             <Textarea
               id="projectDescription"
-              placeholder={dict.auth.projectDescriptionPlaceholder}
+              placeholder={t('profile.businessModelPlaceholder')}
               value={formData.projectDescription}
               onChange={handleInputChange('projectDescription')}
               required
@@ -227,12 +227,12 @@ export function SocialProfileForm({
 
           <div className={formLogical.fieldset}>
             <Label htmlFor="projectLink" className={formLogical.label}>
-              {dict.auth.projectLink}
+              {t('profile.projectLinkLabel')}
             </Label>
             <Input
               id="projectLink"
               type="url"
-              placeholder={dict.auth.projectLinkPlaceholder}
+              placeholder={t('forms.placeholders.projectLink')}
               value={formData.projectLink}
               onChange={handleInputChange('projectLink')}
               className={cn(
@@ -251,12 +251,12 @@ export function SocialProfileForm({
         {/* Personal Information Section */}
         <div className={formLogical.fieldset}>
           <Label htmlFor="personalInfo" className={cn(formLogical.label, "text-lg")}>
-            {dict.auth.personalInfo}
+            {t('profile.personalInfo')}
             <span className="text-red-500 ms-1">*</span>
           </Label>
           <Textarea
             id="personalInfo"
-            placeholder={dict.auth.personalInfoPlaceholder}
+            placeholder={t('profile.selfIntroPlaceholder')}
             value={formData.personalInfo}
             onChange={handleInputChange('personalInfo')}
             required
@@ -277,7 +277,7 @@ export function SocialProfileForm({
         {initialData?.email && (
           <div className={formLogical.fieldset}>
             <Label className={formLogical.label}>
-              {dict.auth.email}
+              {t('auth.email')}
             </Label>
             <div className={cn(
               "px-3 py-2 bg-muted rounded-md border text-sm text-muted-foreground",
@@ -293,7 +293,7 @@ export function SocialProfileForm({
           className="w-full h-12 lg:h-14 text-base lg:text-lg"
           disabled={isLoading}
         >
-          {isLoading ? dict.loading : dict.auth.completeProfile}
+          {isLoading ? t('common.loading') : t('auth.completeProfile')}
         </Button>
       </form>
     </div>

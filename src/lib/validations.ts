@@ -211,7 +211,7 @@ export const validateSocialProfileForm = (
  */
 export const validateProfileCompletionForm = (
   formData: {
-    businessModel: string;
+    projectDescription: string;
     projectLink?: string;
     teamSize: string;
     aboutYourself: string;
@@ -220,12 +220,12 @@ export const validateProfileCompletionForm = (
 ): ValidationResult => {
   const errors: ValidationError[] = [];
 
-  // Business model validation
-  const businessModelError = validators.required(formData.businessModel, 'forms.validation.fieldRequired', t);
-  if (businessModelError) {
-    errors.push({ field: 'businessModel', message: businessModelError });
-  } else if (formData.businessModel.trim().length < 10) {
-    errors.push({ field: 'businessModel', message: t('forms.validation.fieldTooShort') });
+  // Project description validation
+  const projectDescriptionError = validators.required(formData.projectDescription, 'forms.validation.fieldRequired', t);
+  if (projectDescriptionError) {
+    errors.push({ field: 'projectDescription', message: projectDescriptionError });
+  } else if (formData.projectDescription.trim().length < 10) {
+    errors.push({ field: 'projectDescription', message: t('forms.validation.fieldTooShort') });
   }
 
   // Project link validation (optional)
@@ -237,10 +237,9 @@ export const validateProfileCompletionForm = (
     }
   }
 
-  // Team size validation
-  const teamSizeError = validators.required(formData.teamSize, 'forms.validation.fieldRequired', t);
-  if (teamSizeError) {
-    errors.push({ field: 'teamSize', message: teamSizeError });
+  // Team size validation (now optional since it's a placeholder field)
+  if (formData.teamSize && formData.teamSize.trim() && formData.teamSize.trim().length < 2) {
+    errors.push({ field: 'teamSize', message: t('forms.validation.fieldTooShort') });
   }
 
   // About yourself validation

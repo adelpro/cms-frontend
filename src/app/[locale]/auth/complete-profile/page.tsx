@@ -10,22 +10,19 @@ interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function CompleteProfilePage({ params, searchParams }: PageProps) {
+export default async function CompleteProfilePage({ params }: PageProps) {
   const { locale } = await params;
-  const { skippable } = await searchParams;
   
   if (!isValidLocale(locale)) {
     notFound();
   }
 
   const validatedLocale = locale as Locale;
-  const isSkippable = skippable === 'true';
 
   return (
     <AuthLayout locale={validatedLocale}>
       <ProfileCompletionForm 
         locale={validatedLocale}
-        isSkippable={isSkippable}
       />
     </AuthLayout>
   );

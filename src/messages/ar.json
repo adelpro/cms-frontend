@@ -25,7 +25,7 @@
     "home": "الرئيسية",
     "about": "حول",
     "contact": "اتصل بنا",
-    "store": "المتجر",
+    "store": "معرض الأصول والموارد",
     "academy": "الأكاديمية",
     "projects": "المشاريع",
     "reports": "التقارير",
@@ -101,11 +101,18 @@
     "personalInfo": "أخبرنا المزيد عن نفسك وحجم فريقك حتى يتعرف عليك المجتمع بشكل أفضل",
     "completeProfileTitle": "أكمل معلومات ملفك الشخصي",
     "completeProfileDescription": "ساعدنا في التعرف عليك أكثر لتوفير تجربة أفضل",
-    "saveAndContinue": "حفظ والمتابعة"
+    "saveAndContinue": "حفظ والمتابعة",
+    "projectQuestion": "ما الذي تعمل عليه؟ أخبرنا عن مشروعك؟",
+    "businessModelPlaceholder": "الإجابة على سؤال نوع نموذج الأعمال",
+    "projectLinkLabel": "أضف رابط المشروع إذا توفر",
+    "teamSizePlaceholder": "الإجابة على سؤال حجم الفريق؟",
+    "personalInfoInstruction": "أخبرنا المزيد عن نفسك وحجم فريقك حتى يتعرف عليك المجتمع بشكل أفضل",
+    "selfIntroPlaceholder": "الإجابة على طلب التعريف بالذات",
+    "doItLater": "لاحقاً"
   },
   "store": {
     "title": "متجر الموارد",
-    "searchPlaceholder": "البحث في الموارد...",
+    "searchPlaceholder": "البحث في الموارد",
     "filters": "فلاتر الموارد",
     "categories": "فئات الموارد",
     "licenses": "تراخيص الموارد (CreativeCommons)",
@@ -141,7 +148,7 @@
     "ccByNcNd": "نسب العمل-غير تجاري-لا مشتقات"
   },
   "ui": {
-    "searchInResources": "البحث في الموارد...",
+    "searchInResources": "البحث في الموارد",
     "noResultsFound": "لا توجد نتائج تطابق بحثك",
     "publisherLabel": "الناشر:",
     "categoryFilters": "فئات الموارد",

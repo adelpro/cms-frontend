@@ -1,246 +1,163 @@
 "use client";
 
-import { useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { FormField } from '@/components/ui/form-field';
+import { SubmitButton } from '@/components/ui/submit-button';
+import { FormError } from '@/components/ui/form-error';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/components/providers/auth-provider';
+import { useForm } from '@/hooks/use-form';
 import type { Locale } from '@/i18n';
-import { useTranslations } from 'next-intl';
-import { formLogical, typography } from '@/lib/styles/logical';
 import { validateProfileCompletionForm } from '@/lib/validations';
 import { completeUserProfile } from '@/lib/auth';
-import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface ProfileCompletionFormProps {
   locale: Locale;
-  isSkippable?: boolean;
 }
 
-export function ProfileCompletionForm({ locale, isSkippable = false }: ProfileCompletionFormProps) {
+export function ProfileCompletionForm({ locale }: ProfileCompletionFormProps) {
   const t = useTranslations();
-  const [formData, setFormData] = useState({
-    businessModel: '',
-    projectLink: '',
-    teamSize: '',
-    aboutYourself: ''
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [submitError, setSubmitError] = useState<string>('');
-  
-  const { login, user } = useAuth();
+  const router = useRouter();
+  const { login } = useAuth();
 
-  const handleInputChange = (field: keyof typeof formData) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: e.target.value
-    }));
-    
-    // Clear field error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({
-        ...prev,
-        [field]: ''
-      }));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitError('');
-    
-    // Validate form
-    const validation = validateProfileCompletionForm(formData, t);
-    if (!validation.isValid) {
-      const fieldErrors: Record<string, string> = {};
-      validation.errors.forEach(error => {
-        fieldErrors[error.field] = error.message;
-      });
-      setErrors(fieldErrors);
-      return;
-    }
-    
-    setIsLoading(true);
-    
-    try {
-      const response = await completeUserProfile(formData);
-      
-      if (response.success && response.user && response.token) {
-        login(response.user, response.token);
-      } else {
-        setSubmitError(response.error || t('errors.validationError'));
+  const {
+    formData,
+    errors,
+    isLoading,
+    submitError,
+    handleInputChange,
+    handleSubmit
+  } = useForm({
+    initialData: {
+      projectDescription: '',
+      projectLink: '',
+      teamSize: '',
+      aboutYourself: ''
+    },
+    validate: validateProfileCompletionForm,
+    onSubmit: async (data) => {
+      const response = await completeUserProfile(data);
+      return response;
+    },
+    onSuccess: (result) => {
+      if (result.user && result.token) {
+        login(result.user, result.token);
+        // Redirect to store page after successful completion
+        router.push(`/${locale}/store`);
       }
-    } catch (error) {
-      console.error('Profile completion error:', error);
-      setSubmitError(t('errors.networkError'));
-    } finally {
-      setIsLoading(false);
     }
-  };
+  });
 
   const handleSkip = () => {
-    // Skip profile completion for now
-    if (user) {
-      // Mark profile as skipped but allow access
-      window.location.href = '/dashboard';
-    }
+    // Redirect to store page if skipped
+    router.push(`/${locale}/store`);
   };
 
   return (
     <div className="space-y-8">
+      {/* Logo */}
+      <div className="text-center">
+        <Image
+          src="/logo.svg"
+          alt="Itqan"
+          width={50}
+          height={50}
+          className="mx-auto mb-3"
+        />
+      </div>
+
       {/* Header */}
-      <div className="text-center mb-8">
-        <h1 className={cn(
-          typography.heading,
-          "text-3xl lg:text-4xl font-bold text-foreground"
-        )}>
+      <div className="text-center space-y-3">
+        <h1 className="text-[32px] font-bold text-[#333333]">
           {t('profile.completeProfileTitle')}
         </h1>
-        <p className="text-base lg:text-lg text-muted-foreground mt-4">
+        <p className="text-[18px] text-[#333333]">
           {t('profile.completeProfileDescription')}
         </p>
       </div>
 
       {/* Profile Completion Form */}
-      <Card>
-        <CardContent className="pt-8 lg:pt-10">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Show submit error */}
-            {submitError && (
-              <div className={cn(
-                "p-3 rounded-md border bg-destructive/10 border-destructive/20 text-destructive text-sm",
-                formLogical.errorText
-              )}>
-                {submitError}
-              </div>
-            )}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Show submit error */}
+        <FormError message={submitError} />
 
-            {/* Project Information Section */}
-            <div className="space-y-6">
-              <div className={formLogical.fieldset}>
-                <Label htmlFor="businessModel" className={cn(formLogical.label, "text-lg")}>
-                  {t('profile.businessModel')}
-                  <span className="text-red-500 ms-1">*</span>
-                </Label>
-                <Textarea
-                  id="businessModel"
-                  placeholder={t('profile.businessModel')}
-                  value={formData.businessModel}
-                  onChange={handleInputChange('businessModel')}
-                  required
-                  className={cn(
-                    formLogical.input,
-                    "min-h-[100px] resize-none",
-                    errors.businessModel && "border-destructive focus-visible:border-destructive"
-                  )}
-                  aria-invalid={!!errors.businessModel}
-                  rows={4}
-                />
-                {errors.businessModel && (
-                  <p className={formLogical.errorText}>{errors.businessModel}</p>
-                )}
-              </div>
+        {/* Project Information Section */}
+        <div className="space-y-6">
+          {/* Project Description */}
+          <FormField
+            id="projectDescription"
+            name="projectDescription"
+            variant="textarea"
+            label={t('profile.projectQuestion')}
+            value={formData.projectDescription}
+            onChange={handleInputChange('projectDescription')}
+            error={errors.projectDescription}
+            placeholder={t('profile.businessModelPlaceholder')}
+            required
+            rows={4}
+          />
 
-              <div className={formLogical.fieldset}>
-                <Label htmlFor="projectLink" className={formLogical.label}>
-                  {t('forms.placeholders.projectLink')}
-                </Label>
-                <Input
-                  id="projectLink"
-                  type="url"
-                  placeholder={t('forms.placeholders.projectLink')}
-                  value={formData.projectLink}
-                  onChange={handleInputChange('projectLink')}
-                  className={cn(
-                    formLogical.input,
-                    errors.projectLink && "border-destructive focus-visible:border-destructive"
-                  )}
-                  aria-invalid={!!errors.projectLink}
-                  dir="ltr"
-                />
-                {errors.projectLink && (
-                  <p className={formLogical.errorText}>{errors.projectLink}</p>
-                )}
-              </div>
+          {/* Project Link */}
+          <FormField
+            id="projectLink"
+            name="projectLink"
+            type="url"
+            label={t('profile.projectLinkLabel')}
+            value={formData.projectLink}
+            onChange={handleInputChange('projectLink')}
+            error={errors.projectLink}
+            placeholder={t('profile.teamSizePlaceholder')}
+          />
+        </div>
 
-              <div className={formLogical.fieldset}>
-                <Label htmlFor="teamSize" className={cn(formLogical.label, "text-lg")}>
-                  {t('profile.teamSize')}
-                  <span className="text-red-500 ms-1">*</span>
-                </Label>
-                <Input
-                  id="teamSize"
-                  type="text"
-                  placeholder={t('profile.teamSize')}
-                  value={formData.teamSize}
-                  onChange={handleInputChange('teamSize')}
-                  required
-                  className={cn(
-                    formLogical.input,
-                    errors.teamSize && "border-destructive focus-visible:border-destructive"
-                  )}
-                  aria-invalid={!!errors.teamSize}
-                />
-                {errors.teamSize && (
-                  <p className={formLogical.errorText}>{errors.teamSize}</p>
-                )}
-              </div>
-            </div>
+        {/* Personal Information Section */}
+        <div className="space-y-4">
+          {/* Section instruction */}
+          <p className="text-sm text-[#333333] text-start">
+            {t('profile.personalInfoInstruction')}
+          </p>
+          
+          <FormField
+            id="aboutYourself"
+            name="aboutYourself"
+            variant="textarea"
+            label={t('profile.aboutYourself')}
+            value={formData.aboutYourself}
+            onChange={handleInputChange('aboutYourself')}
+            error={errors.aboutYourself}
+            placeholder={t('profile.selfIntroPlaceholder')}
+            required
+            rows={5}
+          />
+        </div>
 
-            {/* Personal Information Section */}
-            <div className={formLogical.fieldset}>
-              <Label htmlFor="aboutYourself" className={cn(formLogical.label, "text-lg")}>
-                {t('profile.aboutYourself')}
-                <span className="text-red-500 ms-1">*</span>
-              </Label>
-              <Textarea
-                id="aboutYourself"
-                placeholder={t('profile.aboutYourself')}
-                value={formData.aboutYourself}
-                onChange={handleInputChange('aboutYourself')}
-                required
-                className={cn(
-                  formLogical.input,
-                  "min-h-[120px] resize-none",
-                  errors.aboutYourself && "border-destructive focus-visible:border-destructive"
-                )}
-                aria-invalid={!!errors.aboutYourself}
-                rows={5}
-              />
-              {errors.aboutYourself && (
-                <p className={formLogical.errorText}>{errors.aboutYourself}</p>
-              )}
-            </div>
+        {/* Action Buttons */}
+        <div className="space-y-4">
+          {/* Save and Continue Button */}
+          <SubmitButton
+            isLoading={isLoading}
+            loadingText={t('common.loading')}
+            className="w-full bg-[#2F504B] hover:bg-[#2F504B]/90"
+            size="lg"
+          >
+            {t('profile.saveAndContinue')}
+          </SubmitButton>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-end pt-4">
-              {isSkippable && (
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={handleSkip}
-                  disabled={isLoading}
-                  className="h-12 lg:h-14 text-base lg:text-lg min-w-[120px]"
-                >
-                  {t('common.skip')}
-                </Button>
-              )}
-              <Button
-                type="submit"
-                className="h-12 lg:h-14 text-base lg:text-lg min-w-[180px]"
-                disabled={isLoading}
-              >
-                {isLoading ? t('common.loading') : t('profile.saveAndContinue')}
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+          {/* Skip Button */}
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            onClick={handleSkip}
+            disabled={isLoading}
+            className="w-full text-base bg-white hover:bg-gray-50"
+          >
+            {t('profile.doItLater')}
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }

@@ -104,11 +104,11 @@ export function SignupForm({ locale }: SignupFormProps) {
           login(response.user, response.token);
         }
       } else {
-        setSubmitError(response.error || dict.auth.validation.signupFailed);
+        setSubmitError(response.error || t('errors.validationError'));
       }
     } catch (error) {
       console.error('Social signup error:', error);
-      setSubmitError(dict.auth.validation.networkError);
+      setSubmitError(t('errors.networkError'));
     } finally {
       setIsLoading(false);
     }
