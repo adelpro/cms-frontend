@@ -235,6 +235,25 @@ export async function downloadAsset(
   return response.blob();
 }
 
+export async function downloadOriginalResource(
+  resourceId: number,
+  token: string
+): Promise<Blob> {
+  const response = await fetch(`${API_BASE_URL}/resources/${resourceId}/download`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData: ApiErrorResponse = await response.json();
+    throw new Error(errorData.error.message);
+  }
+
+  return response.blob();
+}
+
 export async function getPublisherDetails(
   publisherId: number,
   token?: string
