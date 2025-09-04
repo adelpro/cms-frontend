@@ -147,7 +147,9 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
                 {license.permissions.map((permission, index) => (
                   <li key={index} className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm">{permission}</span>
+                    <span className="text-sm">
+                      {typeof permission === 'string' ? permission : permission.label || permission.description || permission.key}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -171,7 +173,9 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
                 {license.conditions.map((condition, index) => (
                   <li key={index} className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <span className="text-sm">{condition}</span>
+                    <span className="text-sm">
+                      {typeof condition === 'string' ? condition : condition.label || condition.description || condition.key}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -195,7 +199,9 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
                 {license.limitations.map((limitation, index) => (
                   <li key={index} className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                    <span className="text-sm">{limitation}</span>
+                    <span className="text-sm">
+                      {typeof limitation === 'string' ? limitation : limitation.label || limitation.description || limitation.key}
+                    </span>
                   </li>
                 ))}
               </ul>

@@ -12,7 +12,6 @@ import {
   Eye,
   BookOpen,
   FileText as FileTextIcon,
-  MousePointer,
   CloudDownload,
   ScrollText,
   SquareDashedMousePointer,
@@ -424,7 +423,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
                 </Button>
               </Link>
 
-              <Link href={`/${locale}/license/${asset.id}`}>
+              <Link href={`/${locale}/license/${asset.license.code}`}>
                 <Button
                   variant="ghost"
                   className="w-full justify-start cursor-pointer bg-neutral-100 hover:bg-neutral-200"

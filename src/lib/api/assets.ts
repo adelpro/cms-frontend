@@ -123,9 +123,9 @@ export interface ApiLicenseDetails {
     description: string;
     order: number;
   }>;
-  permissions: string[];
-  conditions: string[];
-  limitations: string[];
+  permissions: (string | { key: string; label: string; description: string })[];
+  conditions: (string | { key: string; label: string; description: string })[];
+  limitations: (string | { key: string; label: string; description: string })[];
 }
 
 // Utility functions
