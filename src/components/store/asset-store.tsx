@@ -106,7 +106,7 @@ export function AssetStore({ locale }: AssetStoreProps) {
         setAssets(apiAssets);
       } catch (err) {
         console.error('Failed to load assets:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load assets');
+        setError(err instanceof Error ? err.message : t('ui.loadingAssetsError'));
         // Fallback to mock data on error
         const mockAssets: Asset[] = [
           {

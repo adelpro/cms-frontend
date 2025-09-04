@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ChevronRight, Home } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 
 export interface BreadcrumbItem {
@@ -17,8 +18,9 @@ interface BreadcrumbProps {
 }
 
 export function Breadcrumb({ items, className }: BreadcrumbProps) {
+  const t = useTranslations();
   return (
-    <nav className={cn("flex items-center space-x-1 text-sm", className)} aria-label="Breadcrumb">
+    <nav className={cn("flex items-center space-x-1 text-sm", className)} aria-label={t('ui.breadcrumb')}>
       {items.map((item, index) => (
         <React.Fragment key={index}>
           {index === 0 && item.href ? (
