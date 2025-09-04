@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
-import { getDictionary } from '@/lib/i18n/dictionaries';
-import { isValidLocale } from '@/lib/i18n/utils';
-import type { Locale } from '@/lib/i18n/types';
+import { isValidLocale } from '@/i18n';
+import type { Locale } from '@/i18n';
 import { DashboardContent } from '@/components/dashboard/dashboard-content';
 
 interface DashboardPageProps {
@@ -19,9 +18,8 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
   }
   
   const validatedLocale = locale as Locale;
-  const dict = await getDictionary(validatedLocale);
 
-  return <DashboardContent dict={dict} locale={validatedLocale} />;
+  return <DashboardContent locale={validatedLocale} />;
 }
 
 export async function generateMetadata({ params }: DashboardPageProps) {
@@ -32,10 +30,9 @@ export async function generateMetadata({ params }: DashboardPageProps) {
   }
   
   const validatedLocale = locale as Locale;
-  const dict = await getDictionary(validatedLocale);
 
   return {
     title: validatedLocale === 'ar' ? 'لوحة التحكم - منصة المطورين' : 'Dashboard - Developer Platform',
-    description: dict.description,
+    description: 'Developer dashboard for managing projects and resources',
   };
 }

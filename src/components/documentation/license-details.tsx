@@ -6,12 +6,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, ExternalLink, Info } from 'lucide-react';
-import type { Dictionary, Locale } from '@/lib/i18n/types';
+import type { Locale } from '@/i18n';
 import { cn } from '@/lib/utils';
 
 interface LicenseDetailsProps {
   licenseId?: string;
-  dict: Dictionary;
   locale: Locale;
 }
 

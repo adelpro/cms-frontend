@@ -36,12 +36,13 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import type { Dictionary, Locale } from "@/lib/i18n/types";
+import type { Locale } from "@/i18n";
 import { direction } from "@/lib/styles/logical";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
 import { getAssetDetails, downloadAsset, requestAssetAccess } from "@/lib/api/assets";
 import { tokenStorage } from "@/lib/auth";
+import { useTranslations } from "next-intl";
 
 interface AssetDetailsType {
   id: number;
@@ -89,15 +90,15 @@ interface AssetDetailsType {
 
 interface AssetDetailsProps {
   assetId: string;
-  dict: Dictionary;
   locale: Locale;
 }
 
-export function AssetDetails({ assetId, dict, locale }: AssetDetailsProps) {
+export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
+  const t = useTranslations();
   const { user } = useAuth();
   const router = useRouter();
   const [asset, setAsset] = useState<AssetDetailsType | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = true);
   const [error, setError] = useState<string | null>(null);
   const [showAccessRequest, setShowAccessRequest] = useState(false);
   const [showLicenseCarousel, setShowLicenseCarousel] = useState(false);

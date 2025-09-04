@@ -1,7 +1,6 @@
 import { AssetStore } from '@/components/store';
-import { getDictionary } from '@/lib/i18n/dictionaries';
-import { isValidLocale } from '@/lib/i18n/utils';
-import type { Locale } from '@/lib/i18n/types';
+import { isValidLocale } from '@/i18n';
+import type { Locale } from '@/i18n';
 import { notFound } from 'next/navigation';
 
 interface StorePageProps {
@@ -16,7 +15,6 @@ export default async function StorePage({ params }: StorePageProps) {
   }
   
   const validatedLocale = locale as Locale;
-  const dict = await getDictionary(validatedLocale);
 
-  return <AssetStore dict={dict} locale={validatedLocale} />;
+  return <AssetStore locale={validatedLocale} />;
 }

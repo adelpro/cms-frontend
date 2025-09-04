@@ -1,8 +1,11 @@
-import type { Locale } from '@/lib/i18n/types';
+"use client";
+
+import type { Locale } from '@/i18n';
 import { direction, logical, responsive } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { getDictionary } from '@/lib/i18n/dictionaries';
+import { useTranslations } from 'next-intl';
+
 import Link from 'next/link';
 import { Home } from 'lucide-react';
 import { LanguageSwitcher } from '../language-switcher';
@@ -13,8 +16,8 @@ interface AuthLayoutProps {
   className?: string;
 }
 
-export async function AuthLayout({ children, locale, className }: AuthLayoutProps) {
-  const dict = await getDictionary(locale);
+export function AuthLayout({ children, locale, className }: AuthLayoutProps) {
+  const t = useTranslations();
 
   return (
     <div 
@@ -36,7 +39,7 @@ export async function AuthLayout({ children, locale, className }: AuthLayoutProp
           <Link href={`/${locale}`}>
             <span className="flex items-center gap-2">
               <Home className="h-5 w-5" />
-              {dict.auth.returnToWebsite}
+              {t('auth.returnToWebsite')}
             </span>
           </Link>
         </Button>

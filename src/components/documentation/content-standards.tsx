@@ -3,14 +3,13 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileText, Code, Book } from 'lucide-react';
-import type { Dictionary, Locale } from '@/lib/i18n/types';
+import type { Locale } from '@/i18n';
 
 interface ContentStandardsProps {
-  dict: Dictionary;
   locale: Locale;
 }
 
-export function ContentStandards({ }: ContentStandardsProps) {
+export function ContentStandards({ locale }: ContentStandardsProps) {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8">
       {/* Header */}

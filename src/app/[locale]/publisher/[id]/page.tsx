@@ -1,7 +1,6 @@
 import { PublisherProfile } from '@/components/publisher';
-import { getDictionary } from '@/lib/i18n/dictionaries';
-import { isValidLocale } from '@/lib/i18n/utils';
-import type { Locale } from '@/lib/i18n/types';
+import { isValidLocale } from '@/i18n';
+import type { Locale } from '@/i18n';
 import { notFound } from 'next/navigation';
 
 interface PublisherPageProps {
@@ -16,7 +15,6 @@ export default async function PublisherPage({ params }: PublisherPageProps) {
   }
   
   const validatedLocale = locale as Locale;
-  const dict = await getDictionary(validatedLocale);
 
-  return <PublisherProfile publisherId={id} dict={dict} locale={validatedLocale} />;
+  return <PublisherProfile publisherId={id} locale={validatedLocale} />;
 }

@@ -2,14 +2,13 @@
 
 import { usePathname } from 'next/navigation';
 import { Header } from './header';
-import type { Dictionary, Locale } from '@/lib/i18n/types';
+import type { Locale } from '@/i18n';
 
 interface ConditionalHeaderProps {
-  dict: Dictionary;
   locale: Locale;
 }
 
-export function ConditionalHeader({ dict, locale }: ConditionalHeaderProps) {
+export function ConditionalHeader({ locale }: ConditionalHeaderProps) {
   const pathname = usePathname();
   
   // Don't render header on the home page or auth pages
@@ -20,5 +19,5 @@ export function ConditionalHeader({ dict, locale }: ConditionalHeaderProps) {
     return null;
   }
   
-  return <Header dict={dict} locale={locale} />;
+  return <Header locale={locale} />;
 }

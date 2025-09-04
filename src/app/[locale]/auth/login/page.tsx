@@ -1,9 +1,8 @@
 import { notFound } from 'next/navigation';
 import { AuthLayout } from '@/components/auth/auth-layout';
 import { LoginForm } from '@/components/auth/login-form';
-import { getDictionary } from '@/lib/i18n/dictionaries';
-import { isValidLocale } from '@/lib/i18n/utils';
-import type { Locale } from '@/lib/i18n/types';
+import { isValidLocale } from '@/i18n';
+import type { Locale } from '@/i18n';
 
 interface LoginPageProps {
   params: Promise<{
@@ -20,11 +19,10 @@ export default async function LoginPage({ params }: LoginPageProps) {
   }
   
   const validatedLocale = locale as Locale;
-  const dict = await getDictionary(validatedLocale);
 
   return (
     <AuthLayout locale={validatedLocale}>
-      <LoginForm dict={dict} locale={validatedLocale} />
+      <LoginForm locale={validatedLocale} />
     </AuthLayout>
   );
 }
@@ -37,10 +35,9 @@ export async function generateMetadata({ params }: LoginPageProps) {
   }
   
   const validatedLocale = locale as Locale;
-  const dict = await getDictionary(validatedLocale);
 
   return {
-    title: dict.auth.loginTitle,
-    description: dict.auth.loginSubtitle,
+    title: 'Login - Itqan CMS',
+    description: 'Log in to your account in Itqan',
   };
 }

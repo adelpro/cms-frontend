@@ -7,19 +7,20 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/components/providers/auth-provider';
-import type { Dictionary, Locale } from '@/lib/i18n/types';
+import type { Locale } from '@/i18n';
+import { useTranslations } from 'next-intl';
 import { formLogical, typography } from '@/lib/styles/logical';
 import { validateProfileCompletionForm } from '@/lib/validations';
 import { completeUserProfile } from '@/lib/auth';
 import { cn } from '@/lib/utils';
 
 interface ProfileCompletionFormProps {
-  dict: Dictionary;
   locale: Locale;
   isSkippable?: boolean;
 }
 
-export function ProfileCompletionForm({ dict, isSkippable = false }: ProfileCompletionFormProps) {
+export function ProfileCompletionForm({ locale, isSkippable = false }: ProfileCompletionFormProps) {
+  const t = useTranslations();
   const [formData, setFormData] = useState({
     businessModel: '',
     projectLink: '',
@@ -54,7 +55,7 @@ export function ProfileCompletionForm({ dict, isSkippable = false }: ProfileComp
     setSubmitError('');
     
     // Validate form
-    const validation = validateProfileCompletionForm(formData, dict);
+    const validation = validateProfileCompletionForm(formData, t);
     if (!validation.isValid) {
       const fieldErrors: Record<string, string> = {};
       validation.errors.forEach(error => {
@@ -72,11 +73,11 @@ export function ProfileCompletionForm({ dict, isSkippable = false }: ProfileComp
       if (response.success && response.user && response.token) {
         login(response.user, response.token);
       } else {
-        setSubmitError(response.error || dict.auth.validation.signupFailed);
+        setSubmitError(response.error || t('errors.validationError'));
       }
     } catch (error) {
       console.error('Profile completion error:', error);
-      setSubmitError(dict.auth.validation.networkError);
+      setSubmitError(t('errors.networkError'));
     } finally {
       setIsLoading(false);
     }
@@ -98,10 +99,10 @@ export function ProfileCompletionForm({ dict, isSkippable = false }: ProfileComp
           typography.heading,
           "text-3xl lg:text-4xl font-bold text-foreground"
         )}>
-          {dict.auth.completeProfileTitle}
+          {t('profile.completeProfileTitle')}
         </h1>
         <p className="text-base lg:text-lg text-muted-foreground mt-4">
-          {dict.auth.completeProfileDescription}
+          {t('profile.completeProfileDescription')}
         </p>
       </div>
 
@@ -123,12 +124,12 @@ export function ProfileCompletionForm({ dict, isSkippable = false }: ProfileComp
             <div className="space-y-6">
               <div className={formLogical.fieldset}>
                 <Label htmlFor="businessModel" className={cn(formLogical.label, "text-lg")}>
-                  {dict.auth.businessModelQuestion}
+                  {t('profile.businessModel')}
                   <span className="text-red-500 ml-1">*</span>
                 </Label>
                 <Textarea
                   id="businessModel"
-                  placeholder={dict.auth.businessModelPlaceholder}
+                  placeholder={t('profile.businessModel')}
                   value={formData.businessModel}
                   onChange={handleInputChange('businessModel')}
                   required
@@ -147,12 +148,12 @@ export function ProfileCompletionForm({ dict, isSkippable = false }: ProfileComp
 
               <div className={formLogical.fieldset}>
                 <Label htmlFor="projectLink" className={formLogical.label}>
-                  {dict.auth.projectLink}
+                  {t('forms.placeholders.projectLink')}
                 </Label>
                 <Input
                   id="projectLink"
                   type="url"
-                  placeholder={dict.auth.projectLinkPlaceholder}
+                  placeholder={t('forms.placeholders.projectLink')}
                   value={formData.projectLink}
                   onChange={handleInputChange('projectLink')}
                   className={cn(
@@ -169,13 +170,13 @@ export function ProfileCompletionForm({ dict, isSkippable = false }: ProfileComp
 
               <div className={formLogical.fieldset}>
                 <Label htmlFor="teamSize" className={cn(formLogical.label, "text-lg")}>
-                  {dict.auth.teamSizeQuestion}
+                  {t('profile.teamSize')}
                   <span className="text-red-500 ml-1">*</span>
                 </Label>
                 <Input
                   id="teamSize"
                   type="text"
-                  placeholder={dict.auth.teamSizePlaceholder}
+                  placeholder={t('profile.teamSize')}
                   value={formData.teamSize}
                   onChange={handleInputChange('teamSize')}
                   required
@@ -194,12 +195,12 @@ export function ProfileCompletionForm({ dict, isSkippable = false }: ProfileComp
             {/* Personal Information Section */}
             <div className={formLogical.fieldset}>
               <Label htmlFor="aboutYourself" className={cn(formLogical.label, "text-lg")}>
-                {dict.auth.aboutYourselfQuestion}
+                {t('profile.aboutYourself')}
                 <span className="text-red-500 ml-1">*</span>
               </Label>
               <Textarea
                 id="aboutYourself"
-                placeholder={dict.auth.aboutYourselfPlaceholder}
+                placeholder={t('profile.aboutYourself')}
                 value={formData.aboutYourself}
                 onChange={handleInputChange('aboutYourself')}
                 required
@@ -226,7 +227,7 @@ export function ProfileCompletionForm({ dict, isSkippable = false }: ProfileComp
                   disabled={isLoading}
                   className="h-12 lg:h-14 text-base lg:text-lg min-w-[120px]"
                 >
-                  {dict.ui.skip || 'تخطي'}
+                  {t('common.skip')}
                 </Button>
               )}
               <Button
@@ -234,7 +235,7 @@ export function ProfileCompletionForm({ dict, isSkippable = false }: ProfileComp
                 className="h-12 lg:h-14 text-base lg:text-lg min-w-[180px]"
                 disabled={isLoading}
               >
-                {isLoading ? dict.loading : dict.auth.saveAndContinue}
+                {isLoading ? t('common.loading') : t('profile.saveAndContinue')}
               </Button>
             </div>
           </form>

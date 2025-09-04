@@ -1,7 +1,6 @@
 import { AssetDetails } from '@/components/store';
-import { getDictionary } from '@/lib/i18n/dictionaries';
-import { isValidLocale } from '@/lib/i18n/utils';
-import type { Locale } from '@/lib/i18n/types';
+import { isValidLocale } from '@/i18n';
+import type { Locale } from '@/i18n';
 import { notFound } from 'next/navigation';
 
 interface AssetPageProps {
@@ -16,7 +15,6 @@ export default async function AssetPage({ params }: AssetPageProps) {
   }
   
   const validatedLocale = locale as Locale;
-  const dict = await getDictionary(validatedLocale);
 
-  return <AssetDetails assetId={id} dict={dict} locale={validatedLocale} />;
+  return <AssetDetails assetId={id} locale={validatedLocale} />;
 }

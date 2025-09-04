@@ -3,8 +3,8 @@
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Languages } from "lucide-react";
-import { getOppositeLocale, localeNames } from "@/lib/i18n/utils";
-import type { Locale } from "@/lib/i18n/types";
+import type { Locale } from "@/i18n";
+import { getOppositeLocale, localeNames } from "@/i18n";
 
 interface LanguageSwitcherProps {
   currentLocale: Locale;

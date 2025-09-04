@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
-import { useTranslation } from "@/components/providers/locale-provider";
-import type { Locale } from "@/lib/i18n/types";
+import { useTranslations } from "next-intl";
+import type { Locale } from "@/i18n";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -16,7 +16,7 @@ interface ErrorProps {
 export default function Error({ error, reset }: ErrorProps) {
   const params = useParams();
   const locale = (params?.locale || 'en') as Locale;
-  const { dict } = useTranslation();
+  const t = useTranslations();
   useEffect(() => {
     // Log the error to an error reporting service
     console.error('Application error:', error);
@@ -31,10 +31,10 @@ export default function Error({ error, reset }: ErrorProps) {
         
         <div className="space-y-2">
           <h1 className="text-2xl font-bold text-foreground">
-            {dict.ui.somethingWentWrong}
+            {t('errors.somethingWentWrong')}
           </h1>
           <p className="text-muted-foreground">
-            {dict.ui.errorDescription}
+            {t('errors.errorDescription')}
           </p>
         </div>
 
@@ -45,7 +45,7 @@ export default function Error({ error, reset }: ErrorProps) {
             </p>
             {error.digest && (
               <p className="text-xs text-muted-foreground mt-2">
-                {dict.ui.errorId} {error.digest}
+                {t('errors.errorId')} {error.digest}
               </p>
             )}
           </div>
@@ -57,14 +57,14 @@ export default function Error({ error, reset }: ErrorProps) {
             className={cn("gap-2")}
           >
             <RefreshCw className="h-4 w-4" />
-            {dict.ui.tryAgain}
+            {t('ui.tryAgain')}
           </Button>
           
           <Button
             variant="outline"
             onClick={() => { window.location.href = `/${locale}`; }}
           >
-            {dict.ui.goHome}
+            {t('ui.goHome')}
           </Button>
         </div>
       </div>

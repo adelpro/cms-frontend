@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { User, Building2, Globe, ArrowLeft } from 'lucide-react';
-import type { Dictionary, Locale } from '@/lib/i18n/types';
+import type { Locale } from '@/i18n';
 import { logical, spacing } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
 
@@ -33,7 +33,6 @@ interface Asset {
 
 interface PublisherProfileProps {
   publisherId: string;
-  dict: Dictionary;
   locale: Locale;
 }
 

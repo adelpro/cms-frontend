@@ -4,31 +4,32 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/components/providers/auth-provider';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { LogOut, Menu, X } from 'lucide-react';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { ThemeToggle } from '@/components/theme-toggle';
-import type { Dictionary, Locale } from '@/lib/i18n/types';
+import type { Locale } from '@/i18n';
 import { cn } from '@/lib/utils';
 
 interface HeaderProps {
-  dict: Dictionary;
   locale: Locale;
 }
 
-export function Header({ dict, locale }: HeaderProps) {
+export function Header({ locale }: HeaderProps) {
   const { user, logout } = useAuth();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const t = useTranslations();
 
   const navigation = [
-    // { name: dict.header.home, href: `/${locale}` },
-    { name: dict.header.store, href: `/${locale}/store` },
-    { name: dict.header.academy, href: `/${locale}/academy` },
-    { name: dict.header.projects, href: `/${locale}/projects` },
-    { name: dict.header.reports, href: `/${locale}/reports` },
+    // { name: t('navigation.home'), href: `/${locale}` },
+    { name: t('navigation.store'), href: `/${locale}/store` },
+    { name: t('navigation.academy'), href: `/${locale}/academy` },
+    { name: t('navigation.projects'), href: `/${locale}/projects` },
+    { name: t('navigation.reports'), href: `/${locale}/reports` },
   ];
 
   const isActive = (href: string) => {
@@ -54,7 +55,7 @@ export function Header({ dict, locale }: HeaderProps) {
               <Link href={`/${locale}`} className="flex-shrink-0">
                 <Image
                   src="/logo.svg"
-                  alt={dict.header.brand}
+                  alt="Itqan CMS"
                   width={120}
                   height={40}
                   className="w-auto"
@@ -105,18 +106,18 @@ export function Header({ dict, locale }: HeaderProps) {
                         size="icon-sm"
                         onClick={logout}
                         className="relative text-red-600 hover:text-red-600 !p-0"
-                        title={dict.header.logout}
-                        aria-label={dict.header.logout}
+                        title={t('auth.logout')}
+                        aria-label={t('auth.logout')}
                       >
                         <LogOut size={16} />
-                        <span className="sr-only">{dict.header.logout}</span>
+                        <span className="sr-only">{t('auth.logout')}</span>
                       </Button>
                    </>
                  ) : (
                    /* Login Button for non-authenticated users */
                    <Link href={`/${locale}/auth/login`}>
                      <Button variant="outline" size="sm" className="h-8 px-4">
-                       {dict.auth.login}
+                       {t('auth.login')}
                      </Button>
                    </Link>
                  )}
@@ -164,7 +165,7 @@ export function Header({ dict, locale }: HeaderProps) {
               <Link href={`/${locale}`} onClick={closeMobileMenu}>
                 <Image
                   src="/logo.svg"
-                  alt={dict.header.brand}
+                  alt="Itqan CMS"
                   width={120}
                   height={32}
                   className="h-8 w-auto"
@@ -234,7 +235,7 @@ export function Header({ dict, locale }: HeaderProps) {
                     className="w-full justify-start border-red-600 text-red-600 hover:bg-red-600 hover:text-white"
                   >
                     <LogOut className="h-4 w-4 mr-2" />
-                    {dict.header.logout}
+                    {t('auth.logout')}
                   </Button>
                </div>
              ) : (
@@ -252,12 +253,12 @@ export function Header({ dict, locale }: HeaderProps) {
                  <div className="space-y-3">
                    <Link href={`/${locale}/auth/login`} onClick={closeMobileMenu}>
                      <Button variant="outline" className="w-full">
-                       {dict.auth.login}
+                       {t('auth.login')}
                      </Button>
                    </Link>
                    <Link href={`/${locale}/auth/signup`} onClick={closeMobileMenu}>
                      <Button className="w-full">
-                       {dict.auth.signup}
+                       {t('auth.signup')}
                      </Button>
                    </Link>
                  </div>

@@ -7,17 +7,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/components/providers/auth-provider';
-import type { Dictionary, Locale } from '@/lib/i18n/types';
+import type { Locale } from '@/i18n';
 import { validateLoginForm } from '@/lib/validations';
 import { loginUser } from '@/lib/auth';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface LoginFormProps {
-  dict: Dictionary;
   locale: Locale;
 }
 
-export function LoginForm({ dict, locale }: LoginFormProps) {
+export function LoginForm({ locale }: LoginFormProps) {
+  const t = useTranslations();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -48,7 +49,7 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
     setSubmitError('');
     
     // Validate form
-    const validation = validateLoginForm(formData, dict);
+    const validation = validateLoginForm(formData, t);
     if (!validation.isValid) {
       const fieldErrors: Record<string, string> = {};
       validation.errors.forEach(error => {
@@ -66,11 +67,11 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
       if (response.success && response.user && response.token) {
         login(response.user, response.token);
       } else {
-        setSubmitError(response.error || dict.auth.validation.loginFailed);
+        setSubmitError(response.error || t('errors.validationError'));
       }
     } catch (error) {
       console.error('Login error:', error);
-      setSubmitError(dict.auth.validation.networkError);
+      setSubmitError(t('errors.networkError'));
     } finally {
       setIsLoading(false);
     }
@@ -92,10 +93,10 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
       {/* Welcome Message */}
       <div className="text-center space-y-3">
         <h1 className="text-[32px] font-bold text-[#333333]">
-          {dict.auth.loginTitle}
+          {t('auth.loginTitle')}
         </h1>
         <p className="text-[18px] text-[#333333]">
-          {dict.auth.loginSubtitle}
+          {t('auth.loginSubtitle')}
         </p>
       </div>
 
@@ -110,12 +111,12 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
 
         <div className="space-y-2">
           <Label htmlFor="email" className="block text-sm font-medium text-[#333333] text-start">
-            {dict.auth.email}
+            {t('auth.email')}
           </Label>
           <Input
             id="email"
             type="email"
-            placeholder={dict.auth.emailPlaceholder}
+            placeholder={t('forms.placeholders.email')}
             value={formData.email}
             onChange={handleInputChange('email')}
             className={cn(
@@ -132,12 +133,12 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
 
         <div className="space-y-2">
           <Label htmlFor="password" className="block text-sm font-medium text-[#333333] text-start">
-            {dict.auth.password}
+            {t('auth.password')}
           </Label>
           <Input
             id="password"
             type="password"
-            placeholder={dict.auth.passwordPlaceholder}
+            placeholder={t('forms.placeholders.password')}
             value={formData.password}
             onChange={handleInputChange('password')}
             className={cn(
@@ -158,19 +159,19 @@ export function LoginForm({ dict, locale }: LoginFormProps) {
           disabled={isLoading}
         >
           <span className="text-lg">←</span>
-          {isLoading ? dict.loading : dict.auth.login}
+          {isLoading ? t('common.loading') : t('auth.login')}
         </Button>
       </form>
 
       {/* Register Link */}
       <div className="text-center">
         <p className="text-sm text-[#333333]">
-          {dict.auth.noAccount}{' '}
+          {t('auth.noAccount')}{' '}
           <Link
             href={`/${locale}/auth/signup`}
             className="text-primary hover:underline font-medium"
           >
-            {dict.auth.register}
+            {t('auth.register')}
           </Link>
         </p>
       </div>

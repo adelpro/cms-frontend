@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { Filter, Languages, Mic, ReceiptText, ScanSearch, Eye, ListFilter, ScrollText, ChevronDown, ChevronUp } from 'lucide-react';
+import { Languages, Mic, ReceiptText, ScanSearch, Eye, ListFilter, ScrollText, ChevronDown, ChevronUp } from 'lucide-react';
 import {
   Pagination,
   PaginationContent,
@@ -16,11 +17,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import type { Dictionary, Locale } from '@/lib/i18n/types';
-import { logical, spacing } from '@/lib/styles/logical';
+import type { Locale } from '@/i18n';
+import { spacing } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
 import { getAssets, convertApiAssetToAsset } from '@/lib/api/assets';
-import { useAuth } from '@/components/providers/auth-provider';
 import { tokenStorage } from '@/lib/auth';
 
 interface Asset {
@@ -39,12 +39,12 @@ interface Asset {
 }
 
 interface AssetStoreProps {
-  dict: Dictionary;
   locale: Locale;
 }
 
-export function AssetStore({ dict, locale }: AssetStoreProps) {
-  const { user } = useAuth();
+export function AssetStore({ locale }: AssetStoreProps) {
+  // const { user } = useAuth(); // TODO: Implement user-specific features
+  const t = useTranslations();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedLicenses, setSelectedLicenses] = useState<string[]>([]);
@@ -103,16 +103,28 @@ export function AssetStore({ dict, locale }: AssetStoreProps) {
         console.error('Failed to load assets:', err);
         setError(err instanceof Error ? err.message : 'Failed to load assets');
         // Fallback to mock data on error
-        const mockAssets: Asset[] = dict.mockData.assets.map((asset, index): Asset => ({
-          id: (index + 1).toString(),
-          title: asset.title,
-          description: asset.description,
-          license: ['CC BY', 'CC BY-SA', 'CC0', 'CC BY-NC', 'CC BY-ND'][index] || 'CC BY',
-          publisher: asset.publisher,
-          category: ['Translation', 'Transliteration', 'Quran Corpus', 'Quran Audio', 'Quran Illustration/Font'][index] || 'Translation',
-          licenseColor: (['green', 'yellow', 'green', 'yellow', 'yellow'][index] || 'green') as 'green' | 'yellow' | 'red',
-          type: (['translation', 'tafsir', 'audio', 'audio', 'audio'][index] || 'translation') as 'translation' | 'tafsir' | 'audio'
-        }));
+        const mockAssets: Asset[] = [
+          {
+            id: '1',
+            title: 'Quran Translation',
+            description: 'Comprehensive translation of the Holy Quran in English',
+            license: 'CC BY',
+            publisher: 'Islamic Translation Foundation',
+            category: 'Translation',
+            licenseColor: 'green' as const,
+            type: 'translation' as const
+          },
+          {
+            id: '2',
+            title: 'Tafsir Al-Tabari',
+            description: 'Comprehensive commentary on the Quran from Jami\' al-Bayan',
+            license: 'CC BY-SA',
+            publisher: 'Dar Al-Ma\'rifa',
+            category: 'Tafsir',
+            licenseColor: 'yellow' as const,
+            type: 'tafsir' as const
+          }
+        ];
         setAssets(mockAssets);
       } finally {
         setIsLoading(false);
@@ -120,25 +132,25 @@ export function AssetStore({ dict, locale }: AssetStoreProps) {
     };
 
     loadAssets();
-  }, [selectedCategories, selectedLicenses, dict.mockData.assets]);
+  }, [selectedCategories, selectedLicenses]);
 
   const categories = [
-    { key: 'Translation', label: dict.categories.translation },
-    { key: 'Transliteration', label: dict.categories.transliteration },
-    { key: 'Quran Corpus', label: dict.categories.quranCorpus },
-    { key: 'Quran Audio', label: dict.categories.quranAudio },
-    { key: 'Quran Illustration/Font', label: dict.categories.quranIllustrationFont },
-    { key: 'Tafsir', label: dict.categories.tafsir }
+    { key: 'Translation', label: t('categories.translation') },
+    { key: 'Transliteration', label: t('categories.transliteration') },
+    { key: 'Quran Corpus', label: t('categories.quranCorpus') },
+    { key: 'Quran Audio', label: t('categories.quranAudio') },
+    { key: 'Quran Illustration/Font', label: t('categories.quranIllustrationFont') },
+    { key: 'Tafsir', label: t('categories.tafsir') }
   ];
 
   const licenses = [
-    { id: 'cc0', name: 'CC0/ Public Domain', label: dict.licenses.cc0, color: 'green' },
-    { id: 'cc-by', name: 'CC BY', label: dict.licenses.ccBy, color: 'green' },
-    { id: 'cc-by-sa', name: 'CC BY-SA', label: dict.licenses.ccBySa, color: 'yellow' },
-    { id: 'cc-by-nd', name: 'CC BY-ND', label: dict.licenses.ccByNd, color: 'yellow' },
-    { id: 'cc-by-nc', name: 'CC BY-NC', label: dict.licenses.ccByNc, color: 'yellow' },
-    { id: 'cc-by-nc-sa', name: 'CC BY-NC-SA', label: dict.licenses.ccByNcSa, color: 'red' },
-    { id: 'cc-by-nc-nd', name: 'CC BY-NC-ND', label: dict.licenses.ccByNcNd, color: 'red' }
+    { id: 'cc0', name: 'CC0/ Public Domain', label: t('licenses.cc0'), color: 'green' },
+    { id: 'cc-by', name: 'CC BY', label: t('licenses.ccBy'), color: 'green' },
+    { id: 'cc-by-sa', name: 'CC BY-SA', label: t('licenses.ccBySa'), color: 'yellow' },
+    { id: 'cc-by-nd', name: 'CC BY-ND', label: t('licenses.ccByNd'), color: 'yellow' },
+    { id: 'cc-by-nc', name: 'CC BY-NC', label: t('licenses.ccByNc'), color: 'yellow' },
+    { id: 'cc-by-nc-sa', name: 'CC BY-NC-SA', label: t('licenses.ccByNcSa'), color: 'red' },
+    { id: 'cc-by-nc-nd', name: 'CC BY-NC-ND', label: t('licenses.ccByNcNd'), color: 'red' }
   ];
 
   const filteredAssets = assets.filter(asset => {
@@ -175,7 +187,7 @@ export function AssetStore({ dict, locale }: AssetStoreProps) {
   return (
          <div className="max-width-container px-4 py-8">
       <div className="mb-5">
-        <h1 className="text-3xl font-bold">{dict.store.title}</h1>
+        <h1 className="text-3xl font-bold">{t('store.title')}</h1>
       </div>
 
              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-5">
@@ -186,12 +198,12 @@ export function AssetStore({ dict, locale }: AssetStoreProps) {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <ScanSearch size={24} className="flex-shrink-0" />
-                {dict.ui.searchInResources}
+                {t('ui.searchInResources')}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <Input
-                placeholder={dict.ui.searchInResources}
+                placeholder={t('ui.searchInResources')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full"
@@ -208,7 +220,7 @@ export function AssetStore({ dict, locale }: AssetStoreProps) {
                <CardTitle className="flex items-center justify-between text-base">
                  <div className="flex items-center gap-2">
                    <ListFilter size={24} className="flex-shrink-0" />
-                   {dict.ui.categoryFilters}
+                   {t('ui.categoryFilters')}
                  </div>
                  <div className="lg:hidden">
                    {isCategoryFilterOpen ? (
@@ -248,7 +260,7 @@ export function AssetStore({ dict, locale }: AssetStoreProps) {
                <CardTitle className="flex items-center justify-between text-base">
                  <div className="flex items-center gap-2">
                    <ScrollText size={24} className="flex-shrink-0" />
-                   {dict.ui.licenseFilters}
+                   {t('ui.licenseFilters')}
                  </div>
                  <div className="lg:hidden">
                    {isLicenseFilterOpen ? (
@@ -299,7 +311,7 @@ export function AssetStore({ dict, locale }: AssetStoreProps) {
         <div className="lg:col-span-3">
           {isLoading ? (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">{dict.api.loading.loadingAssets}</p>
+              <p className="text-muted-foreground">{t('ui.loadingAssets')}</p>
             </div>
           ) : error ? (
             <div className="text-center py-12">
@@ -318,7 +330,7 @@ export function AssetStore({ dict, locale }: AssetStoreProps) {
             </div>
           ) : filteredAssets.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">{dict.ui.noResultsFound}</p>
+              <p className="text-muted-foreground">{t('ui.noResultsFound')}</p>
             </div>
           ) : (
             <>
@@ -352,7 +364,7 @@ export function AssetStore({ dict, locale }: AssetStoreProps) {
                            
                            <div className="space-y-2">
                              <div className="text-sm text-muted-foreground flex flex-col">
-                               <span className="font-medium">{dict.ui.publisherLabel}</span> {asset.publisher}
+                               <span className="font-medium">{t('ui.publisherLabel')}</span> {asset.publisher}
                              </div>
                            </div>
                          </div>
@@ -360,7 +372,7 @@ export function AssetStore({ dict, locale }: AssetStoreProps) {
                          <div className="mt-auto">
                            <Button asChild size="lg" variant="outline" className="w-full">
                              <Link href={`/${locale}/store/asset/${asset.id}`}>
-                               {dict.ui.viewDetails}
+                               {t('store.viewDetails')}
                                <Eye size={16} />
                              </Link>
                            </Button>

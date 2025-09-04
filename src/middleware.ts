@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { locales, defaultLocale } from '@/lib/i18n/utils';
-import type { Locale } from '@/lib/i18n/types';
+import { locales, defaultLocale } from '@/i18n';
+import type { Locale } from '@/i18n';
 
 // Validate if a string is a valid locale with type safety
 function isValidLocale(locale: string): locale is Locale {

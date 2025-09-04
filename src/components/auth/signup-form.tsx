@@ -2,22 +2,23 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/components/providers/auth-provider';
-import type { Dictionary, Locale } from '@/lib/i18n/types';
-import { formLogical, typography } from '@/lib/styles/logical';
+import type { Locale } from '@/i18n';
 import { validateSignupForm } from '@/lib/validations';
 import { signupUser, socialLogin } from '@/lib/auth';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface SignupFormProps {
-  dict: Dictionary;
   locale: Locale;
 }
 
-export function SignupForm({ dict, locale }: SignupFormProps) {
+export function SignupForm({ locale }: SignupFormProps) {
+  const t = useTranslations();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -52,7 +53,7 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
     setSubmitError('');
     
     // Validate form
-    const validation = validateSignupForm(formData, dict);
+    const validation = validateSignupForm(formData, t);
     if (!validation.isValid) {
       const fieldErrors: Record<string, string> = {};
       validation.errors.forEach(error => {
@@ -70,11 +71,11 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
       if (response.success && response.user && response.token) {
         login(response.user, response.token);
       } else {
-        setSubmitError(response.error || dict.auth.validation.signupFailed);
+        setSubmitError(response.error || t('errors.validationError'));
       }
     } catch (error) {
       console.error('Signup error:', error);
-      setSubmitError(dict.auth.validation.networkError);
+      setSubmitError(t('errors.networkError'));
     } finally {
       setIsLoading(false);
     }
@@ -115,13 +116,21 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="text-center mb-8">
-        <h1 className={cn(
-          typography.heading,
-          "text-3xl lg:text-4xl font-bold text-foreground"
-        )}>
-          {dict.auth.signupTitle}
+      {/* Logo */}
+      <div className="text-center">
+        <Image
+          src="/logo.svg"
+          alt="Itqan"
+          width={50}
+          height={50}
+          className="mx-auto mb-3"
+        />
+      </div>
+
+      {/* Welcome Message */}
+      <div className="text-center space-y-3">
+        <h1 className="text-[32px] font-bold text-[#333333]">
+          {t('auth.signupTitle')}
         </h1>
       </div>
 
@@ -156,7 +165,7 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
           </svg>
-          {dict.auth.loginWithGoogle}
+                      {t('auth.loginWithGoogle')}
         </Button>
 
         <Button
@@ -172,7 +181,7 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
           <svg className="size-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
           </svg>
-          {dict.auth.loginWithGitHub}
+                      {t('auth.loginWithGitHub')}
         </Button>
       </div>
       */}
@@ -183,19 +192,16 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Show submit error */}
         {submitError && (
-          <div className={cn(
-            "p-3 rounded-md border bg-destructive/10 border-destructive/20 text-destructive text-sm",
-            formLogical.errorText
-          )}>
+          <div className="p-3 rounded-md border bg-destructive/10 border-destructive/20 text-destructive text-sm text-center">
             {submitError}
           </div>
         )}
 
         {/* Name Fields */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className={formLogical.fieldset}>
-            <Label htmlFor="firstName" className={formLogical.label}>
-              {dict.auth.firstName}
+          <div className="space-y-2">
+            <Label htmlFor="firstName" className="block text-sm font-medium text-[#333333] text-start">
+              {t('auth.firstName')}
             </Label>
             <Input
               id="firstName"
@@ -203,19 +209,20 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
               value={formData.firstName}
               onChange={handleInputChange('firstName')}
               className={cn(
-                formLogical.input,
-                errors.firstName && "border-destructive focus-visible:border-destructive"
+                "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
+                "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
+                errors.firstName && "border-destructive focus:ring-destructive"
               )}
               aria-invalid={!!errors.firstName}
             />
             {errors.firstName && (
-              <p className={formLogical.errorText}>{errors.firstName}</p>
+              <p className="text-destructive text-sm text-start">{errors.firstName}</p>
             )}
           </div>
 
-          <div className={formLogical.fieldset}>
-            <Label htmlFor="lastName" className={formLogical.label}>
-              {dict.auth.lastName}
+          <div className="space-y-2">
+            <Label htmlFor="lastName" className="block text-sm font-medium text-[#333333] text-start">
+              {t('auth.lastName')}
             </Label>
             <Input
               id="lastName"
@@ -223,123 +230,129 @@ export function SignupForm({ dict, locale }: SignupFormProps) {
               value={formData.lastName}
               onChange={handleInputChange('lastName')}
               className={cn(
-                formLogical.input,
-                errors.lastName && "border-destructive focus-visible:border-destructive"
+                "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
+                "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
+                errors.lastName && "border-destructive focus:ring-destructive"
               )}
               aria-invalid={!!errors.lastName}
             />
             {errors.lastName && (
-              <p className={formLogical.errorText}>{errors.lastName}</p>
+              <p className="text-destructive text-sm text-start">{errors.lastName}</p>
             )}
           </div>
         </div>
 
         {/* Email */}
-        <div className={formLogical.fieldset}>
-          <Label htmlFor="email" className={formLogical.label}>
-            {dict.auth.email}
+        <div className="space-y-2">
+          <Label htmlFor="email" className="block text-sm font-medium text-[#333333] text-start">
+            {t('auth.email')}
           </Label>
           <Input
             id="email"
             type="email"
-            placeholder={dict.auth.emailPlaceholder}
+            placeholder={t('forms.placeholders.email')}
             value={formData.email}
             onChange={handleInputChange('email')}
             className={cn(
-              formLogical.input,
-              errors.email && "border-destructive focus-visible:border-destructive"
+              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
+              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
+              errors.email && "border-destructive focus:ring-destructive"
             )}
             aria-invalid={!!errors.email}
           />
           {errors.email && (
-            <p className={formLogical.errorText}>{errors.email}</p>
+            <p className="text-destructive text-sm text-start">{errors.email}</p>
           )}
         </div>
 
         {/* Password */}
-        <div className={formLogical.fieldset}>
-          <Label htmlFor="password" className={formLogical.label}>
-            {dict.auth.password}
+        <div className="space-y-2">
+          <Label htmlFor="password" className="block text-sm font-medium text-[#333333] text-start">
+            {t('auth.password')}
           </Label>
           <Input
             id="password"
             type="password"
-            placeholder={dict.auth.passwordPlaceholder}
+            placeholder={t('forms.placeholders.password')}
             value={formData.password}
             onChange={handleInputChange('password')}
             className={cn(
-              formLogical.input,
-              errors.password && "border-destructive focus-visible:border-destructive"
+              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
+              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
+              errors.password && "border-destructive focus:ring-destructive"
             )}
             aria-invalid={!!errors.password}
           />
           {errors.password && (
-            <p className={formLogical.errorText}>{errors.password}</p>
+            <p className="text-destructive text-sm text-start">{errors.password}</p>
           )}
         </div>
 
         {/* Title */}
-        <div className={formLogical.fieldset}>
-          <Label htmlFor="title" className={formLogical.label}>
-            {dict.auth.title}
+        <div className="space-y-2">
+          <Label htmlFor="title" className="block text-sm font-medium text-[#333333] text-start">
+            {t('auth.title')}
           </Label>
           <Input
             id="title"
             type="text"
-            placeholder={dict.auth.titlePlaceholder}
+            placeholder={t('forms.placeholders.title')}
             value={formData.title}
             onChange={handleInputChange('title')}
             className={cn(
-              formLogical.input,
-              errors.title && "border-destructive focus-visible:border-destructive"
+              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
+              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
+              errors.title && "border-destructive focus:ring-destructive"
             )}
             aria-invalid={!!errors.title}
           />
           {errors.title && (
-            <p className={formLogical.errorText}>{errors.title}</p>
+            <p className="text-destructive text-sm text-start">{errors.title}</p>
           )}
         </div>
 
         {/* Phone Number */}
-        <div className={formLogical.fieldset}>
-          <Label htmlFor="phoneNumber" className={formLogical.label}>
-            {dict.auth.phoneNumber}
+        <div className="space-y-2">
+          <Label htmlFor="phoneNumber" className="block text-sm font-medium text-[#333333] text-start">
+            {t('auth.phoneNumber')}
           </Label>
           <Input
             id="phoneNumber"
             type="tel"
-            placeholder={dict.auth.phoneNumberPlaceholder}
+            placeholder={t('forms.placeholders.phoneNumber')}
             value={formData.phoneNumber}
             onChange={handleInputChange('phoneNumber')}
             className={cn(
-              formLogical.input,
-              errors.phoneNumber && "border-destructive focus-visible:border-destructive"
+              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
+              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
+              errors.phoneNumber && "border-destructive focus:ring-destructive"
             )}
             aria-invalid={!!errors.phoneNumber}
           />
           {errors.phoneNumber && (
-            <p className={formLogical.errorText}>{errors.phoneNumber}</p>
+            <p className="text-destructive text-sm text-start">{errors.phoneNumber}</p>
           )}
         </div>
 
         <Button
           type="submit"
-          className="w-full h-12 lg:h-14 text-base lg:text-lg"
+          className="w-full h-12 bg-[#2F504B] hover:bg-[#2F504B]/90 text-white rounded-md text-base font-medium flex items-center justify-center gap-2"
           disabled={isLoading}
         >
-          {isLoading ? dict.loading : dict.auth.signup}
+          <span className="text-lg">←</span>
+          {isLoading ? t('common.loading') : t('auth.signup')}
         </Button>
       </form>
 
       {/* Login Link */}
-      <div className="text-center mb-2">
-        <p className="text-sm text-muted-foreground">
-          {dict.auth.alreadyHaveAccount}{' '}
+      <div className="text-center">
+        <p className="text-sm text-[#333333]">
+          {t('auth.alreadyHaveAccount')}{' '}
           <Link
             href={`/${locale}/auth/login`}
             className="text-primary hover:underline font-medium"
           >
-            {dict.auth.loginLink}
+            {t('auth.loginLink')}
           </Link>
         </p>
       </div>
