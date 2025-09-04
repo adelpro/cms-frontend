@@ -25,34 +25,34 @@ export function LicenseCarousel({ assetTitle, license, onAccept, onCancel }: Lic
   };
 
   const licenseContent = `
-License Agreement for ${assetTitle}
+${t('license.agreementFor')} ${assetTitle}
 
-License Type: ${license.toUpperCase()}
+${t('license.licenseType')}: ${license.toUpperCase()}
 
-TERMS AND CONDITIONS
+${t('license.termsAndConditions')}
 
-1. GRANT OF LICENSE
-By downloading this resource, you agree to comply with the terms of the ${license} license.
+1. ${t('license.grantOfLicense')}
+${t('license.grantOfLicenseText', { license })}
 
-2. PERMITTED USES
-- You may use this resource for personal and commercial projects
-- You may modify and adapt the resource for your needs
-- You must provide appropriate attribution when required
+2. ${t('license.permittedUses')}
+- ${t('license.personalCommercialUse')}
+- ${t('license.modifyAdapt')}
+- ${t('license.provideAttribution')}
 
-3. RESTRICTIONS
-- You may not redistribute the original files without permission
-- You may not claim ownership of the original work
-- Commercial use may require additional permissions
+3. ${t('license.restrictions')}
+- ${t('license.noRedistribution')}
+- ${t('license.noOwnershipClaim')}
+- ${t('license.commercialPermissions')}
 
-4. WARRANTIES AND LIABILITY
-This resource is provided "as is" without warranties of any kind.
-The publisher is not liable for any damages arising from use of this resource.
+4. ${t('license.warrantiesLiability')}
+${t('license.asIsWarranty')}
+${t('license.noLiability')}
 
-5. TERMINATION
-This license terminates automatically if you violate any terms.
-Upon termination, you must cease all use and delete all copies.
+5. ${t('license.termination')}
+${t('license.terminationText')}
+${t('license.terminationAction')}
 
-By clicking "Accept", you acknowledge that you have read and agree to these terms.
+${t('license.acceptanceText')}
   `;
 
   return (
