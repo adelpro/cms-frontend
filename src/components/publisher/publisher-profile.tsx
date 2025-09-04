@@ -7,28 +7,24 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { User, Building2, Globe, ArrowLeft } from 'lucide-react';
+import { User, Building2, Globe, ArrowLeft, MapPin, CheckCircle2, Github, Twitter } from 'lucide-react';
 import type { Locale } from '@/i18n';
 import { logical, spacing } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
+import { getPublisherDetails, convertApiAssetToAsset, type ApiPublisherDetails } from '@/lib/api/assets';
+import { tokenStorage } from '@/lib/auth';
+import { useTranslations } from 'next-intl';
 
-interface Publisher {
-  id: string;
-  name: string;
-  description: string;
-  avatar?: string;
-  website?: string;
-  email?: string;
-  joinDate: string;
-}
-
-interface Asset {
+interface ConvertedAsset {
   id: string;
   title: string;
   description: string;
   license: string;
   category: string;
   licenseColor: 'green' | 'yellow' | 'red';
+  has_access: boolean;
+  download_count: number;
+  file_size: string;
 }
 
 interface PublisherProfileProps {
@@ -37,76 +33,43 @@ interface PublisherProfileProps {
 }
 
 export function PublisherProfile({ publisherId, locale }: PublisherProfileProps) {
-  const [publisher, setPublisher] = useState<Publisher | null>(null);
-  const [assets, setAssets] = useState<Asset[]>([]);
+  const t = useTranslations();
+  const [publisher, setPublisher] = useState<ApiPublisherDetails | null>(null);
+  const [assets, setAssets] = useState<ConvertedAsset[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedLicenses, setSelectedLicenses] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    // Mock publisher data
-    const mockPublisher: Publisher = {
-      id: publisherId,
-      name: 'مؤسسة الترجمة الإسلامية',
-      description: 'نبذة مختصرة ومعلومات عن الناشر - معلومات عن الناشر مختصرة. مؤسسة متخصصة في ترجمة النصوص الإسلامية وإنتاج الموارد التعليمية عالية الجودة للمجتمع المسلم حول العالم. نهدف إلى توفير ترجمات دقيقة ومفهومة تساعد في نشر المعرفة الإسلامية.',
-      website: 'https://islamic-translation.org',
-      email: 'info@islamic-translation.org',
-      joinDate: '2020-03-15'
+    const fetchPublisherData = async () => {
+      setIsLoading(true);
+      setError('');
+      
+      try {
+        const token = tokenStorage.getToken();
+        const publisherData = await getPublisherDetails(parseInt(publisherId), token || undefined);
+        
+        setPublisher(publisherData);
+        
+        // Convert API assets to our internal format
+        const convertedAssets = publisherData.assets.map(convertApiAssetToAsset);
+        setAssets(convertedAssets);
+      } catch (err) {
+        console.error('Error fetching publisher data:', err);
+        setError(err instanceof Error ? err.message : t('ui.publisherNotFound'));
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    const mockAssets: Asset[] = [
-      {
-        id: '1',
-        title: 'ترجمة القرآن الكريم',
-        description: 'ترجمة شاملة للقرآن الكريم باللغة الإنجليزية',
-        license: 'CC BY',
-        category: 'Translation',
-        licenseColor: 'green'
-      },
-      {
-        id: '2',
-        title: 'تفسير ابن كثير مترجم',
-        description: 'ترجمة مختارات من تفسير ابن كثير',
-        license: 'CC BY-SA',
-        category: 'Translation',
-        licenseColor: 'yellow'
-      },
-      {
-        id: '3',
-        title: 'أسماء الله الحسنى',
-        description: 'شرح وترجمة أسماء الله الحسنى',
-        license: 'CC BY',
-        category: 'Translation',
-        licenseColor: 'green'
-      },
-      {
-        id: '4',
-        title: 'الأحاديث النبوية مترجمة',
-        description: 'مجموعة من الأحاديث النبوية الصحيحة مع الترجمة',
-        license: 'CC BY-NC',
-        category: 'Translation',
-        licenseColor: 'yellow'
-      },
-      {
-        id: '5',
-        title: 'دعاء ختم القرآن',
-        description: 'دعاء ختم القرآن الكريم مترجم',
-        license: 'CC0',
-        category: 'Translation',
-        licenseColor: 'green'
-      }
-    ];
-
-    setPublisher(mockPublisher);
-    setAssets(mockAssets);
-  }, [publisherId]);
+    fetchPublisherData();
+  }, [publisherId, t]);
 
   const categories = [
-    'Translation',
-    'Transliteration', 
-    'Quran Corpus',
-    'Quran Audio',
-    'Quran Illustration/Font',
-    'Tafsir'
+    'mushaf',
+    'tafsir',
+    'recitation'
   ];
 
   const licenses = [
@@ -141,10 +104,26 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center">{t('common.loading')}</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center text-destructive">{error}</div>
+      </div>
+    );
+  }
+
   if (!publisher) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center">جاري التحميل...</div>
+        <div className="text-center">{t('ui.publisherNotFound')}</div>
       </div>
     );
   }
@@ -226,7 +205,7 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-shrink-0">
                   <Avatar className="w-24 h-24">
-                    <AvatarImage src={publisher.avatar} alt={publisher.name} />
+                    <AvatarImage src={publisher.thumbnail_url} alt={publisher.name} />
                     <AvatarFallback className="text-2xl bg-primary/10">
                       <Building2 className="w-12 h-12" />
                     </AvatarFallback>
@@ -235,13 +214,31 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
                 
                 <div className="flex-1 space-y-4">
                   <div>
-                    <h1 className="text-2xl font-bold mb-2">{publisher.name}</h1>
-                    <p className="text-muted-foreground leading-relaxed">
+                    <div className="flex items-center gap-2 mb-2">
+                      <h1 className="text-2xl font-bold">{publisher.name}</h1>
+                      {publisher.verified && (
+                        <div title={t('ui.verifiedPublisher')}>
+                          <CheckCircle2 className="w-6 h-6 text-blue-500" />
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-muted-foreground leading-relaxed mb-2">
                       {publisher.description}
                     </p>
+                    {publisher.bio && (
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {publisher.bio}
+                      </p>
+                    )}
                   </div>
                   
                   <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                    {publisher.location && (
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4" />
+                        <span>{publisher.location}</span>
+                      </div>
+                    )}
                     {publisher.website && (
                       <div className="flex items-center gap-2">
                         <Globe className="w-4 h-4" />
@@ -251,13 +248,55 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
                           rel="noopener noreferrer"
                           className="text-primary hover:underline"
                         >
-                          الموقع الإلكتروني
+                          {t('ui.website')}
+                        </a>
+                      </div>
+                    )}
+                    {publisher.social_links.twitter && (
+                      <div className="flex items-center gap-2">
+                        <Twitter className="w-4 h-4" />
+                        <a 
+                          href={`https://twitter.com/${publisher.social_links.twitter.replace('@', '')}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline"
+                        >
+                          {publisher.social_links.twitter}
+                        </a>
+                      </div>
+                    )}
+                    {publisher.social_links.github && (
+                      <div className="flex items-center gap-2">
+                        <Github className="w-4 h-4" />
+                        <a 
+                          href={`https://github.com/${publisher.social_links.github}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline"
+                        >
+                          {publisher.social_links.github}
                         </a>
                       </div>
                     )}
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4" />
-                      <span>انضم في {new Date(publisher.joinDate).toLocaleDateString('ar-SA')}</span>
+                      <span>{t('ui.joinedOn')} {new Date(publisher.stats.joined_at).toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US')}</span>
+                    </div>
+                  </div>
+
+                  {/* Publisher Stats */}
+                  <div className="flex flex-wrap gap-6 text-sm">
+                    <div className="text-center">
+                      <div className="font-bold text-lg">{publisher.stats.resources_count}</div>
+                      <div className="text-muted-foreground">{t('ui.resources')}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="font-bold text-lg">{publisher.stats.assets_count}</div>
+                      <div className="text-muted-foreground">{t('ui.assets')}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="font-bold text-lg">{publisher.stats.total_downloads.toLocaleString()}</div>
+                      <div className="text-muted-foreground">{t('ui.totalDownloads')}</div>
                     </div>
                   </div>
                 </div>
@@ -275,19 +314,40 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
               {filteredAssets.map(asset => (
                 <Card key={asset.id} className="hover:shadow-md transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-lg">{asset.title}</CardTitle>
+                    <div className="flex items-start justify-between">
+                      <CardTitle className="text-lg flex-1">{asset.title}</CardTitle>
+                      {asset.has_access && (
+                        <div title={t('ui.hasAccess')}>
+                          <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 ml-2" />
+                        </div>
+                      )}
+                    </div>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <p className="text-muted-foreground text-sm">{asset.description}</p>
                     
                     <div className="flex flex-wrap gap-2">
-                      <Badge variant="outline">{asset.license}</Badge>
+                      <Badge 
+                        variant="outline" 
+                        className={cn({
+                          'border-green-500 text-green-700': asset.licenseColor === 'green',
+                          'border-yellow-500 text-yellow-700': asset.licenseColor === 'yellow',
+                          'border-red-500 text-red-700': asset.licenseColor === 'red'
+                        })}
+                      >
+                        {asset.license}
+                      </Badge>
                       <Badge variant="secondary">{asset.category}</Badge>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span>{asset.download_count.toLocaleString()} {t('ui.downloads')}</span>
+                      <span>{asset.file_size}</span>
                     </div>
                     
                     <div className={cn("flex", logical.justifyEnd)}>
                       <Button size="sm" asChild>
-                        <Link href={`/${locale}/store/asset/${asset.id}`}>عرض التفاصيل</Link>
+                        <Link href={`/${locale}/store/asset/${asset.id}`}>{t('ui.viewDetails')}</Link>
                       </Button>
                     </div>
                   </CardContent>

@@ -1,0 +1,7 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+After every long process (command that makes non-small changes) do a build and check for build errors and solve them

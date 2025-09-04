@@ -114,11 +114,6 @@ export function ProfileCompletionForm({ locale }: ProfileCompletionFormProps) {
 
         {/* Personal Information Section */}
         <div className="space-y-4">
-          {/* Section instruction */}
-          <p className="text-sm text-[#333333] text-start">
-            {t('profile.personalInfoInstruction')}
-          </p>
-          
           <FormField
             id="aboutYourself"
             name="aboutYourself"

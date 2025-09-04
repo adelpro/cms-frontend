@@ -86,6 +86,48 @@ export interface ApiErrorResponse {
   };
 }
 
+export interface ApiPublisherDetails {
+  id: number;
+  name: string;
+  description: string;
+  bio: string;
+  thumbnail_url: string;
+  cover_url: string;
+  location: string;
+  website: string;
+  verified: boolean;
+  social_links: {
+    twitter?: string;
+    github?: string;
+  };
+  stats: {
+    resources_count: number;
+    assets_count: number;
+    total_downloads: number;
+    joined_at: string;
+  };
+  assets: ApiAsset[];
+}
+
+export interface ApiLicenseDetails {
+  code: string;
+  name: string;
+  short_name: string;
+  url: string;
+  icon_url: string;
+  summary: string;
+  full_text: string;
+  legal_code_url: string;
+  license_terms: Array<{
+    title: string;
+    description: string;
+    order: number;
+  }>;
+  permissions: string[];
+  conditions: string[];
+  limitations: string[];
+}
+
 // Utility functions
 async function handleApiResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
@@ -191,6 +233,60 @@ export async function downloadAsset(
   }
 
   return response.blob();
+}
+
+export async function getPublisherDetails(
+  publisherId: number,
+  token?: string
+): Promise<ApiPublisherDetails> {
+  const url = `${API_BASE_URL}/publishers/${publisherId}`;
+  console.log('Fetching publisher details from:', url);
+  
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: getAuthHeaders(token),
+  });
+
+  console.log('Publisher details response status:', response.status);
+  console.log('Publisher details response headers:', response.headers);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Publisher details error response:', errorText);
+    throw new Error(`HTTP ${response.status}: ${errorText}`);
+  }
+
+  const data = await response.json();
+  console.log('Publisher details response data:', data);
+  
+  return data;
+}
+
+export async function getLicenseDetails(
+  licenseCode: string,
+  token?: string
+): Promise<ApiLicenseDetails> {
+  const url = `${API_BASE_URL}/licenses/${licenseCode}`;
+  console.log('Fetching license details from:', url);
+  
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: getAuthHeaders(token),
+  });
+
+  console.log('License details response status:', response.status);
+  console.log('License details response headers:', response.headers);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('License details error response:', errorText);
+    throw new Error(`HTTP ${response.status}: ${errorText}`);
+  }
+
+  const data = await response.json();
+  console.log('License details response data:', data);
+  
+  return data;
 }
 
 // Type conversion functions for backward compatibility
