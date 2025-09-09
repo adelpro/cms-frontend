@@ -1,7 +1,7 @@
 import { env } from '@/lib/env';
 
 // API base URL according to the API contract
-const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
+const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL + "/mock-api";
 
 // API Types based on the contract
 export interface ApiLicense {
@@ -265,7 +265,7 @@ export async function requestAssetAccess(
   data: ApiAccessRequest,
   token: string
 ): Promise<ApiAccessRequestResponse> {
-  const response = await fetch(`${API_BASE_URL}/assets/${assetId}/request-access`, {
+  const response = await fetch(`${API_BASE_URL}/assets/${assetId}/request-access/`, {
     method: 'POST',
     headers: getAuthHeaders(token),
     body: JSON.stringify(data),
