@@ -6,7 +6,7 @@
 import { env } from '@/lib/env';
 
 // API base URL with mock-api prefix as required
-const API_BASE_URL = `${env.NEXT_PUBLIC_BACKEND_URL}/api/v1`;
+const API_BASE_URL = `${env.NEXT_PUBLIC_BACKEND_URL}/mock-api`;
 
 // API response types based on the contract
 export interface ApiUser {
