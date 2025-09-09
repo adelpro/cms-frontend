@@ -26,10 +26,10 @@
     "about": "About",
     "contact": "Contact",
     "store": "Assets Store",
-    "academy": "Academy",
-    "projects": "Projects",
-    "reports": "Reports",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "contentStandards": "Content and Technical Standards",
+    "publishers": "Publishers",
+    "aboutProject": "About the Project"
   },
   "language": {
     "language": "Language",

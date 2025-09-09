@@ -18,18 +18,24 @@ interface HeaderProps {
   locale: Locale;
 }
 
+interface NavigationItem {
+  name: string;
+  href: string;
+  disabled?: boolean;
+}
+
 export function Header({ locale }: HeaderProps) {
   const { user, logout } = useAuth();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const t = useTranslations();
 
-  const navigation = [
+  const navigation: NavigationItem[] = [
     // { name: t('navigation.home'), href: `/${locale}` },
     { name: t('navigation.store'), href: `/${locale}/store` },
-    { name: t('navigation.academy'), href: `/${locale}/academy` },
-    { name: t('navigation.projects'), href: `/${locale}/projects` },
-    { name: t('navigation.reports'), href: `/${locale}/reports` },
+    { name: t('navigation.contentStandards'), href: `/${locale}/documentation/standards` },
+    { name: t('navigation.publishers'), href: '#', disabled: true },
+    { name: t('navigation.aboutProject'), href: '#', disabled: true },
   ];
 
   const isActive = (href: string) => {
@@ -64,20 +70,33 @@ export function Header({ locale }: HeaderProps) {
 
               {/* Desktop Navigation */}
               <nav className="hidden lg:flex items-center gap-8">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={cn(
-                      "text-sm font-semibold px-4 py-2 rounded-md transition-colors",
-                      isActive(item.href)
-                        ? "text-primary bg-primary/10"
-                        : "text-muted-foreground hover:text-primary hover:bg-primary/5"
-                    )}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+                {navigation.map((item) => {
+                  if (item.disabled) {
+                    return (
+                      <span
+                        key={item.name}
+                        className="text-sm font-semibold px-4 py-2 rounded-md text-muted-foreground/50 cursor-not-allowed"
+                      >
+                        {item.name}
+                      </span>
+                    );
+                  }
+                  
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={cn(
+                        "text-sm font-semibold px-4 py-2 rounded-md transition-colors",
+                        isActive(item.href)
+                          ? "text-primary bg-primary/10"
+                          : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+                      )}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                })}
               </nav>
             </div>
 
@@ -183,21 +202,34 @@ export function Header({ locale }: HeaderProps) {
 
             {/* Navigation Links */}
             <nav className="p-4 space-y-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    "block text-sm font-semibold px-4 py-2 rounded-md transition-colors",
-                    isActive(item.href)
-                      ? "text-primary bg-primary/10"
-                      : "text-muted-foreground hover:text-primary hover:bg-primary/5"
-                  )}
-                  onClick={closeMobileMenu}
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {navigation.map((item) => {
+                if (item.disabled) {
+                  return (
+                    <span
+                      key={item.name}
+                      className="block text-sm font-semibold px-4 py-2 rounded-md text-muted-foreground/50 cursor-not-allowed"
+                    >
+                      {item.name}
+                    </span>
+                  );
+                }
+                
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={cn(
+                      "block text-sm font-semibold px-4 py-2 rounded-md transition-colors",
+                      isActive(item.href)
+                        ? "text-primary bg-primary/10"
+                        : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+                    )}
+                    onClick={closeMobileMenu}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
             </nav>
 
                          {/* User Section or Auth Actions */}
