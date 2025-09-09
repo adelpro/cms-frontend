@@ -46,11 +46,28 @@ interface AssetDetailsType {
   id: number;
   title: string;
   description: string;
+  long_description: string;
   thumbnail_url: string;
   category: 'mushaf' | 'tafsir' | 'recitation';
   license: {
     code: string;
     name: string;
+    short_name: string;
+    url: string;
+    icon_url: string;
+    summary: string;
+    full_text: string;
+    legal_code_url: string;
+    license_terms: Array<{
+      title: string;
+      description: string;
+      order: number;
+    }>;
+    permissions: Array<{ key: string; label: string; description: string }>;
+    conditions: Array<object>;
+    limitations: Array<{ key: string; label: string; description: string }>;
+    usage_count: number;
+    is_default: boolean;
   };
   snapshots: Array<{
     thumbnail_url: string;
@@ -61,13 +78,14 @@ interface AssetDetailsType {
     id: number;
     name: string;
     thumbnail_url: string;
-    bio?: string;
+    bio: string | null;
+    verified: boolean;
   };
   resource: {
     id: number;
     title: string;
     description: string;
-  };
+  } | null;
   technical_details: {
     file_size: string;
     format: string;
@@ -83,7 +101,13 @@ interface AssetDetailsType {
   };
   access: {
     has_access: boolean;
+    requires_approval: boolean;
   };
+  related_assets: Array<{
+    id: number;
+    title: string;
+    thumbnail_url: string;
+  }>;
 }
 
 interface AssetDetailsProps {
@@ -188,9 +212,23 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
     }
   };
 
+  const handleDownloadOriginalResourceClick = () => {
+    // Check if user is authenticated
+    if (!user) {
+      // Navigate to login if not authenticated, but preserve the current page in the URL for potential return
+      router.push(
+        `/${locale}/auth/login?returnTo=${encodeURIComponent(
+          window.location.pathname
+        )}`
+      );
+      return;
+    }
+    handleDownloadOriginalResource();
+  };
+
   const handleDownloadOriginalResource = async () => {
-    if (!asset) return;
-    
+    if (!asset || !asset.resource) return;
+
     try {
       const token = tokenStorage.getToken();
       if (!token) {
@@ -198,7 +236,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
       }
 
       const blob = await downloadOriginalResource(asset.resource.id, token);
-      
+
       // Create download link
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -408,7 +446,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
               </Link>
 
               <Button
-                onClick={handleDownloadOriginalResource}
+                onClick={handleDownloadOriginalResourceClick}
                 variant="outline"
                 size="lg"
                 className="w-full justify-center cursor-pointer mt-2"

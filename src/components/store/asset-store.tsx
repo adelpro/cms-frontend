@@ -107,37 +107,14 @@ export function AssetStore({ locale }: AssetStoreProps) {
       } catch (err) {
         console.error('Failed to load assets:', err);
         setError(err instanceof Error ? err.message : t('ui.loadingAssetsError'));
-        // Fallback to mock data on error
-        const mockAssets: Asset[] = [
-          {
-            id: '1',
-            title: 'Quran Translation',
-            description: 'Comprehensive translation of the Holy Quran in English',
-            license: 'CC BY',
-            publisher: 'Islamic Translation Foundation',
-            category: 'Translation',
-            licenseColor: 'green' as const,
-            type: 'translation' as const
-          },
-          {
-            id: '2',
-            title: 'Tafsir Al-Tabari',
-            description: 'Comprehensive commentary on the Quran from Jami\' al-Bayan',
-            license: 'CC BY-SA',
-            publisher: 'Dar Al-Ma\'rifa',
-            category: 'Tafsir',
-            licenseColor: 'yellow' as const,
-            type: 'tafsir' as const
-          }
-        ];
-        setAssets(mockAssets);
+        setAssets([]); // Set empty array on error
       } finally {
         setIsLoading(false);
       }
     };
 
     loadAssets();
-  }, [selectedCategories, selectedLicenses]);
+  }, [selectedCategories, selectedLicenses, t]);
 
   const categories = [
     { key: 'translation', label: t('categories.translation') },

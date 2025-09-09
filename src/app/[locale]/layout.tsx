@@ -60,14 +60,15 @@ export default async function RootLayout({
           geistSans.variable,
           geistMono.variable,
           "antialiased",
-          isRTL && "font-arabic"
+          isRTL && "font-arabic",
+          "bg-[#F8F8F8]"
         )}
       >
         <ThemeProvider>
           <NextIntlProvider locale={validatedLocale} messages={messages}>
             <AuthProvider locale={validatedLocale}>
               <ConditionalHeader locale={validatedLocale} />
-              <main>
+              <main className="pt-16">
                 {children}
               </main>
             </AuthProvider>

@@ -5,23 +5,24 @@
 
 import { env } from '@/lib/env';
 
-// API base URL with mock-api prefix as required
-const API_BASE_URL = `${env.NEXT_PUBLIC_BACKEND_URL}/api/v1`;
+// API base URL according to the API contract
+const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
 // API response types based on the contract
 export interface ApiUser {
   id: number;
   email: string;
+  name: string;
   first_name: string;
   last_name: string;
-  title?: string;
-  phone_number?: string;
-  avatar_url?: string;
-  bio?: string;
-  organization?: string;
-  location?: string;
-  website?: string;
-  github_username?: string;
+  phone_number: string | null;
+  title: string | null;
+  avatar_url: string | null;
+  bio: string | null;
+  organization: string | null;
+  location: string | null;
+  website: string | null;
+  github_username: string | null;
   email_verified: boolean;
   profile_completed: boolean;
   auth_provider: 'email' | 'google' | 'github';
@@ -196,8 +197,8 @@ export function convertApiUserToUser(apiUser: ApiUser): {
     email: apiUser.email,
     firstName: apiUser.first_name,
     lastName: apiUser.last_name,
-    jobTitle: apiUser.title,
-    phoneNumber: apiUser.phone_number,
+    jobTitle: apiUser.title || undefined,
+    phoneNumber: apiUser.phone_number || undefined,
     provider: apiUser.auth_provider,
     profileCompleted: apiUser.profile_completed,
   };
