@@ -60,7 +60,8 @@ export default async function RootLayout({
           geistSans.variable,
           geistMono.variable,
           "antialiased",
-          isRTL && "font-arabic"
+          isRTL && "font-arabic",
+          "bg-[#F8F8F8]"
         )}
       >
         <ThemeProvider>
