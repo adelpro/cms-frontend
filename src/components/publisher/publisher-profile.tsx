@@ -6,12 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { User, Building2, Globe, ArrowLeft, MapPin, CheckCircle2, Github, Twitter } from 'lucide-react';
 import type { Locale } from '@/i18n';
-import { logical, spacing } from '@/lib/styles/logical';
+import { logical } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
-import { getPublisherDetails, convertApiAssetToAsset, type ApiPublisherDetails } from '@/lib/api/assets';
+import { getPublisherDetails, convertApiAssetSummaryToAsset, type ApiPublisherDetails } from '@/lib/api/assets';
 import { tokenStorage } from '@/lib/auth';
 import { useTranslations } from 'next-intl';
 
@@ -36,8 +35,6 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
   const t = useTranslations();
   const [publisher, setPublisher] = useState<ApiPublisherDetails | null>(null);
   const [assets, setAssets] = useState<ConvertedAsset[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedLicenses, setSelectedLicenses] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>('');
 
@@ -53,7 +50,7 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
         setPublisher(publisherData);
         
         // Convert API assets to our internal format
-        const convertedAssets = publisherData.assets.map(convertApiAssetToAsset);
+        const convertedAssets = publisherData.assets.map(convertApiAssetSummaryToAsset);
         setAssets(convertedAssets);
       } catch (err) {
         console.error('Error fetching publisher data:', err);
@@ -66,43 +63,9 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
     fetchPublisherData();
   }, [publisherId, t]);
 
-  const categories = [
-    'mushaf',
-    'tafsir',
-    'recitation'
-  ];
 
-  const licenses = [
-    { id: 'cc0', name: 'CC0/ Public Domain', label: 'مفتوح بالكامل', color: 'green' },
-    { id: 'cc-by', name: 'CC BY', label: 'إسناد', color: 'green' },
-    { id: 'cc-by-sa', name: 'CC BY-SA', label: 'إسناد ومشاركة بالمثل', color: 'yellow' },
-    { id: 'cc-by-nd', name: 'CC BY-ND', label: 'إسناد بلا اشتقاق', color: 'yellow' },
-    { id: 'cc-by-nc', name: 'CC BY-NC', label: 'إسناد واستخدام غيرتجاري', color: 'yellow' },
-    { id: 'cc-by-nc-sa', name: 'CC BY-NC-SA', label: 'إسناد غيرتجاري، مشاركة بالمثل', color: 'red' },
-    { id: 'cc-by-nc-nd', name: 'CC BY-NC-ND', label: 'إسناد غيرتجاري بلا اشتقاق', color: 'red' }
-  ];
+  const filteredAssets = assets;
 
-  const filteredAssets = assets.filter(asset => {
-    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(asset.category);
-    const matchesLicense = selectedLicenses.length === 0 || selectedLicenses.includes(asset.license);
-    return matchesCategory && matchesLicense;
-  });
-
-  const handleCategoryChange = (category: string, checked: boolean) => {
-    if (checked) {
-      setSelectedCategories(prev => [...prev, category]);
-    } else {
-      setSelectedCategories(prev => prev.filter(c => c !== category));
-    }
-  };
-
-  const handleLicenseChange = (license: string, checked: boolean) => {
-    if (checked) {
-      setSelectedLicenses(prev => [...prev, license]);
-    } else {
-      setSelectedLicenses(prev => prev.filter(l => l !== license));
-    }
-  };
 
   if (isLoading) {
     return (
@@ -137,7 +100,7 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
           className="flex items-center text-muted-foreground hover:text-primary transition-colors"
         >
           <ArrowLeft className="h-4 w-4 ms-2" />
-          العودة إلى المتجر
+          {t('ui.backToStore')}
         </Link>
       </div>
 
@@ -307,7 +270,7 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
           {/* Resources List */}
           <div>
             <h2 className="text-xl font-bold mb-6">
-              قائمة الموارد ({filteredAssets.length})
+              {t('ui.publisherAssets')} ({filteredAssets.length})
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -357,7 +320,7 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
 
             {filteredAssets.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-muted-foreground">لم يتم العثور على موارد تطابق المرشحات المحددة</p>
+                <p className="text-muted-foreground">{t('ui.noAssetsMatchingFilters')}</p>
               </div>
             )}
           </div>

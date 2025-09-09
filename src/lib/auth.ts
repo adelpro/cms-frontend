@@ -4,6 +4,8 @@ import {
   loginUser as apiLoginUser, 
   registerUser as apiRegisterUser,
   convertApiUserToUser,
+  getUserProfile,
+  updateUserProfile,
   type ApiAuthResponse 
 } from '@/lib/api/auth';
 
@@ -91,33 +93,6 @@ export const userStorage = {
   }
 };
 
-/**
- * Generate fake token for demo purposes
- */
-const generateFakeToken = (): string => {
-  return 'fake_jwt_token_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-};
-
-/**
- * Generate fake user for demo purposes
- */
-const generateFakeUser = (
-  email: string, 
-  firstName: string, 
-  lastName: string, 
-  provider: 'email' | 'google' | 'github' = 'email',
-  additionalData?: Partial<User>
-): User => {
-  return {
-    id: 'user_' + Math.random().toString(36).substring(2, 15),
-    email,
-    firstName,
-    lastName,
-    provider,
-    profileCompleted: provider === 'email' ? true : false,
-    ...additionalData
-  };
-};
 
 /**
  * Login user with email/password using real API
@@ -224,88 +199,6 @@ export const signupUser = async (formData: {
   }
 };
 
-/**
- * Simulate social login API call
- */
-export const socialLogin = async (
-  provider: 'google' | 'github',
-  socialData?: { firstName?: string; lastName?: string; email?: string }
-): Promise<AuthResponse> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 800));
-  
-  const email = socialData?.email || `user@${provider}.com`;
-  const firstName = socialData?.firstName || 'Social';
-  const lastName = socialData?.lastName || 'User';
-  
-  // Check if user exists and has completed profile (simulate database check)
-  const existingUser = userStorage.getUser();
-  if (existingUser && existingUser.email === email && existingUser.profileCompleted) {
-    const token = generateFakeToken();
-    tokenStorage.setToken(token);
-    
-    return {
-      success: true,
-      token,
-      user: existingUser
-    };
-  }
-  
-  // New social user - requires profile completion
-  const partialUser = generateFakeUser(email, firstName, lastName, provider, {
-    profileCompleted: false
-  });
-  
-  return {
-    success: true,
-    user: partialUser,
-    requiresProfileCompletion: true
-  };
-};
-
-/**
- * Complete social user profile
- */
-export const completeProfile = async (
-  socialUserData: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    provider: 'google' | 'github';
-  },
-  profileData: {
-    jobTitle: string;
-    phoneNumber: string;
-    businessModel: string;
-    teamSize: string;
-    aboutYourself: string;
-  }
-): Promise<AuthResponse> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1200));
-  
-  const token = generateFakeToken();
-  const user = generateFakeUser(
-    socialUserData.email,
-    socialUserData.firstName,
-    socialUserData.lastName,
-    socialUserData.provider,
-    {
-      jobTitle: profileData.jobTitle,
-      phoneNumber: profileData.phoneNumber,
-      profileCompleted: true
-    }
-  );
-  
-  tokenStorage.setToken(token);
-  userStorage.setUser(user);
-  
-  return {
-    success: true,
-    token,
-    user
-  };
-};
 
 /**
  * Logout user
@@ -324,34 +217,48 @@ export const completeUserProfile = async (profileData: {
   teamSize: string;
   aboutYourself: string;
 }): Promise<AuthResponse> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1200));
-  
-  const currentUser = userStorage.getUser();
-  if (!currentUser) {
+  try {
+    // Get current user and token
+    const currentUser = userStorage.getUser();
+    const currentToken = tokenStorage.getToken();
+    
+    if (!currentUser || !currentToken) {
+      return {
+        success: false,
+        error: 'No authenticated user found'
+      };
+    }
+
+    // Update user profile via API
+    const updateData = {
+      name: `${currentUser.firstName} ${currentUser.lastName}`,
+      bio: profileData.aboutYourself,
+      organization: profileData.teamSize,
+      website: profileData.projectLink || undefined,
+    };
+
+    await updateUserProfile(currentToken, updateData);
+    
+    // Get updated user profile from API
+    const updatedApiUser = await getUserProfile(currentToken);
+    const updatedUser = convertApiUserToUser(updatedApiUser);
+    
+    // Store updated user data
+    userStorage.setUser(updatedUser);
+    
+    return {
+      success: true,
+      token: currentToken,
+      user: updatedUser
+    };
+  } catch (error) {
+    console.error('Profile completion error:', error);
+    
     return {
       success: false,
-      error: 'No user found'
+      error: error instanceof Error ? error.message : 'Profile completion failed'
     };
   }
-  
-  // Use profileData to avoid unused parameter warning
-  console.log('Completing profile with data:', profileData);
-  
-  const token = generateFakeToken();
-  const updatedUser: User = {
-    ...currentUser,
-    profileCompleted: true
-  };
-  
-  tokenStorage.setToken(token);
-  userStorage.setUser(updatedUser);
-  
-  return {
-    success: true,
-    token,
-    user: updatedUser
-  };
 };
 
 /**

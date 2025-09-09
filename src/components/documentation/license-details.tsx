@@ -148,7 +148,7 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
                   <li key={index} className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                     <span className="text-sm">
-                      {typeof permission === 'string' ? permission : permission.label || permission.description || permission.key}
+                      {permission.label || permission.description || permission.key}
                     </span>
                   </li>
                 ))}
@@ -174,7 +174,7 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
                   <li key={index} className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                     <span className="text-sm">
-                      {typeof condition === 'string' ? condition : condition.label || condition.description || condition.key}
+                      {JSON.stringify(condition)}
                     </span>
                   </li>
                 ))}
@@ -200,7 +200,7 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
                   <li key={index} className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-red-500 rounded-full"></div>
                     <span className="text-sm">
-                      {typeof limitation === 'string' ? limitation : limitation.label || limitation.description || limitation.key}
+                      {limitation.label || limitation.description || limitation.key}
                     </span>
                   </li>
                 ))}
@@ -252,27 +252,6 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
             </p>
           </div>
 
-          <div>
-            <h3 className="font-medium mb-3">{t('ui.howToAttribute')}</h3>
-            <div className="bg-muted/50 rounded-lg p-4">
-              <p className="text-sm font-mono" dir="ltr">
-                &quot;{t('ui.title')}&quot; by {t('ui.author')} {t('ui.licensedUnder')} {license.short_name}
-              </p>
-              <p className="text-xs text-muted-foreground mt-2">
-                {t('ui.includeLicenseAndSourceLinks')}
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="font-medium mb-3">{t('ui.commonUses')}</h3>
-            <ul className="text-muted-foreground text-sm space-y-1">
-              <li>• {t('ui.educationalContent')}</li>
-              <li>• {t('ui.translationsAndReference')}</li>
-              <li>• {t('ui.openDataAndCollections')}</li>
-              <li>• {t('ui.openSourceProjects')}</li>
-            </ul>
-          </div>
         </CardContent>
       </Card>
 

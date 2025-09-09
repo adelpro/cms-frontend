@@ -1,12 +1,20 @@
 import { env } from '@/lib/env';
 
-// Use local mock server for development, production API for production
-const API_BASE_URL = `${env.NEXT_PUBLIC_BACKEND_URL}/mock-api`;
+// API base URL according to the API contract
+const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
 // API Types based on the contract
 export interface ApiLicense {
   code: string;
   name: string;
+}
+
+export interface ApiLicenseSummary {
+  code: string;
+  name: string;
+  short_name: string;
+  icon_url: string;
+  is_default: boolean;
 }
 
 export interface ApiPublisher {
@@ -15,6 +23,27 @@ export interface ApiPublisher {
   thumbnail_url: string;
   bio?: string;
   verified?: boolean;
+}
+
+export interface ApiPublisherSummary {
+  id: number;
+  name: string;
+  thumbnail_url: string;
+  bio: string | null;
+  verified: boolean;
+}
+
+export interface ApiAssetSummary {
+  id: number;
+  title: string;
+  description: string;
+  thumbnail_url: string;
+  category: 'mushaf' | 'tafsir' | 'recitation';
+  license: ApiLicenseSummary;
+  publisher: ApiPublisherSummary;
+  has_access: boolean;
+  download_count: number;
+  file_size: string;
 }
 
 export interface ApiAsset {
@@ -30,17 +59,25 @@ export interface ApiAsset {
   file_size: string;
 }
 
-export interface ApiAssetDetails extends ApiAsset {
+export interface ApiAssetDetails {
+  id: number;
+  title: string;
+  description: string;
+  long_description: string;
+  thumbnail_url: string;
+  category: 'mushaf' | 'tafsir' | 'recitation';
+  license: ApiLicenseDetails; // Full license details, not summary
   snapshots: Array<{
     thumbnail_url: string;
     title: string;
     description: string;
   }>;
+  publisher: ApiPublisherSummary;
   resource: {
     id: number;
     title: string;
     description: string;
-  };
+  } | null;
   technical_details: {
     file_size: string;
     format: string;
@@ -56,7 +93,13 @@ export interface ApiAssetDetails extends ApiAsset {
   };
   access: {
     has_access: boolean;
+    requires_approval: boolean;
   };
+  related_assets: Array<{
+    id: number;
+    title: string;
+    thumbnail_url: string;
+  }>;
 }
 
 export interface ApiAssetsResponse {
@@ -76,7 +119,11 @@ export interface ApiAccessRequestResponse {
   request_id: number;
   status: 'pending' | 'approved' | 'rejected';
   message: string;
-  download_url?: string;
+  access?: {
+    download_url: string;
+    expires_at: string | null;
+    granted_at: string;
+  } | null;
 }
 
 export interface ApiErrorResponse {
@@ -90,15 +137,15 @@ export interface ApiPublisherDetails {
   id: number;
   name: string;
   description: string;
-  bio: string;
+  bio: string | null;
   thumbnail_url: string;
-  cover_url: string;
-  location: string;
-  website: string;
+  cover_url: string | null;
+  location: string | null;
+  website: string | null;
   verified: boolean;
   social_links: {
-    twitter?: string;
-    github?: string;
+    twitter?: string | null;
+    github?: string | null;
   };
   stats: {
     resources_count: number;
@@ -106,7 +153,7 @@ export interface ApiPublisherDetails {
     total_downloads: number;
     joined_at: string;
   };
-  assets: ApiAsset[];
+  assets: ApiAssetSummary[];
 }
 
 export interface ApiLicenseDetails {
@@ -123,9 +170,11 @@ export interface ApiLicenseDetails {
     description: string;
     order: number;
   }>;
-  permissions: (string | { key: string; label: string; description: string })[];
-  conditions: (string | { key: string; label: string; description: string })[];
-  limitations: (string | { key: string; label: string; description: string })[];
+  permissions: Array<{ key: string; label: string; description: string }>;
+  conditions: Array<object>;
+  limitations: Array<{ key: string; label: string; description: string }>;
+  usage_count: number;
+  is_default: boolean;
 }
 
 // Utility functions
@@ -216,7 +265,7 @@ export async function requestAssetAccess(
   data: ApiAccessRequest,
   token: string
 ): Promise<ApiAccessRequestResponse> {
-  const response = await fetch(`${API_BASE_URL}/assets/${assetId}/request-access/`, {
+  const response = await fetch(`${API_BASE_URL}/assets/${assetId}/request-access`, {
     method: 'POST',
     headers: getAuthHeaders(token),
     body: JSON.stringify(data),
@@ -317,6 +366,197 @@ export async function getLicenseDetails(
   return data;
 }
 
+export interface ApiLicensesResponse {
+  licenses: ApiLicenseSummary[];
+}
+
+export interface ApiLicenseSummary {
+  code: string;
+  name: string;
+  short_name: string;
+  icon_url: string;
+  is_default: boolean;
+}
+
+export interface ApiAppConfig {
+  version: string;
+  features: {
+    auto_approve_access: boolean;
+    manual_license_review: boolean;
+    advanced_analytics: boolean;
+    api_access: boolean;
+  };
+  limits: {
+    max_file_size_mb: number;
+    max_files_per_resource: number;
+    max_resources_per_publisher: number;
+  };
+  ui: {
+    primary_color: string;
+    dark_color: string;
+    supported_locales: string[];
+    default_locale: string;
+  };
+  categories: Array<{
+    key: string;
+    name: string;
+    description: string;
+  }>;
+  external_links: {
+    docs: string;
+    support: string;
+    github: string;
+  };
+}
+
+export interface ApiHealthStatus {
+  status: 'healthy' | 'unhealthy';
+  timestamp: string;
+  version: string;
+  services: {
+    database: 'healthy' | 'unhealthy';
+    storage: 'healthy' | 'unhealthy';
+    auth: 'healthy' | 'unhealthy';
+  };
+}
+
+export interface ApiContentStandardsSubsection {
+  title: string;
+  content: string;
+}
+
+export interface ApiContentStandardsSection {
+  title: string;
+  content: string;
+  subsections: ApiContentStandardsSubsection[];
+  required_fields: string[];
+  default_license: string;
+}
+
+export interface ApiFileFormatSpec {
+  schema_url: string;
+  example_url: string;
+}
+
+export interface ApiContentStandards {
+  version: string;
+  last_updated: string;
+  sections: ApiContentStandardsSection[];
+  file_formats: {
+    supported: string[];
+    recommended: string[];
+    specifications: { [key: string]: ApiFileFormatSpec };
+  };
+}
+
+/**
+ * Get list of all available licenses
+ */
+export async function getLicenses(token?: string): Promise<ApiLicensesResponse> {
+  const url = `${API_BASE_URL}/licenses`;
+  console.log('Fetching licenses from:', url);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: getAuthHeaders(token),
+  });
+
+  console.log('Licenses response status:', response.status);
+  console.log('Licenses response headers:', response.headers);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Licenses error response:', errorText);
+    throw new Error(`HTTP ${response.status}: ${errorText}`);
+  }
+
+  const data = await response.json();
+  console.log('Licenses response data:', data);
+
+  return data;
+}
+
+/**
+ * Get application configuration
+ */
+export async function getAppConfig(token?: string): Promise<ApiAppConfig> {
+  const url = `${API_BASE_URL}/config`;
+  console.log('Fetching app config from:', url);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: getAuthHeaders(token),
+  });
+
+  console.log('Config response status:', response.status);
+  console.log('Config response headers:', response.headers);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Config error response:', errorText);
+    throw new Error(`HTTP ${response.status}: ${errorText}`);
+  }
+
+  const data = await response.json();
+  console.log('Config response data:', data);
+
+  return data;
+}
+
+/**
+ * Get system health status
+ */
+export async function getHealthStatus(token?: string): Promise<ApiHealthStatus> {
+  const url = `${API_BASE_URL}/health`;
+  console.log('Fetching health status from:', url);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: getAuthHeaders(token),
+  });
+
+  console.log('Health response status:', response.status);
+  console.log('Health response headers:', response.headers);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Health error response:', errorText);
+    throw new Error(`HTTP ${response.status}: ${errorText}`);
+  }
+
+  const data = await response.json();
+  console.log('Health response data:', data);
+
+  return data;
+}
+
+/**
+ * Get content standards
+ */
+export async function getContentStandards(token?: string): Promise<ApiContentStandards> {
+  const url = `${API_BASE_URL}/content-standards`;
+  console.log('Fetching content standards from:', url);
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: getAuthHeaders(token),
+  });
+
+  console.log('Content standards response status:', response.status);
+  console.log('Content standards response headers:', response.headers);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Content standards error response:', errorText);
+    throw new Error(`HTTP ${response.status}: ${errorText}`);
+  }
+
+  const data = await response.json();
+  console.log('Content standards response data:', data);
+
+  return data;
+}
+
 // Type conversion functions for backward compatibility
 export function convertApiAssetToAsset(apiAsset: ApiAsset) {
   return {
@@ -332,6 +572,23 @@ export function convertApiAssetToAsset(apiAsset: ApiAsset) {
     has_access: apiAsset.has_access,
     download_count: apiAsset.download_count,
     file_size: apiAsset.file_size,
+  };
+}
+
+export function convertApiAssetSummaryToAsset(apiAssetSummary: ApiAssetSummary) {
+  return {
+    id: apiAssetSummary.id.toString(),
+    title: apiAssetSummary.title,
+    description: apiAssetSummary.description,
+    license: apiAssetSummary.license.name,
+    publisher: apiAssetSummary.publisher.name,
+    category: apiAssetSummary.category,
+    licenseColor: getLicenseColor(apiAssetSummary.license.code),
+    type: getAssetType(apiAssetSummary.category),
+    thumbnail_url: apiAssetSummary.thumbnail_url,
+    has_access: apiAssetSummary.has_access,
+    download_count: apiAssetSummary.download_count,
+    file_size: apiAssetSummary.file_size,
   };
 }
 
