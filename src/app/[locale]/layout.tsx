@@ -22,10 +22,25 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Itqan CMS",
-  description: "A modern content management system",
-};
+export async function generateMetadata({ params }: RootLayoutProps): Promise<Metadata> {
+  const { locale } = await params;
+  
+  if (!isValidLocale(locale)) {
+    return {
+      title: "ITQAN | Content Management System",
+      description: "A modern content management system",
+    };
+  }
+  
+  const validatedLocale = locale as Locale;
+  
+  return {
+    title: validatedLocale === 'ar' ? 'إتقان | نظام إدارة المحتوى' : 'ITQAN | Content Management System',
+    description: validatedLocale === 'ar' 
+      ? 'منصة إتقان لإدارة المحتوى القرآني - حلول متقدمة تربط الناشرين بالمطورين والمستخدمين في بيئة تقنية متكاملة'
+      : 'ITQAN Quranic Content Management Platform - Advanced solutions connecting publishers with developers and users in an integrated technical environment',
+  };
+}
 
 export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
