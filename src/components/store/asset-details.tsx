@@ -450,6 +450,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
                 variant="outline"
                 size="lg"
                 className="w-full justify-center cursor-pointer mt-2"
+                disabled={!asset.resource?.id}
               >
                 {t('ui.downloadOriginalResource')}
                 <CloudDownload className="h-4 w-4 ms-2" />

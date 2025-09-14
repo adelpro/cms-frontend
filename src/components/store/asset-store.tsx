@@ -85,12 +85,12 @@ export function AssetStore({ locale }: AssetStoreProps) {
         if (selectedLicenses.length > 0) {
           const licenseMap: { [key: string]: string } = {
             'CC0/ Public Domain': 'cc0',
-            'CC BY': 'cc-by-4.0',
-            'CC BY-SA': 'cc-by-sa-4.0',
-            'CC BY-ND': 'cc-by-nd-4.0',
-            'CC BY-NC': 'cc-by-nc-4.0',
-            'CC BY-NC-SA': 'cc-by-nc-sa-4.0',
-            'CC BY-NC-ND': 'cc-by-nc-nd-4.0'
+            'CC BY': 'cc-by',
+            'CC BY-SA': 'cc-by-sa',
+            'CC BY-ND': 'cc-by-nd',
+            'CC BY-NC': 'cc-by-nc',
+            'CC BY-NC-SA': 'cc-by-nc-sa',
+            'CC BY-NC-ND': 'cc-by-nc-nd'
           };
           const mappedLicenses = selectedLicenses
             .map(license => licenseMap[license])

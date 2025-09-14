@@ -175,7 +175,9 @@ export async function logoutUser(token: string): Promise<void> {
   });
   
   if (!response.ok) {
-    throw new Error('Logout failed');
+    // Don't handle auth errors for logout - just log and continue
+    console.warn('Logout API call failed:', response.status, response.statusText);
+    // We'll still clear local storage even if the API call fails
   }
 }
 

@@ -1,7 +1,7 @@
 import { env } from '@/lib/env';
 
 // API base URL according to the API contract
-const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL + "/mock-api";
+const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL + "/api/v1";
 
 // API Types based on the contract
 export interface ApiLicense {

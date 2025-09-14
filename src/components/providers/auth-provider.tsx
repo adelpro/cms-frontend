@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { useRouter, usePathname } from 'next/navigation';
 import type { User } from '@/lib/auth';
 import { checkAuthStatus, logoutUser, tokenStorage, userStorage } from '@/lib/auth';
+import { httpInterceptor } from '@/lib/http-interceptor';
 import type { Locale } from '@/i18n';
 import { AuthLoading } from '@/components/auth/auth-loading';
 
@@ -33,6 +34,14 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
   const router = useRouter();
   const pathname = usePathname();
 
+  const logout = () => {
+    logoutUser();
+    setUser(null);
+    setIsAuthenticated(false);
+    setRequiresProfileCompletion(false);
+    router.replace(`/${locale}/store`);
+  };
+
   // Check authentication status on mount
   useEffect(() => {
     const checkAuth = () => {
@@ -51,8 +60,11 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
       }
     };
 
+    // Set up the logout callback for the HTTP interceptor
+    httpInterceptor.setLogoutCallback(logout);
+
     checkAuth();
-  }, []);
+  }, [locale, router]);
 
   // Handle route protection (very permissive - only handle auth pages and profile completion)
   useEffect(() => {
@@ -92,14 +104,6 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
     } else {
       router.replace(`/${locale}/store`);
     }
-  };
-
-  const logout = () => {
-    logoutUser();
-    setUser(null);
-    setIsAuthenticated(false);
-    setRequiresProfileCompletion(false);
-    router.replace(`/${locale}/store`);
   };
 
   const updateUser = (userData: User) => {

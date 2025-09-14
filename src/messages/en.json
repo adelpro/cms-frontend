@@ -141,11 +141,11 @@
   "licenses": {
     "cc0": "Fully Open",
     "ccBy": "Attribution",
-    "ccBySa": "Attribution-ShareAlike",
-    "ccByNd": "Attribution-NoDerivs",
-    "ccByNc": "Attribution-NonCommercial",
-    "ccByNcSa": "Attribution-NonCommercial-ShareAlike",
-    "ccByNcNd": "Attribution-NonCommercial-NoDerivs"
+    "ccBySa": "Attribution ShareAlike",
+    "ccByNd": "Attribution No Derivatives",
+    "ccByNc": "Attribution Non-Commercial",
+    "ccByNcSa": "Attribution Non-Commercial ShareAlike",
+    "ccByNcNd": "Attribution Non-Commercial No Derivatives"
   },
   "ui": {
     "searchInResources": "Search resources",
@@ -255,43 +255,43 @@
     "acceptanceText": "By clicking \"Accept\", you acknowledge that you have read and agree to these terms."
   },
   "contentStandards": {
-    "title": "Documents: Data Access Standards",
-    "description": "This document outlines the standards for accessing data in files. Please follow the guidelines below for each category.",
+    "title": "Documents: Content Access Standards",
+    "description": "This document explains standards for accessing content in files. Please follow the guidelines below for each category",
+    "version": "Version",
+    "lastUpdated": "Last updated",
     "onThisPage": "On this page",
     "example": "Example",
     "verseUsage": {
       "title": "Verse Usage Standards",
-      "description": "To access verses, follow these standards:",
-      "point1": "Use the correct verse ID format",
-      "point2": "Ensure proper verse indexing",
-      "point3": "Check for the latest updates in the verse database",
-      "exampleText": "To access verse 2:255, use",
+      "description": "To access verses, follow the following standards",
+      "guidelines": "Guidelines",
+      "guideline1": "Use correct verse identifier format",
+      "guideline2": "Ensure correct verse indexing", 
+      "guideline3": "Verify latest updates in verse database",
+      "exampleText": "Example: To access verse 2:255, use getVerse('2:255')",
       "exampleCode": "getVerse('2:255')"
     },
-    "wordUsage": {
-      "title": "Word Usage Standards",
-      "description": "To access words, adhere to the following:",
-      "point1": "Use the defined word keys",
-      "point2": "Ensure the word list is up to date",
-      "point3": "Maintain consistency in word formatting",
-      "exampleText": "To retrieve the word \"الله\", use",
+    "wordsUsage": {
+      "title": "Words Usage Standards",
+      "description": "To access words, commit to the following",
+      "guidelines": "Guidelines",
+      "guideline1": "Use specified word keys",
+      "guideline2": "Ensure word list is updated",
+      "guideline3": "Maintain consistency in word formatting",
+      "exampleText": "Example: To retrieve the word \"الله\", use getWord(\"الله\")",
       "exampleCode": "getWord(\"الله\")"
     },
     "tafsirUsage": {
-      "title": "Tafsir Usage Standards",
-      "description": "To access tafsir, adhere to the following:",
-      "point1": "Use the defined tafsir keys",
-      "point2": "Ensure the tafsir list is up to date",
-      "point3": "Maintain consistency in tafsir formatting",
-      "exampleText": "To retrieve tafsir for verse 2:255, use",
+      "title": "Tafsir Usage Standards", 
+      "description": "When accessing tafsir, follow the following guidelines",
+      "guidelines": "Guidelines",
+      "guideline1": "Use correct tafsir reference",
+      "guideline2": "Ensure translation accuracy",
+      "guideline3": "Verify existence of updated interpretations for tafsir",
+      "exampleText": "Example: To access tafsir for verse 2:255, use getTafsir('2:255')",
       "exampleCode": "getTafsir('2:255')"
     },
-    "additionalGuidelines": {
-      "title": "Additional Guidelines",
-      "point1": "Follow UTF-8 encoding standards to ensure proper display of Arabic text",
-      "point2": "Validate data before use in production applications",
-      "point3": "In case of issues or errors, report them to the responsible publisher"
-    }
+    "footer": "© Content Standards for 2023, All rights reserved"
   },
   "errors": {
     "pageNotFound": "Page not found",
