@@ -9,6 +9,23 @@ const nextConfig: NextConfig = {
     // Enable optimized package imports
     optimizePackageImports: ['lucide-react'],
   },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'api.cms.itqan.dev',
+      },
+      {
+        protocol: 'https',
+        hostname: 'staging.api.cms.itqan.dev',
+      },
+      {
+        protocol: 'https',
+        hostname: 'develop.api.cms.itqan.dev',
+      },
+    ],
+  },
   
   // Configure redirects to default to Arabic store page
   async redirects() {

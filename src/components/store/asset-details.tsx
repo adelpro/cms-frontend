@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,6 +19,7 @@ import {
   Languages,
   AlertCircle,
   RefreshCw,
+  ScanEye,
 } from "lucide-react";
 import {
   Dialog,
@@ -41,6 +43,7 @@ import { useAuth } from "@/components/providers/auth-provider";
 import { getAssetDetails, downloadAsset, downloadOriginalResource } from "@/lib/api/assets";
 import { tokenStorage } from "@/lib/auth";
 import { useTranslations } from "next-intl";
+import { env } from "@/lib/env";
 
 interface AssetDetailsType {
   id: number;
@@ -70,7 +73,7 @@ interface AssetDetailsType {
     is_default: boolean;
   };
   snapshots: Array<{
-    thumbnail_url: string;
+    thumbnail_url: string; // image url ( the image that will be shown in the carousel)
     title: string;
     description: string;
   }>;
@@ -307,7 +310,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
   };
 
   return (
-    <div className="max-width-container px-4 py-8">
+    <div className="w-full max-w-[1280px] mx-auto px-4 py-8">
       {/* Breadcrumb */}
       <div className="mb-6">
         <Breadcrumb
@@ -319,9 +322,9 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="flex flex-col lg:flex-row gap-8">
         {/* Main Content - Left Side */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="flex-1 space-y-6">
           {/* Asset Header with Title and Category Badge */}
           <div className="space-y-4 flex flex-col gap-3">
             <div className="flex items-center gap-3">
@@ -330,7 +333,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
               </h1>
               <Badge
                 variant="outline"
-                className="flex items-center gap-2 px-3 py-1"
+                className="flex items-center gap-2 px-3 py-1 bg-white"
               >
                 <Languages size={24} />
                 <span>{getAssetType(asset.category)}</span>
@@ -344,40 +347,68 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
           </div>
 
           {/* Content Preview Section */}
-          <Card className="bg-transparent shadow-none mt-8">
-            <CardHeader className="p-0">
+          <Card className="bg-transparent shadow-none mt-8 ps-10 md:ps-0">
+            <CardHeader className="p-0 w-[calc(100%-40px)] max-w-full">
               <CardTitle className="flex items-center gap-2 text-lg">
-                <Eye className="h-5 w-5" />
+                <ScanEye className="h-5 w-5" />
                 {t('ui.contentPreview')}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="relative">
-                <Carousel className="w-full">
+                <Carousel className="w-full" isRTL={isRTL}>
                   <CarouselContent>
                     {(Array.isArray(asset.snapshots) && asset.snapshots.length > 0) 
                       ? asset.snapshots.map((snapshot, index) => (
                         <CarouselItem key={index}>
-                        <div className="flex justify-center">
-                          <div className="w-full max-w-md h-48 bg-muted/50 rounded-lg flex items-center justify-center relative overflow-hidden">
-                            {/* Image placeholder with diagonal stripes */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-muted/30 to-muted/60"></div>
-                            <div
-                              className="absolute inset-0"
-                              style={{
-                                backgroundImage: `repeating-linear-gradient(
-                                45deg,
-                                transparent,
-                                transparent 10px,
-                                rgba(255,255,255,0.1) 10px,
-                                rgba(255,255,255,0.1) 20px
-                              )`,
-                              }}
-                            ></div>
-                            <div className="relative z-10 text-muted-foreground text-center p-4">
-                              <FileTextIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                              <p className="text-sm">{snapshot.title}</p>
-                            </div>
+                        <div className="flex">
+                          <div className="w-full max-w-[calc(100%-40px)]  h-[500px] bg-muted/50 rounded-lg flex items-center justify-center relative overflow-hidden">
+                            {snapshot.thumbnail_url ? (
+                              <>
+                                <Image
+                                  src={`${env.NEXT_PUBLIC_BACKEND_URL}${snapshot.thumbnail_url}`}
+                                  alt={snapshot.title || `Snapshot ${index + 1}`}
+                                  fill
+                                  className="object-cover rounded-lg cursor-zoom-in hover:opacity-90 transition-opacity"
+                                  onClick={() => window.open(`${env.NEXT_PUBLIC_BACKEND_URL}${snapshot.thumbnail_url}`, '_blank')}
+                                  onError={(e) => {
+                                    // Fallback to placeholder if image fails to load
+                                    const target = e.target as HTMLImageElement;
+                                    target.style.display = 'none';
+                                    const fallback = target.nextElementSibling as HTMLElement;
+                                    if (fallback) fallback.style.display = 'flex';
+                                  }}
+                                />
+                                {/* Fallback placeholder (hidden by default) */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-muted/30 to-muted/60 hidden items-center justify-center">
+                                  <div className="text-muted-foreground text-center p-4">
+                                    <FileTextIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                                    <p className="text-sm">{snapshot.title}</p>
+                                  </div>
+                                </div>
+                              </>
+                            ) : (
+                              /* Image placeholder with diagonal stripes for snapshots without thumbnail_url */
+                              <>
+                                <div className="absolute inset-0 bg-gradient-to-br from-muted/30 to-muted/60"></div>
+                                <div
+                                  className="absolute inset-0"
+                                  style={{
+                                    backgroundImage: `repeating-linear-gradient(
+                                    45deg,
+                                    transparent,
+                                    transparent 10px,
+                                    rgba(255,255,255,0.1) 10px,
+                                    rgba(255,255,255,0.1) 20px
+                                  )`,
+                                  }}
+                                ></div>
+                                <div className="relative z-10 text-muted-foreground text-center p-4">
+                                  <FileTextIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                                  <p className="text-sm">{snapshot.title}</p>
+                                </div>
+                              </>
+                            )}
                           </div>
                         </div>
                       </CarouselItem>
@@ -396,18 +427,8 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
                         </CarouselItem>
                       )}
                   </CarouselContent>
-                  <CarouselPrevious
-                    className={cn(
-                      "absolute left-2 top-1/2 transform -translate-y-1/2",
-                      isRTL && "left-auto right-2"
-                    )}
-                  />
-                  <CarouselNext
-                    className={cn(
-                      "absolute right-2 top-1/2 transform -translate-y-1/2",
-                      isRTL && "right-auto left-2"
-                    )}
-                  />
+                  <CarouselPrevious />
+                  <CarouselNext />
                 </Carousel>
               </div>
             </CardContent>
@@ -415,7 +436,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
         </div>
 
         {/* Sidebar - Right Side */}
-        <div className="space-y-6 max-w-[300px]">
+        <div className="w-full lg:w-[320px] flex-shrink-0 space-y-6">
           {/* Resource Actions Card */}
           <Card>
             <CardHeader>

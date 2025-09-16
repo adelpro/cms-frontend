@@ -563,10 +563,10 @@ export function convertApiAssetToAsset(apiAsset: ApiAsset) {
     id: apiAsset.id.toString(),
     title: apiAsset.title,
     description: apiAsset.description,
-    license: apiAsset.license.name,
-    publisher: apiAsset.publisher.name,
+    license: apiAsset.license?.name || 'Unknown License',
+    publisher: apiAsset.publisher?.name || 'Unknown Publisher',
     category: apiAsset.category,
-    licenseColor: getLicenseColor(apiAsset.license.code),
+    licenseColor: getLicenseColor(apiAsset.license?.code || ''),
     type: getAssetType(apiAsset.category),
     thumbnail_url: apiAsset.thumbnail_url,
     has_access: apiAsset.has_access,
@@ -576,14 +576,22 @@ export function convertApiAssetToAsset(apiAsset: ApiAsset) {
 }
 
 export function convertApiAssetSummaryToAsset(apiAssetSummary: ApiAssetSummary) {
+  // Log warnings if expected properties are missing
+  if (!apiAssetSummary.license) {
+    console.warn('Asset missing license data:', apiAssetSummary.id, apiAssetSummary.title);
+  }
+  if (!apiAssetSummary.publisher) {
+    console.warn('Asset missing publisher data:', apiAssetSummary.id, apiAssetSummary.title);
+  }
+
   return {
     id: apiAssetSummary.id.toString(),
     title: apiAssetSummary.title,
     description: apiAssetSummary.description,
-    license: apiAssetSummary.license.name,
-    publisher: apiAssetSummary.publisher.name,
+    license: apiAssetSummary.license?.name || 'Unknown License',
+    publisher: apiAssetSummary.publisher?.name || 'Unknown Publisher',
     category: apiAssetSummary.category,
-    licenseColor: getLicenseColor(apiAssetSummary.license.code),
+    licenseColor: getLicenseColor(apiAssetSummary.license?.code || ''),
     type: getAssetType(apiAssetSummary.category),
     thumbnail_url: apiAssetSummary.thumbnail_url,
     has_access: apiAssetSummary.has_access,
