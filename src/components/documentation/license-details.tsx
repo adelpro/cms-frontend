@@ -1,16 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import React from 'react';
+// import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+// import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, ExternalLink, Info, RefreshCw, AlertCircle } from 'lucide-react';
+import { ArrowLeft, ExternalLink } from 'lucide-react';
+// import { ArrowLeft, ExternalLink, Info, RefreshCw, AlertCircle } from 'lucide-react';
 import type { Locale } from '@/i18n';
-import { cn } from '@/lib/utils';
-import { getLicenseDetails, type ApiLicenseDetails } from '@/lib/api/assets';
-import { tokenStorage } from '@/lib/auth';
+// import { cn } from '@/lib/utils';
+// import { getLicenseDetails, type ApiLicenseDetails } from '@/lib/api/assets';
+// import { tokenStorage } from '@/lib/auth';
 import { useTranslations } from 'next-intl';
+import { getLicense } from '@/lib/licenses';
 
 interface LicenseDetailsProps {
   licenseId?: string;
@@ -19,75 +21,78 @@ interface LicenseDetailsProps {
 
 export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
   const t = useTranslations();
-  const [license, setLicense] = useState<ApiLicenseDetails | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string>('');
+  
+  // Get license data from static data
+  const license = getLicense(licenseId || 'CC0');
 
-  useEffect(() => {
-    const fetchLicenseData = async () => {
-      setIsLoading(true);
-      setError('');
+  // const [license, setLicense] = useState<ApiLicenseDetails | null>(null);
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [error, setError] = useState<string>('');
+
+  // useEffect(() => {
+  //   const fetchLicenseData = async () => {
+  //     setIsLoading(true);
+  //     setError('');
       
-      try {
-        const token = tokenStorage.getToken();
-        const licenseData = await getLicenseDetails(licenseId || 'cc-by', token || undefined);
-        setLicense(licenseData);
-      } catch (err) {
-        console.error('Error fetching license data:', err);
-        setError(err instanceof Error ? err.message : t('ui.licenseNotFound'));
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  //     try {
+  //       const token = tokenStorage.getToken();
+  //       const licenseData = await getLicenseDetails(licenseId || 'cc-by', token || undefined);
+  //       setLicense(licenseData);
+  //     } catch (err) {
+  //       console.error('Error fetching license data:', err);
+  //       setError(err instanceof Error ? err.message : t('ui.licenseNotFound'));
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    fetchLicenseData();
-  }, [licenseId, t]);
+  //   fetchLicenseData();
+  // }, [licenseId, t]);
 
-  // Helper function to determine license color based on code
-  const getLicenseColor = (code: string): 'green' | 'yellow' | 'red' => {
-    const greenLicenses = ['cc0', 'cc-by-4.0'];
-    const yellowLicenses = ['cc-by-sa-4.0', 'cc-by-nd-4.0', 'cc-by-nc-4.0'];
-    const redLicenses = ['cc-by-nc-sa-4.0', 'cc-by-nc-nd-4.0'];
+  // // Helper function to determine license color based on code
+  // const getLicenseColor = (code: string): 'green' | 'yellow' | 'red' => {
+  //   const greenLicenses = ['cc0', 'cc-by-4.0'];
+  //   const yellowLicenses = ['cc-by-sa-4.0', 'cc-by-nd-4.0', 'cc-by-nc-4.0'];
+  //   const redLicenses = ['cc-by-nc-sa-4.0', 'cc-by-nc-nd-4.0'];
     
-    if (greenLicenses.includes(code)) return 'green';
-    if (yellowLicenses.includes(code)) return 'yellow';
-    if (redLicenses.includes(code)) return 'red';
-    return 'green'; // default
-  };
+  //   if (greenLicenses.includes(code)) return 'green';
+  //   if (yellowLicenses.includes(code)) return 'yellow';
+  //   if (redLicenses.includes(code)) return 'red';
+  //   return 'green'; // default
+  // };
 
-  if (isLoading) {
-    return (
-      <div className="container mx-auto max-w-4xl px-4 py-8">
-        <div className="text-center space-y-4">
-          <RefreshCw className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
-          <p className="text-muted-foreground">{t('common.loading')}</p>
-        </div>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="container mx-auto max-w-4xl px-4 py-8">
+  //       <div className="text-center space-y-4">
+  //         <RefreshCw className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
+  //         <p className="text-muted-foreground">{t('common.loading')}</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
-  if (error) {
-    return (
-      <div className="container mx-auto max-w-4xl px-4 py-8">
-        <div className="text-center space-y-4">
-          <AlertCircle className="h-12 w-12 mx-auto text-destructive" />
-          <h2 className="text-xl font-semibold text-foreground">
-            {t('ui.licenseNotFound')}
-          </h2>
-          <p className="text-muted-foreground">{error}</p>
-          <Button onClick={() => window.location.reload()} variant="outline">
-            {t('ui.tryAgain')}
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <div className="container mx-auto max-w-4xl px-4 py-8">
+  //       <div className="text-center space-y-4">
+  //         <AlertCircle className="h-12 w-12 mx-auto text-destructive" />
+  //         <h2 className="text-xl font-semibold text-foreground">
+  //           {t('ui.licenseNotFound')}
+  //         </h2>
+  //         <p className="text-muted-foreground">{error}</p>
+  //         <Button onClick={() => window.location.reload()} variant="outline">
+  //           {t('ui.tryAgain')}
+  //         </Button>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   if (!license) {
     return (
       <div className="container mx-auto max-w-4xl px-4 py-8">
         <div className="text-center space-y-4">
-          <AlertCircle className="h-12 w-12 mx-auto text-destructive" />
           <h2 className="text-xl font-semibold text-foreground">
             {t('ui.licenseNotFound')}
           </h2>
@@ -110,7 +115,36 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
         </Link>
       </div>
 
-      {/* Header */}
+      {/* Main Content */}
+      <div className="text-center space-y-8">
+        {/* Big heading (license code capitalized) */}
+        <h1 className="text-4xl font-bold uppercase">
+          {license.code}
+        </h1>
+        
+        {/* License name based on language */}
+        <h2 className="text-2xl font-semibold text-muted-foreground">
+          {license.name[locale]}
+        </h2>
+        
+        {/* Button link to deed */}
+        <div className="pt-4">
+          <Button asChild size="lg">
+            <a 
+              href={license.deedUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2"
+            >
+              <ExternalLink className="h-5 w-5" />
+              {t('ui.viewLicenseDeed')}
+            </a>
+          </Button>
+        </div>
+      </div>
+
+      {/* Commented out old content */}
+      {/* 
       <div className="text-center mb-8">
         <div className="flex items-center justify-center gap-4 mb-4">
           <Badge 
@@ -133,7 +167,6 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Permissions */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-green-700">
@@ -159,7 +192,6 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
           </CardContent>
         </Card>
 
-        {/* Conditions */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-blue-700">
@@ -185,7 +217,6 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
           </CardContent>
         </Card>
 
-        {/* Limitations */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-red-700">
@@ -212,7 +243,6 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
         </Card>
       </div>
 
-      {/* License Terms */}
       {license.license_terms && license.license_terms.length > 0 && (
         <Card className="mt-8">
           <CardHeader>
@@ -236,7 +266,6 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
         </Card>
       )}
 
-      {/* Detailed Information */}
       <Card className="mt-8">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -255,7 +284,6 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
         </CardContent>
       </Card>
 
-      {/* Actions */}
       <div className="flex gap-4 justify-center mt-6">
         <Button asChild>
           <a 
@@ -287,6 +315,7 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
           </Link>
         </Button>
       </div>
+      */}
     </div>
   );
 }
