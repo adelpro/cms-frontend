@@ -15,6 +15,11 @@ export interface UserProfileSchema {
   name: string;
   phone: string | null;
   is_active: boolean;
+  is_profile_completed: boolean;
+  bio: string;
+  project_summary: string;
+  project_url: string;
+  job_title: string;
   created_at: string;
   updated_at: string;
 }
@@ -22,6 +27,10 @@ export interface UserProfileSchema {
 export interface UserUpdateSchema {
   name?: string | null;
   phone?: string | null;
+  bio?: string;
+  project_summary?: string;
+  project_url?: string;
+  job_title?: string;
 }
 
 export interface TokenResponseSchema {
@@ -39,6 +48,8 @@ export interface RegisterSchema {
   email: string;
   password: string;
   name?: string;
+  phone?: string;
+  job_title?: string;
 }
 
 export interface RefreshTokenIn {
@@ -273,9 +284,10 @@ export function convertUserProfileToUser(userProfile: UserProfileSchema): {
     email: userProfile.email,
     firstName: nameParts[0] || '',
     lastName: nameParts.slice(1).join(' ') || '',
+    jobTitle: userProfile.job_title || undefined,
     phoneNumber: userProfile.phone || undefined,
     provider: 'email', // Default, would need to be determined from auth context
-    profileCompleted: true, // Assume completed if profile exists
+    profileCompleted: userProfile.is_profile_completed,
   };
 }
 

@@ -56,6 +56,10 @@ export interface DetailAssetSnapshotOut {
   description: string;
 }
 
+export interface DetailAssetResourceOut {
+  id: number;
+}
+
 export interface DetailAssetOut {
   id: number;
   category: string;
@@ -64,8 +68,9 @@ export interface DetailAssetOut {
   long_description: string;
   thumbnail_url: string;
   publisher: DetailAssetPublisherOut;
+  resource: DetailAssetResourceOut;
   license: string;
-  snapshots?: DetailAssetSnapshotOut[];
+  snapshots: DetailAssetSnapshotOut[];
 }
 
 // Paginated response types

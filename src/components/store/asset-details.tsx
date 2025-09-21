@@ -180,11 +180,11 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
             usage_count: 0,
             is_default: false,
           },
-          snapshots: assetData.snapshots?.map(snapshot => ({
+          snapshots: assetData.snapshots.map(snapshot => ({
             thumbnail_url: snapshot.image_url,
             title: snapshot.title,
             description: snapshot.description,
-          })) || [],
+          })),
           publisher: {
             id: assetData.publisher.id,
             name: assetData.publisher.name,
@@ -192,7 +192,11 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
             bio: assetData.publisher.description,
             verified: false,
           },
-          resource: null, // Not provided in new API
+          resource: {
+            id: assetData.resource.id,
+            title: `Resource ${assetData.resource.id}`,
+            description: 'Resource description not available',
+          },
           technical_details: {
             file_size: 'Unknown',
             format: 'Unknown',

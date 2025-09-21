@@ -115,7 +115,8 @@ export const loginUser = async (email: string, password: string): Promise<AuthRe
     return {
       success: true,
       token: apiResponse.access,
-      user
+      user,
+      requiresProfileCompletion: !user.profileCompleted
     };
   } catch (error) {
     console.error('Login API error:', error);
@@ -158,7 +159,9 @@ export const signupUser = async (formData: {
     const apiResponse: TokenResponseSchema = await apiRegisterUser({
       email: formData.email,
       password: formData.password,
-      name: `${formData.firstName} ${formData.lastName}`
+      name: `${formData.firstName} ${formData.lastName}`,
+      phone: formData.phoneNumber,
+      job_title: formData.title
     });
     
     // Get user profile to get complete user data
@@ -175,7 +178,7 @@ export const signupUser = async (formData: {
       success: true,
       token: apiResponse.access,
       user,
-      requiresProfileCompletion: false // Assume profile is complete in new API
+      requiresProfileCompletion: !user.profileCompleted
     };
   } catch (error) {
     console.error('Signup API error:', error);
@@ -216,10 +219,9 @@ export const logoutUser = (): void => {
  * Complete user profile (for email signups)
  */
 export const completeUserProfile = async (profileData: {
-  projectDescription: string;
-  projectLink?: string;
-  teamSize: string;
-  aboutYourself: string;
+  project_summary: string;
+  project_url?: string;
+  bio: string;
 }): Promise<AuthResponse> => {
   try {
     // Get current user and token
@@ -236,7 +238,9 @@ export const completeUserProfile = async (profileData: {
     // Update user profile via API
     const updateData = {
       name: `${currentUser.firstName} ${currentUser.lastName}`,
-      phone: profileData.teamSize // Using phone field for team size temporarily
+      bio: profileData.bio,
+      project_summary: profileData.project_summary,
+      project_url: profileData.project_url || ''
     };
 
     await updateUserProfile(currentToken, updateData);
