@@ -3,10 +3,11 @@
 import { 
   loginUser as apiLoginUser, 
   registerUser as apiRegisterUser,
-  convertApiUserToUser,
+  convertUserProfileToUser,
   getUserProfile,
   updateUserProfile,
-  type ApiAuthResponse 
+  type TokenResponseSchema,
+  type UserProfileSchema
 } from '@/lib/api/auth';
 
 /**
@@ -99,18 +100,21 @@ export const userStorage = {
  */
 export const loginUser = async (email: string, password: string): Promise<AuthResponse> => {
   try {
-    const apiResponse: ApiAuthResponse = await apiLoginUser({ email, password });
+    const apiResponse: TokenResponseSchema = await apiLoginUser({ email, password });
+    
+    // Get user profile to get complete user data
+    const userProfile: UserProfileSchema = await getUserProfile(apiResponse.access);
     
     // Convert API user to internal user format
-    const user = convertApiUserToUser(apiResponse.user);
+    const user = convertUserProfileToUser(userProfile);
     
     // Store tokens and user data
-    tokenStorage.setToken(apiResponse.access_token);
+    tokenStorage.setToken(apiResponse.access);
     userStorage.setUser(user);
     
     return {
       success: true,
-      token: apiResponse.access_token,
+      token: apiResponse.access,
       user
     };
   } catch (error) {
@@ -151,27 +155,27 @@ export const signupUser = async (formData: {
   phoneNumber: string;
 }): Promise<AuthResponse> => {
   try {
-    const apiResponse: ApiAuthResponse = await apiRegisterUser({
+    const apiResponse: TokenResponseSchema = await apiRegisterUser({
       email: formData.email,
       password: formData.password,
-      first_name: formData.firstName,
-      last_name: formData.lastName,
-      title: formData.title,
-      phone_number: formData.phoneNumber
+      name: `${formData.firstName} ${formData.lastName}`
     });
     
+    // Get user profile to get complete user data
+    const userProfile: UserProfileSchema = await getUserProfile(apiResponse.access);
+    
     // Convert API user to internal user format
-    const user = convertApiUserToUser(apiResponse.user);
+    const user = convertUserProfileToUser(userProfile);
     
     // Store tokens and user data
-    tokenStorage.setToken(apiResponse.access_token);
+    tokenStorage.setToken(apiResponse.access);
     userStorage.setUser(user);
     
     return {
       success: true,
-      token: apiResponse.access_token,
+      token: apiResponse.access,
       user,
-      requiresProfileCompletion: !apiResponse.user.profile_completed
+      requiresProfileCompletion: false // Assume profile is complete in new API
     };
   } catch (error) {
     console.error('Signup API error:', error);
@@ -232,16 +236,14 @@ export const completeUserProfile = async (profileData: {
     // Update user profile via API
     const updateData = {
       name: `${currentUser.firstName} ${currentUser.lastName}`,
-      bio: profileData.aboutYourself,
-      organization: profileData.teamSize,
-      website: profileData.projectLink || undefined,
+      phone: profileData.teamSize // Using phone field for team size temporarily
     };
 
     await updateUserProfile(currentToken, updateData);
     
     // Get updated user profile from API
-    const updatedApiUser = await getUserProfile(currentToken);
-    const updatedUser = convertApiUserToUser(updatedApiUser);
+    const updatedUserProfile = await getUserProfile(currentToken);
+    const updatedUser = convertUserProfileToUser(updatedUserProfile);
     
     // Store updated user data
     userStorage.setUser(updatedUser);

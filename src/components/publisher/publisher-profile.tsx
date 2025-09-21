@@ -10,7 +10,7 @@ import { User, Building2, Globe, ArrowLeft, MapPin, CheckCircle2, Github, Twitte
 import type { Locale } from '@/i18n';
 import { logical } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
-import { getPublisherDetails, convertApiAssetSummaryToAsset, type ApiPublisherDetails } from '@/lib/api/assets';
+import { getPublisherDetails, convertDetailPublisherToApiPublisherDetails, type ApiPublisherDetails } from '@/lib/api/assets';
 import { tokenStorage } from '@/lib/auth';
 import { useTranslations } from 'next-intl';
 
@@ -47,11 +47,13 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
         const token = tokenStorage.getToken();
         const publisherData = await getPublisherDetails(parseInt(publisherId), token || undefined);
         
-        setPublisher(publisherData);
+        // Convert new API format to expected format
+        const convertedPublisher = convertDetailPublisherToApiPublisherDetails(publisherData);
+        setPublisher(convertedPublisher);
         
-        // Convert API assets to our internal format
-        const convertedAssets = publisherData.assets.map(convertApiAssetSummaryToAsset);
-        setAssets(convertedAssets);
+        // Note: New API doesn't return assets in publisher details
+        // We would need to make a separate call to get assets by publisher
+        setAssets([]);
       } catch (err) {
         console.error('Error fetching publisher data:', err);
         setError(err instanceof Error ? err.message : t('ui.publisherNotFound'));
@@ -215,7 +217,7 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
                         </a>
                       </div>
                     )}
-                    {publisher.social_links.twitter && (
+                    {publisher.social_links?.twitter && (
                       <div className="flex items-center gap-2">
                         <Twitter className="w-4 h-4" />
                         <a 
@@ -228,7 +230,7 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
                         </a>
                       </div>
                     )}
-                    {publisher.social_links.github && (
+                    {publisher.social_links?.github && (
                       <div className="flex items-center gap-2">
                         <Github className="w-4 h-4" />
                         <a 
@@ -243,22 +245,22 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
                     )}
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4" />
-                      <span>{t('ui.joinedOn')} {new Date(publisher.stats.joined_at).toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US')}</span>
+                      <span>{t('ui.joinedOn')} {publisher.stats?.joined_at ? new Date(publisher.stats.joined_at).toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US') : 'N/A'}</span>
                     </div>
                   </div>
 
                   {/* Publisher Stats */}
                   <div className="flex flex-wrap gap-6 text-sm">
                     <div className="text-center">
-                      <div className="font-bold text-lg">{publisher.stats.resources_count}</div>
+                      <div className="font-bold text-lg">{publisher.stats?.resources_count || 0}</div>
                       <div className="text-muted-foreground">{t('ui.resources')}</div>
                     </div>
                     <div className="text-center">
-                      <div className="font-bold text-lg">{publisher.stats.assets_count}</div>
+                      <div className="font-bold text-lg">{publisher.stats?.assets_count || 0}</div>
                       <div className="text-muted-foreground">{t('ui.assets')}</div>
                     </div>
                     <div className="text-center">
-                      <div className="font-bold text-lg">{publisher.stats.total_downloads.toLocaleString()}</div>
+                      <div className="font-bold text-lg">{publisher.stats?.total_downloads?.toLocaleString() || '0'}</div>
                       <div className="text-muted-foreground">{t('ui.totalDownloads')}</div>
                     </div>
                   </div>
