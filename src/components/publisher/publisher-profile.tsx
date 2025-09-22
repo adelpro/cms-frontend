@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { getPublisherDetails, convertApiAssetSummaryToAsset, type ApiPublisherDetails } from '@/lib/api/assets';
 import { tokenStorage } from '@/lib/auth';
 import { useTranslations } from 'next-intl';
+import { env } from '@/lib/env';
 
 interface ConvertedAsset {
   id: string;
@@ -168,7 +169,7 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-shrink-0">
                   <Avatar className="w-24 h-24">
-                    <AvatarImage src={publisher.thumbnail_url} alt={publisher.name} />
+                    <AvatarImage src={`${env.NEXT_PUBLIC_BACKEND_URL}${publisher.thumbnail_url}`} alt={publisher.name} />
                     <AvatarFallback className="text-2xl bg-primary/10">
                       <Building2 className="w-12 h-12" />
                     </AvatarFallback>
