@@ -3,10 +3,11 @@
 import { 
   loginUser as apiLoginUser, 
   registerUser as apiRegisterUser,
-  convertApiUserToUser,
+  convertUserProfileToUser,
   getUserProfile,
   updateUserProfile,
-  type ApiAuthResponse 
+  type TokenResponseSchema,
+  type UserProfileSchema
 } from '@/lib/api/auth';
 
 /**
@@ -99,19 +100,23 @@ export const userStorage = {
  */
 export const loginUser = async (email: string, password: string): Promise<AuthResponse> => {
   try {
-    const apiResponse: ApiAuthResponse = await apiLoginUser({ email, password });
+    const apiResponse: TokenResponseSchema = await apiLoginUser({ email, password });
+    
+    // Get user profile to get complete user data
+    const userProfile: UserProfileSchema = await getUserProfile(apiResponse.access);
     
     // Convert API user to internal user format
-    const user = convertApiUserToUser(apiResponse.user);
+    const user = convertUserProfileToUser(userProfile);
     
     // Store tokens and user data
-    tokenStorage.setToken(apiResponse.access_token);
+    tokenStorage.setToken(apiResponse.access);
     userStorage.setUser(user);
     
     return {
       success: true,
-      token: apiResponse.access_token,
-      user
+      token: apiResponse.access,
+      user,
+      requiresProfileCompletion: !user.profileCompleted
     };
   } catch (error) {
     console.error('Login API error:', error);
@@ -151,27 +156,29 @@ export const signupUser = async (formData: {
   phoneNumber: string;
 }): Promise<AuthResponse> => {
   try {
-    const apiResponse: ApiAuthResponse = await apiRegisterUser({
+    const apiResponse: TokenResponseSchema = await apiRegisterUser({
       email: formData.email,
       password: formData.password,
-      first_name: formData.firstName,
-      last_name: formData.lastName,
-      title: formData.title,
-      phone_number: formData.phoneNumber
+      name: `${formData.firstName} ${formData.lastName}`,
+      phone: formData.phoneNumber,
+      job_title: formData.title
     });
     
+    // Get user profile to get complete user data
+    const userProfile: UserProfileSchema = await getUserProfile(apiResponse.access);
+    
     // Convert API user to internal user format
-    const user = convertApiUserToUser(apiResponse.user);
+    const user = convertUserProfileToUser(userProfile);
     
     // Store tokens and user data
-    tokenStorage.setToken(apiResponse.access_token);
+    tokenStorage.setToken(apiResponse.access);
     userStorage.setUser(user);
     
     return {
       success: true,
-      token: apiResponse.access_token,
+      token: apiResponse.access,
       user,
-      requiresProfileCompletion: !apiResponse.user.profile_completed
+      requiresProfileCompletion: !user.profileCompleted
     };
   } catch (error) {
     console.error('Signup API error:', error);
@@ -212,10 +219,9 @@ export const logoutUser = (): void => {
  * Complete user profile (for email signups)
  */
 export const completeUserProfile = async (profileData: {
-  projectDescription: string;
-  projectLink?: string;
-  teamSize: string;
-  aboutYourself: string;
+  project_summary: string;
+  project_url?: string;
+  bio: string;
 }): Promise<AuthResponse> => {
   try {
     // Get current user and token
@@ -232,16 +238,16 @@ export const completeUserProfile = async (profileData: {
     // Update user profile via API
     const updateData = {
       name: `${currentUser.firstName} ${currentUser.lastName}`,
-      bio: profileData.aboutYourself,
-      organization: profileData.teamSize,
-      website: profileData.projectLink || undefined,
+      bio: profileData.bio,
+      project_summary: profileData.project_summary,
+      project_url: profileData.project_url || ''
     };
 
     await updateUserProfile(currentToken, updateData);
     
     // Get updated user profile from API
-    const updatedApiUser = await getUserProfile(currentToken);
-    const updatedUser = convertApiUserToUser(updatedApiUser);
+    const updatedUserProfile = await getUserProfile(currentToken);
+    const updatedUser = convertUserProfileToUser(updatedUserProfile);
     
     // Store updated user data
     userStorage.setUser(updatedUser);

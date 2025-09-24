@@ -31,10 +31,9 @@ export function ProfileCompletionForm({ locale }: ProfileCompletionFormProps) {
     handleSubmit
   } = useForm({
     initialData: {
-      projectDescription: '',
-      projectLink: '',
-      teamSize: '',
-      aboutYourself: ''
+      project_summary: '',
+      project_url: '',
+      bio: ''
     },
     validate: validateProfileCompletionForm,
     onSubmit: async (data) => {
@@ -85,43 +84,43 @@ export function ProfileCompletionForm({ locale }: ProfileCompletionFormProps) {
 
         {/* Project Information Section */}
         <div className="space-y-6">
-          {/* Project Description */}
+          {/* Project Summary */}
           <FormField
-            id="projectDescription"
-            name="projectDescription"
+            id="project_summary"
+            name="project_summary"
             variant="textarea"
             label={t('profile.projectQuestion')}
-            value={formData.projectDescription}
-            onChange={handleInputChange('projectDescription')}
-            error={errors.projectDescription}
+            value={formData.project_summary}
+            onChange={handleInputChange('project_summary')}
+            error={errors.project_summary}
             placeholder={t('profile.businessModelPlaceholder')}
             required
             rows={4}
           />
 
-          {/* Project Link */}
+          {/* Project URL */}
           <FormField
-            id="projectLink"
-            name="projectLink"
+            id="project_url"
+            name="project_url"
             type="url"
             label={t('profile.projectLinkLabel')}
-            value={formData.projectLink}
-            onChange={handleInputChange('projectLink')}
-            error={errors.projectLink}
-            placeholder={t('profile.teamSizePlaceholder')}
+            value={formData.project_url}
+            onChange={handleInputChange('project_url')}
+            error={errors.project_url}
+            placeholder={t('forms.placeholders.projectLink')}
           />
         </div>
 
         {/* Personal Information Section */}
         <div className="space-y-4">
           <FormField
-            id="aboutYourself"
-            name="aboutYourself"
+            id="bio"
+            name="bio"
             variant="textarea"
             label={t('profile.aboutYourself')}
-            value={formData.aboutYourself}
-            onChange={handleInputChange('aboutYourself')}
-            error={errors.aboutYourself}
+            value={formData.bio}
+            onChange={handleInputChange('bio')}
+            error={errors.bio}
             placeholder={t('profile.selfIntroPlaceholder')}
             required
             rows={5}

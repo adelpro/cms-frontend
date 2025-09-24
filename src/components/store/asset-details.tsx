@@ -156,7 +156,68 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
           return;
         }
         
-        setAsset(assetData);
+        // Convert new API format to expected format
+        const convertedAsset: AssetDetailsType = {
+          id: assetData.id,
+          title: assetData.name,
+          description: assetData.description,
+          long_description: assetData.long_description,
+          thumbnail_url: assetData.thumbnail_url,
+          category: assetData.category as 'mushaf' | 'tafsir' | 'recitation',
+          license: {
+            code: assetData.license.toLowerCase().replace(/\s+/g, '-'),
+            name: assetData.license,
+            short_name: assetData.license,
+            url: '',
+            icon_url: '',
+            summary: '',
+            full_text: '',
+            legal_code_url: '',
+            license_terms: [],
+            permissions: [],
+            conditions: [],
+            limitations: [],
+            usage_count: 0,
+            is_default: false,
+          },
+          snapshots: assetData.snapshots.map(snapshot => ({
+            thumbnail_url: snapshot.image_url,
+            title: snapshot.title,
+            description: snapshot.description,
+          })),
+          publisher: {
+            id: assetData.publisher.id,
+            name: assetData.publisher.name,
+            thumbnail_url: '',
+            bio: assetData.publisher.description,
+            verified: false,
+          },
+          resource: {
+            id: assetData.resource.id,
+            title: `Resource ${assetData.resource.id}`,
+            description: 'Resource description not available',
+          },
+          technical_details: {
+            file_size: 'Unknown',
+            format: 'Unknown',
+            encoding: 'Unknown',
+            version: 'Unknown',
+            language: 'Unknown',
+          },
+          stats: {
+            download_count: 0,
+            view_count: 0,
+            created_at: '',
+            updated_at: '',
+          },
+          access: {
+            has_access: false, // Should be checked separately
+            requires_approval: false,
+          },
+          related_assets: [],
+        };
+        
+        setAsset(convertedAsset);
         console.log('Asset set successfully:', assetData);
       } catch (err) {
         console.error('Error loading asset details:', err);

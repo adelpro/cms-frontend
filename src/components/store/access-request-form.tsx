@@ -78,11 +78,13 @@ export function AccessRequestForm({ assetId, assetTitle, onSuccess, onCancel }: 
         intended_use: formData.intended_use
       }, token);
 
-      // Handle success based on response status
-      if (response.status === 'approved') {
+      // Handle success based on response
+      // New API returns AccessRequestResponseOut with request and access fields
+      if (response.access && response.access.is_active) {
+        // Access granted immediately
         onSuccess();
       } else {
-        // For pending requests, still call onSuccess to close form
+        // Request submitted, pending approval
         onSuccess();
       }
     } catch (error) {
