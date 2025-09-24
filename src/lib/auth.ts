@@ -121,20 +121,13 @@ export const loginUser = async (email: string, password: string): Promise<AuthRe
   } catch (error) {
     console.error('Login API error:', error);
     
-    // Handle specific API errors
+    // Handle API errors - the error message should already be properly formatted from the API
     if (error instanceof Error) {
-      if (error.message.includes('Invalid email or password')) {
-        return {
-          success: false,
-          error: 'Invalid credentials'
-        };
-      }
-      if (error.message.includes('Email already exists')) {
-        return {
-          success: false,
-          error: 'Email already exists'
-        };
-      }
+      // Return the actual error message from the API instead of generic messages
+      return {
+        success: false,
+        error: error.message
+      };
     }
     
     return {
@@ -183,20 +176,13 @@ export const signupUser = async (formData: {
   } catch (error) {
     console.error('Signup API error:', error);
     
-    // Handle specific API errors
+    // Handle API errors - the error message should already be properly formatted from the API
     if (error instanceof Error) {
-      if (error.message.includes('Email already exists')) {
-        return {
-          success: false,
-          error: 'Email already exists'
-        };
-      }
-      if (error.message.includes('Invalid input')) {
-        return {
-          success: false,
-          error: 'Please check your input and try again'
-        };
-      }
+      // Return the actual error message from the API instead of generic messages
+      return {
+        success: false,
+        error: error.message
+      };
     }
     
     return {
@@ -260,9 +246,17 @@ export const completeUserProfile = async (profileData: {
   } catch (error) {
     console.error('Profile completion error:', error);
     
+    // Handle API errors - the error message should already be properly formatted from the API
+    if (error instanceof Error) {
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+    
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Profile completion failed'
+      error: 'Profile completion failed'
     };
   }
 };

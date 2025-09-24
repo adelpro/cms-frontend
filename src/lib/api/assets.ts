@@ -1,4 +1,5 @@
 import { env } from '@/lib/env';
+import { getDefaultError } from '@/lib/error-messages';
 
 // API base URL according to the API contract
 const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
@@ -257,8 +258,14 @@ export interface ApiLicenseDetails {
 // Utility functions
 async function handleApiResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
-    const errorData: ApiErrorResponse = await response.json();
-    throw new Error(errorData.message);
+    const errorData: ApiErrorResponse = await response.json().catch(() => ({
+      error_name: 'UNKNOWN_ERROR',
+      message: getDefaultError()
+    }));
+    
+    // Use the message field from the API response, not the error_name
+    const errorMessage = errorData.message || errorData.error_name || getDefaultError();
+    throw new Error(errorMessage);
   }
   return response.json();
 }
@@ -338,9 +345,15 @@ export async function getAssetDetails(
   console.log('Asset details response headers:', response.headers);
 
   if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Asset details error response:', errorText);
-    throw new Error(`HTTP ${response.status}: ${errorText}`);
+    try {
+      const errorData: ApiErrorResponse = await response.json();
+      const errorMessage = errorData.message || errorData.error_name || getDefaultError();
+      throw new Error(errorMessage);
+    } catch (parseError) {
+      const errorText = await response.text();
+      console.error('Asset details error response:', errorText);
+      throw new Error(getDefaultError());
+    }
   }
 
   const data = await response.json();
@@ -387,8 +400,13 @@ export async function downloadAsset(
   });
 
   if (!response.ok) {
-    const errorData: ApiErrorResponse = await response.json();
-    throw new Error(errorData.message);
+    try {
+      const errorData: ApiErrorResponse = await response.json();
+      const errorMessage = errorData.message || errorData.error_name || getDefaultError();
+      throw new Error(errorMessage);
+    } catch (parseError) {
+      throw new Error(getDefaultError());
+    }
   }
 
   return response.blob();
@@ -406,8 +424,13 @@ export async function downloadOriginalResource(
   });
 
   if (!response.ok) {
-    const errorData: ApiErrorResponse = await response.json();
-    throw new Error(errorData.message);
+    try {
+      const errorData: ApiErrorResponse = await response.json();
+      const errorMessage = errorData.message || errorData.error_name || getDefaultError();
+      throw new Error(errorMessage);
+    } catch (parseError) {
+      throw new Error(getDefaultError());
+    }
   }
 
   return response.blob();
@@ -429,9 +452,15 @@ export async function getPublisherDetails(
   console.log('Publisher details response headers:', response.headers);
 
   if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Publisher details error response:', errorText);
-    throw new Error(`HTTP ${response.status}: ${errorText}`);
+    try {
+      const errorData: ApiErrorResponse = await response.json();
+      const errorMessage = errorData.message || errorData.error_name || getDefaultError();
+      throw new Error(errorMessage);
+    } catch (parseError) {
+      const errorText = await response.text();
+      console.error('Publisher details error response:', errorText);
+      throw new Error(getDefaultError());
+    }
   }
 
   const data = await response.json();
@@ -500,8 +529,14 @@ export async function getResourceDetails(
   });
 
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`HTTP ${response.status}: ${errorText}`);
+    try {
+      const errorData: ApiErrorResponse = await response.json();
+      const errorMessage = errorData.message || errorData.error_name || getDefaultError();
+      throw new Error(errorMessage);
+    } catch (parseError) {
+      const errorText = await response.text();
+      throw new Error(getDefaultError());
+    }
   }
 
   return response.json();

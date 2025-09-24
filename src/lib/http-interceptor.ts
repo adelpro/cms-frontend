@@ -1,6 +1,7 @@
 "use client";
 
 import { logoutUser } from '@/lib/auth';
+import { getLocalizedError } from '@/lib/error-messages';
 
 /**
  * Global HTTP Interceptor for handling authentication errors
@@ -91,7 +92,7 @@ class HttpInterceptor {
     }
 
     // Throw a specific error that can be caught by calling code
-    throw new Error('Authentication failed. Please log in again.');
+    throw new Error(getLocalizedError('errors.authenticationFailed'));
   }
 
   /**

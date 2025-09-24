@@ -4,6 +4,7 @@
  */
 
 import { env } from '@/lib/env';
+import { getDefaultError } from '@/lib/error-messages';
 
 // API base URL according to the API contract
 const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
@@ -129,10 +130,12 @@ async function handleApiResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
     const errorData: ApiErrorResponse = await response.json().catch(() => ({
       error_name: 'UNKNOWN_ERROR',
-      message: 'An unknown error occurred'
+      message: getDefaultError()
     }));
     
-    throw new Error(errorData.message);
+    // Use the message field from the API response, not the error_name
+    const errorMessage = errorData.message || errorData.error_name || getDefaultError();
+    throw new Error(errorMessage);
   }
   
   return response.json();

@@ -302,6 +302,7 @@
     "errorId": "Error ID:",
     "networkError": "Network error. Please check your internet connection",
     "serverError": "Server error. Please try again later",
-    "validationError": "Please check your input and try again"
+    "validationError": "Please check your input and try again",
+    "authenticationFailed": "Authentication failed. Please log in again."
   }
 }
