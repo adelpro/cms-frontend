@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { User, Building2, Globe, ArrowLeft, MapPin, CheckCircle2, Github, Twitter, Languages, Mic, ReceiptText, ScanSearch, Eye, ListFilter, ScrollText, ChevronDown, ChevronUp } from 'lucide-react';
+import { Building2, Globe, ArrowLeft, MapPin, CheckCircle2, Github, Twitter, Languages, Mic, ReceiptText, ScanSearch, Eye, ListFilter, ScrollText, ChevronDown, ChevronUp } from 'lucide-react';
 import {
   Pagination,
   PaginationContent,
@@ -445,27 +445,8 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
                         </a>
                       </div>
                     )}
-                    <div className="flex items-center gap-2">
-                      <User className="w-4 h-4" />
-                      <span>{t('ui.joinedOn')} {publisher.stats?.joined_at ? new Date(publisher.stats.joined_at).toLocaleDateString(locale === 'ar' ? 'ar-SA' : 'en-US') : 'N/A'}</span>
-                    </div>
                   </div>
 
-                  {/* Publisher Stats */}
-                  <div className="flex flex-wrap gap-6 text-sm">
-                    <div className="text-center">
-                      <div className="font-bold text-lg">{publisher.stats?.resources_count || 0}</div>
-                      <div className="text-muted-foreground">{t('ui.resources')}</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="font-bold text-lg">{publisher.stats?.assets_count || 0}</div>
-                      <div className="text-muted-foreground">{t('ui.assets')}</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="font-bold text-lg">{publisher.stats?.total_downloads?.toLocaleString() || '0'}</div>
-                      <div className="text-muted-foreground">{t('ui.totalDownloads')}</div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </CardContent>
