@@ -15,6 +15,7 @@ export const env = {
   NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL || "https://develop.api.cms.itqan.dev"
 } as const;
 
+
 // Helper functions
 export const isDevelopment = env.NODE_ENV === 'development';
 export const isProduction = env.NODE_ENV === 'production';
