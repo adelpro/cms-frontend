@@ -393,11 +393,6 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
                     <p className="text-muted-foreground leading-relaxed mb-2">
                       {publisher.description}
                     </p>
-                    {publisher.bio && (
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {publisher.bio}
-                      </p>
-                    )}
                   </div>
                   
                   <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">

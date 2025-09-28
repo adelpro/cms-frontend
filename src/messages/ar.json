@@ -87,7 +87,6 @@
       "titleRequired": "المسمى الوظيفي مطلوب",
       "phoneRequired": "رقم الهاتف مطلوب",
       "phoneInvalid": "صيغة رقم الهاتف غير صحيحة",
-      "fieldTooShort": "هذا الحقل قصير جداً",
       "fieldTooLong": "هذا الحقل طويل جداً",
       "fieldRequired": "هذا الحقل مطلوب",
       "invalidUrl": "يرجى إدخال رابط صحيح"

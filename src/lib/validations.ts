@@ -76,12 +76,6 @@ export const validators = {
     return null;
   },
 
-  minLength: (value: string | undefined, minLength: number, t: TranslationFunction): string | null => {
-    if (!value || value.trim().length < minLength) {
-      return t('forms.validation.fieldTooShort');
-    }
-    return null;
-  },
 
   maxLength: (value: string | undefined, maxLength: number, t: TranslationFunction): string | null => {
     if (!value || value.trim().length > maxLength) {
@@ -189,15 +183,11 @@ export const validateSocialProfileForm = (
   // Project description validation
   if (!formData.projectDescription || !formData.projectDescription.trim()) {
     errors.push({ field: 'projectDescription', message: t('forms.validation.fieldRequired') });
-  } else if (formData.projectDescription.trim().length < 10) {
-    errors.push({ field: 'projectDescription', message: t('forms.validation.fieldTooShort') });
   }
 
   // Personal info validation
   if (!formData.personalInfo || !formData.personalInfo.trim()) {
     errors.push({ field: 'personalInfo', message: t('forms.validation.fieldRequired') });
-  } else if (formData.personalInfo.trim().length < 20) {
-    errors.push({ field: 'personalInfo', message: t('forms.validation.fieldTooShort') });
   }
 
   return {
@@ -223,8 +213,6 @@ export const validateProfileCompletionForm = (
   const projectSummaryError = validators.required(formData.project_summary, 'forms.validation.fieldRequired', t);
   if (projectSummaryError) {
     errors.push({ field: 'project_summary', message: projectSummaryError });
-  } else if (formData.project_summary.trim().length < 10) {
-    errors.push({ field: 'project_summary', message: t('forms.validation.fieldTooShort') });
   }
 
   // Project URL validation (optional)
@@ -240,8 +228,6 @@ export const validateProfileCompletionForm = (
   const bioError = validators.required(formData.bio, 'forms.validation.fieldRequired', t);
   if (bioError) {
     errors.push({ field: 'bio', message: bioError });
-  } else if (formData.bio.trim().length < 20) {
-    errors.push({ field: 'bio', message: t('forms.validation.fieldTooShort') });
   }
 
   return {

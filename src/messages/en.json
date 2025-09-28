@@ -87,7 +87,6 @@
       "titleRequired": "Title is required",
       "phoneRequired": "Phone number is required",
       "phoneInvalid": "Please enter a valid phone number",
-      "fieldTooShort": "This field is too short",
       "fieldTooLong": "This field is too long",
       "fieldRequired": "This field is required",
       "invalidUrl": "Please enter a valid URL"
