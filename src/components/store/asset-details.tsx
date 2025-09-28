@@ -260,7 +260,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
 
       const downloadResponse = await downloadAsset(asset.id, token);
       
-      // Use the download helper to open download URL in new tab
+      // Navigate to the download URL to trigger download
       downloadFileFromUrl(downloadResponse.download_url);
       
       setShowLicenseCarousel(false);
@@ -295,7 +295,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
 
       const downloadResponse = await downloadOriginalResource(asset.resource.id, token);
 
-      // Use the download helper to open download URL in new tab
+      // Navigate to the download URL to trigger download
       downloadFileFromUrl(downloadResponse.download_url);
     } catch (err) {
       console.error('Error downloading original resource:', err);
