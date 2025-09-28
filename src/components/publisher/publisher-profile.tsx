@@ -384,11 +384,11 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
                   <div>
                     <div className="flex items-center gap-2 mb-2">
                       <h1 className="text-2xl font-bold">{publisher.name}</h1>
-                      {publisher.verified && (
+                      {/* {publisher.verified && (
                         <div title={t('ui.verifiedPublisher')}>
                           <CheckCircle2 className="w-6 h-6 text-blue-500" />
                         </div>
-                      )}
+                      )} */}
                     </div>
                     <p className="text-muted-foreground leading-relaxed mb-2">
                       {publisher.description}
