@@ -1,6 +1,11 @@
 import { env } from '@/lib/env';
 import { getDefaultError } from '@/lib/error-messages';
 
+// Import types from the API models
+type DownloadResponseOut = {
+  download_url: string;
+};
+
 // API base URL according to the API contract
 const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -391,7 +396,7 @@ export async function getAssetAccessStatus(
 export async function downloadAsset(
   assetId: number,
   token: string
-): Promise<Blob> {
+): Promise<DownloadResponseOut> {
   const response = await fetch(`${API_BASE_URL}/assets/${assetId}/download/`, {
     method: 'GET',
     headers: {
@@ -399,23 +404,13 @@ export async function downloadAsset(
     },
   });
 
-  if (!response.ok) {
-    try {
-      const errorData: ApiErrorResponse = await response.json();
-      const errorMessage = errorData.message || errorData.error_name || getDefaultError();
-      throw new Error(errorMessage);
-    } catch {
-      throw new Error(getDefaultError());
-    }
-  }
-
-  return response.blob();
+  return handleApiResponse<DownloadResponseOut>(response);
 }
 
 export async function downloadOriginalResource(
   resourceId: number,
   token: string
-): Promise<Blob> {
+): Promise<DownloadResponseOut> {
   const response = await fetch(`${API_BASE_URL}/resources/${resourceId}/download/`, {
     method: 'GET',
     headers: {
@@ -423,17 +418,7 @@ export async function downloadOriginalResource(
     },
   });
 
-  if (!response.ok) {
-    try {
-      const errorData: ApiErrorResponse = await response.json();
-      const errorMessage = errorData.message || errorData.error_name || getDefaultError();
-      throw new Error(errorMessage);
-    } catch {
-      throw new Error(getDefaultError());
-    }
-  }
-
-  return response.blob();
+  return handleApiResponse<DownloadResponseOut>(response);
 }
 
 export async function getPublisherDetails(

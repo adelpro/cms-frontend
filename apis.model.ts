@@ -306,6 +306,12 @@ interface AssetAccessStatusOut {
   requires_approval: boolean;
 }
 
+// Download Response Schemas
+interface DownloadResponseOut {
+  /** Download URL path relative to backend URL */
+  download_url: string;
+}
+
 // Legacy AssetDetails interface for backward compatibility
 interface AssetDetails {
   /** Unique identifier for the asset */

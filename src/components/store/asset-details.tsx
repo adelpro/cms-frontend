@@ -41,6 +41,7 @@ import { direction } from "@/lib/styles/logical";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
 import { getAssetDetails, downloadAsset, downloadOriginalResource } from "@/lib/api/assets";
+import { downloadFileFromUrl } from "@/lib/utils";
 import { tokenStorage } from "@/lib/auth";
 import { useTranslations } from "next-intl";
 import { env } from "@/lib/env";
@@ -257,17 +258,10 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
         throw new Error(t('ui.unauthorized'));
       }
 
-      const blob = await downloadAsset(asset.id, token);
+      const downloadResponse = await downloadAsset(asset.id, token);
       
-      // Create download link
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${asset.title}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      // Use the download helper to open download URL in new tab
+      downloadFileFromUrl(downloadResponse.download_url);
       
       setShowLicenseCarousel(false);
     } catch (err) {
@@ -299,17 +293,10 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
         throw new Error(t('ui.unauthorized'));
       }
 
-      const blob = await downloadOriginalResource(asset.resource.id, token);
+      const downloadResponse = await downloadOriginalResource(asset.resource.id, token);
 
-      // Create download link
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${asset.resource.title}.zip`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      // Use the download helper to open download URL in new tab
+      downloadFileFromUrl(downloadResponse.download_url);
     } catch (err) {
       console.error('Error downloading original resource:', err);
       setError(err instanceof Error ? err.message : t('ui.downloadFailed'));
