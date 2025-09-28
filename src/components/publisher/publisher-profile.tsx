@@ -23,6 +23,7 @@ import { spacing } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
 import { getPublisherDetails, convertDetailPublisherToApiPublisherDetails, type ApiPublisherDetails, getAssets, convertListAssetToAsset } from '@/lib/api/assets';
 import { tokenStorage } from '@/lib/auth';
+import { env } from '../../lib/env';
 
 interface Asset {
   id: string;
@@ -372,7 +373,7 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-shrink-0">
                   <Avatar className="w-24 h-24">
-                    <AvatarImage src={publisher.thumbnail_url} alt={publisher.name} />
+                    <AvatarImage src={`${env.NEXT_PUBLIC_BACKEND_URL}${publisher.icon_url}`} alt={publisher.name} />
                     <AvatarFallback className="text-2xl bg-primary/10">
                       <Building2 className="w-12 h-12" />
                     </AvatarFallback>

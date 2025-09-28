@@ -216,7 +216,7 @@ export interface ApiPublisherDetails {
   name: string;
   description: string;
   bio?: string;
-  thumbnail_url?: string;
+  icon_url?: string;
   cover_url?: string | null;
   location?: string | null;
   website?: string | null;
@@ -606,7 +606,7 @@ export interface ApiLicense {
 export interface ApiPublisher {
   id: number;
   name: string;
-  thumbnail_url?: string;
+  icon_url?: string;
   bio?: string;
   verified?: boolean;
 }
@@ -708,7 +708,7 @@ export function convertDetailPublisherToApiPublisherDetails(detailPublisher: Det
     id: detailPublisher.id,
     name: detailPublisher.name,
     description: detailPublisher.description,
-    thumbnail_url: detailPublisher.icon_url || '',
+    icon_url: detailPublisher.icon_url || '',
     bio: detailPublisher.description,
     verified: detailPublisher.is_verified,
     location: detailPublisher.address,

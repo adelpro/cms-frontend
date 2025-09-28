@@ -66,7 +66,7 @@ export interface License {
 export interface Publisher {
   id: number;
   name: string;
-  thumbnail_url: string;
+  icon_url: string;
   bio?: string;
 }
 
