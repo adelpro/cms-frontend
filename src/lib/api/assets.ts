@@ -349,7 +349,7 @@ export async function getAssetDetails(
       const errorData: ApiErrorResponse = await response.json();
       const errorMessage = errorData.message || errorData.error_name || getDefaultError();
       throw new Error(errorMessage);
-    } catch (parseError) {
+    } catch {
       const errorText = await response.text();
       console.error('Asset details error response:', errorText);
       throw new Error(getDefaultError());
@@ -404,7 +404,7 @@ export async function downloadAsset(
       const errorData: ApiErrorResponse = await response.json();
       const errorMessage = errorData.message || errorData.error_name || getDefaultError();
       throw new Error(errorMessage);
-    } catch (parseError) {
+    } catch {
       throw new Error(getDefaultError());
     }
   }
@@ -428,7 +428,7 @@ export async function downloadOriginalResource(
       const errorData: ApiErrorResponse = await response.json();
       const errorMessage = errorData.message || errorData.error_name || getDefaultError();
       throw new Error(errorMessage);
-    } catch (parseError) {
+    } catch {
       throw new Error(getDefaultError());
     }
   }
@@ -456,7 +456,7 @@ export async function getPublisherDetails(
       const errorData: ApiErrorResponse = await response.json();
       const errorMessage = errorData.message || errorData.error_name || getDefaultError();
       throw new Error(errorMessage);
-    } catch (parseError) {
+    } catch {
       const errorText = await response.text();
       console.error('Publisher details error response:', errorText);
       throw new Error(getDefaultError());
@@ -533,8 +533,8 @@ export async function getResourceDetails(
       const errorData: ApiErrorResponse = await response.json();
       const errorMessage = errorData.message || errorData.error_name || getDefaultError();
       throw new Error(errorMessage);
-    } catch (parseError) {
-      const errorText = await response.text();
+    } catch {
+      await response.text(); // Consume the response body
       throw new Error(getDefaultError());
     }
   }
@@ -838,8 +838,7 @@ const mockLicenseData: Record<string, ApiLicenseDetails> = {
  * Get license details (mock implementation since new API doesn't have license endpoints)
  */
 export async function getLicenseDetails(
-  licenseCode: string,
-  _token?: string
+  licenseCode: string
 ): Promise<ApiLicenseDetails> {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500));

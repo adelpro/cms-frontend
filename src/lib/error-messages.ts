@@ -18,23 +18,23 @@ export function getLocalizedErrorMessage(key: string, locale: string = 'en'): st
   
   // Navigate through nested object structure using dot notation
   const keys = key.split('.');
-  let result: any = messages;
+  let result: unknown = messages;
   
   for (const k of keys) {
     if (result && typeof result === 'object' && k in result) {
-      result = result[k];
+      result = (result as Record<string, unknown>)[k];
     } else {
       // Fallback to English if key not found
       const enKeys = key.split('.');
-      let enResult: any = enMessages;
+      let enResult: unknown = enMessages;
       for (const enK of enKeys) {
         if (enResult && typeof enResult === 'object' && enK in enResult) {
-          enResult = enResult[enK];
+          enResult = (enResult as Record<string, unknown>)[enK];
         } else {
           return key; // Return the key itself if not found anywhere
         }
       }
-      return enResult;
+      return typeof enResult === 'string' ? enResult : key;
     }
   }
   
