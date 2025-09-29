@@ -20,7 +20,7 @@ import {
 import type { Locale } from '@/i18n';
 import { spacing } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
-import { getAssets, convertApiAssetToAsset } from '@/lib/api/assets';
+import { getAssets, convertListAssetToAsset } from '@/lib/api/assets';
 import { tokenStorage } from '@/lib/auth';
 
 interface Asset {
@@ -46,15 +46,27 @@ export function AssetStore({ locale }: AssetStoreProps) {
   // const { user } = useAuth(); // TODO: Implement user-specific features
   const t = useTranslations();
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedLicenses, setSelectedLicenses] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [assets, setAssets] = useState<Asset[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [isCategoryFilterOpen, setIsCategoryFilterOpen] = useState(false);
   const [isLicenseFilterOpen, setIsLicenseFilterOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const itemsPerPage = 10;
+
+  // Debounce search query to avoid too many API calls
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+      setCurrentPage(1); // Reset to first page when search changes
+    }, 500); // 500ms delay
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   // Load assets from API
   useEffect(() => {
@@ -64,7 +76,15 @@ export function AssetStore({ locale }: AssetStoreProps) {
         setError(null);
         
         const token = tokenStorage.getToken();
-        const filters: { category?: string; license_code?: string } = {};
+        const filters: { category?: string[]; license_code?: string[]; search?: string; page?: number; page_size?: number } = {
+          page: currentPage,
+          page_size: itemsPerPage
+        };
+        
+        // Apply search filter if provided
+        if (debouncedSearchQuery.trim()) {
+          filters.search = debouncedSearchQuery.trim();
+        }
         
         // Apply category filter if selected - support multiple categories
         if (selectedCategories.length > 0) {
@@ -77,33 +97,34 @@ export function AssetStore({ locale }: AssetStoreProps) {
             .map(cat => categoryMap[cat])
             .filter(Boolean); // Remove undefined values
           if (mappedCategories.length > 0) {
-            filters.category = mappedCategories.join(',');
+            filters.category = mappedCategories;
           }
         }
         
         // Apply license filter if selected - support multiple licenses
         if (selectedLicenses.length > 0) {
           const licenseMap: { [key: string]: string } = {
-            'CC0/ Public Domain': 'cc0',
-            'CC BY': 'cc-by',
-            'CC BY-SA': 'cc-by-sa',
-            'CC BY-ND': 'cc-by-nd',
-            'CC BY-NC': 'cc-by-nc',
-            'CC BY-NC-SA': 'cc-by-nc-sa',
-            'CC BY-NC-ND': 'cc-by-nc-nd'
+            'CC0/ Public Domain': 'CC0',
+            'CC BY': 'CC-BY',
+            'CC BY-SA': 'CC-BY-SA',
+            'CC BY-ND': 'CC-BY-ND',
+            'CC BY-NC': 'CC-BY-NC',
+            'CC BY-NC-SA': 'CC-BY-NC-SA',
+            'CC BY-NC-ND': 'CC-BY-NC-ND'
           };
           const mappedLicenses = selectedLicenses
             .map(license => licenseMap[license])
             .filter(Boolean); // Remove undefined values
           if (mappedLicenses.length > 0) {
-            filters.license_code = mappedLicenses.join(',');
+            filters.license_code = mappedLicenses;
           }
         }
         
         console.log('Sending filters to API:', filters);
         const response = await getAssets(token || undefined, filters);
-        const apiAssets = response.assets.map(convertApiAssetToAsset);
+        const apiAssets = response.results.map(convertListAssetToAsset);
         setAssets(apiAssets);
+        setTotalCount(response.count);
       } catch (err) {
         console.error('Failed to load assets:', err);
         setError(err instanceof Error ? err.message : t('ui.loadingAssetsError'));
@@ -114,7 +135,7 @@ export function AssetStore({ locale }: AssetStoreProps) {
     };
 
     loadAssets();
-  }, [selectedCategories, selectedLicenses, t]);
+  }, [selectedCategories, selectedLicenses, debouncedSearchQuery, currentPage, t]);
 
   const categories = [
     { key: 'translation', label: t('categories.translation') },
@@ -123,26 +144,19 @@ export function AssetStore({ locale }: AssetStoreProps) {
   ];
 
   const licenses = [
-    { id: 'cc0', name: 'CC0/ Public Domain', label: t('licenses.cc0'), color: 'green' },
-    { id: 'cc-by', name: 'CC BY', label: t('licenses.ccBy'), color: 'green' },
-    { id: 'cc-by-sa', name: 'CC BY-SA', label: t('licenses.ccBySa'), color: 'yellow' },
-    { id: 'cc-by-nd', name: 'CC BY-ND', label: t('licenses.ccByNd'), color: 'yellow' },
-    { id: 'cc-by-nc', name: 'CC BY-NC', label: t('licenses.ccByNc'), color: 'yellow' },
-    { id: 'cc-by-nc-sa', name: 'CC BY-NC-SA', label: t('licenses.ccByNcSa'), color: 'red' },
-    { id: 'cc-by-nc-nd', name: 'CC BY-NC-ND', label: t('licenses.ccByNcNd'), color: 'red' }
+    { id: 'CC0', name: 'CC0/ Public Domain', label: t('licenses.cc0'), color: 'green' },
+    { id: 'CC-BY', name: 'CC BY', label: t('licenses.ccBy'), color: 'green' },
+    { id: 'CC-BY-SA', name: 'CC BY-SA', label: t('licenses.ccBySa'), color: 'yellow' },
+    { id: 'CC-BY-ND', name: 'CC BY-ND', label: t('licenses.ccByNd'), color: 'yellow' },
+    { id: 'CC-BY-NC', name: 'CC BY-NC', label: t('licenses.ccByNc'), color: 'yellow' },
+    { id: 'CC-BY-NC-SA', name: 'CC BY-NC-SA', label: t('licenses.ccByNcSa'), color: 'red' },
+    { id: 'CC-BY-NC-ND', name: 'CC BY-NC-ND', label: t('licenses.ccByNcNd'), color: 'red' }
   ];
 
-  // Apply search filter on the client side (since search is not supported by API yet)
-  const filteredAssets = assets.filter(asset => {
-    const matchesSearch = asset.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         asset.description.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    return matchesSearch;
-  });
-
-  const totalPages = Math.ceil(filteredAssets.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedAssets = filteredAssets.slice(startIndex, startIndex + itemsPerPage);
+  // Assets are now filtered by the API, so we use them directly
+  // Pagination is also handled by the API
+  const displayAssets = assets;
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
 
   const handleCategoryChange = (category: string, checked: boolean) => {
     if (checked) {
@@ -271,9 +285,9 @@ export function AssetStore({ locale }: AssetStoreProps) {
                        variant="outline" 
                        className={cn(
                          "text-xs border-0 text-white h-6 px-2 w-fit",
-                         (license.id === 'cc-by' || license.id === 'cc0') && "bg-emerald-500",
-                         (license.id === 'cc-by-sa' || license.id === 'cc-by-nd' || license.id === 'cc-by-nc') && "bg-amber-500",
-                         (license.id === 'cc-by-nc-sa' || license.id === 'cc-by-nc-nd') && "bg-red-500"
+                         (license.id === 'CC-BY' || license.id === 'CC0') && "bg-emerald-500",
+                         (license.id === 'CC-BY-SA' || license.id === 'CC-BY-ND' || license.id === 'CC-BY-NC') && "bg-amber-500",
+                         (license.id === 'CC-BY-NC-SA' || license.id === 'CC-BY-NC-ND') && "bg-red-500"
                        )}
                      >
                        {license.id.toUpperCase()}
@@ -306,14 +320,14 @@ export function AssetStore({ locale }: AssetStoreProps) {
                 Try Again
               </Button>
             </div>
-          ) : filteredAssets.length === 0 ? (
+          ) : assets.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground">{t('ui.noResultsFound')}</p>
             </div>
           ) : (
             <>
                              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mb-8 auto-rows-fr">
-                 {paginatedAssets.map((asset) => (
+                 {displayAssets.map((asset) => (
                    <Card key={asset.id} className="shadow-[0px_4px_6px_-4px_rgba(0,0,0,0.1),0px_10px_15px_-3px_rgba(0,0,0,0.1)] hover:shadow-[0px_8px_10px_-6px_rgba(0,0,0,0.1),0px_16px_20px_-5px_rgba(0,0,0,0.1)] transition-shadow h-full">
                     <CardHeader className="flex items-center justify-between gap-2">
                       {asset.type === 'translation' && (

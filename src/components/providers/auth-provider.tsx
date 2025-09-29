@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import type { User } from '@/lib/auth';
 import { checkAuthStatus, logoutUser, tokenStorage, userStorage } from '@/lib/auth';
@@ -34,13 +34,13 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const logout = () => {
+  const logout = useCallback(() => {
     logoutUser();
     setUser(null);
     setIsAuthenticated(false);
     setRequiresProfileCompletion(false);
     router.replace(`/${locale}/store`);
-  };
+  }, [locale, router]);
 
   // Check authentication status on mount
   useEffect(() => {
@@ -64,7 +64,7 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
     httpInterceptor.setLogoutCallback(logout);
 
     checkAuth();
-  }, [locale, router]);
+  }, [locale, router, logout]);
 
   // Handle route protection (very permissive - only handle auth pages and profile completion)
   useEffect(() => {

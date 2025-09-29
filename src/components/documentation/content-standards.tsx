@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText, ArrowLeft, Hash, Square, BookOpen, Code } from 'lucide-react';
+import { ArrowLeft, Hash, Square, BookOpen } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { Locale } from '@/i18n';
 
