@@ -110,7 +110,7 @@
     "doItLater": "لاحقاً"
   },
   "store": {
-    "title": "متجر الموارد",
+    "title": "معرض الموارد",
     "searchPlaceholder": "البحث في الموارد",
     "filters": "فلاتر الموارد",
     "categories": "فئات الموارد",
@@ -203,7 +203,7 @@
     "hasAccess": "لديك وصول لهذا الأصل",
     "viewDetails": "عرض التفاصيل",
     "licenseNotFound": "الرخصة غير موجودة",
-    "backToStore": "العودة إلى المتجر",
+    "backToStore": "العودة إلى المعرض",
     "permissions": "يُسمح بـ",
     "conditions": "الشروط",
     "limitations": "القيود",
