@@ -7,6 +7,21 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
+ * Returns the current locale for API headers ('ar' | 'en').
+ * Prefers the locale encoded in the URL (/ar/... or /en/...).
+ */
+export function getCurrentLocaleForHeaders(): 'ar' | 'en' {
+  try {
+    if (typeof window !== 'undefined') {
+      const firstPath = window.location.pathname.split('/')[1]
+      if (firstPath === 'ar' || firstPath === 'en') return firstPath
+    }
+  } catch {}
+  // Fallback to default
+  return (env.NEXT_PUBLIC_DEFAULT_LOCALE as 'ar' | 'en') || 'ar'
+}
+
+/**
  * Navigates to the download URL to trigger automatic download
  * @param downloadUrl - The download URL path from the API response
  */

@@ -5,6 +5,7 @@
 
 import { env } from '@/lib/env';
 import { getDefaultError } from '@/lib/error-messages';
+import { getCurrentLocaleForHeaders } from '@/lib/utils';
 
 // API base URL according to the API contract
 const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
@@ -146,6 +147,7 @@ function getAuthHeaders(token?: string): HeadersInit {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
+    'Accept-Language': getCurrentLocaleForHeaders(),
   };
   
   if (token) {

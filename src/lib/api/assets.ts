@@ -1,5 +1,6 @@
 import { env } from '@/lib/env';
 import { getDefaultError } from '@/lib/error-messages';
+import { getCurrentLocaleForHeaders } from '@/lib/utils';
 
 // Import types from the API models
 type DownloadResponseOut = {
@@ -279,6 +280,7 @@ function getAuthHeaders(token?: string): HeadersInit {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
+    'Accept-Language': getCurrentLocaleForHeaders(),
   };
   
   if (token) {
@@ -399,9 +401,7 @@ export async function downloadAsset(
 ): Promise<DownloadResponseOut> {
   const response = await fetch(`${API_BASE_URL}/assets/${assetId}/download/`, {
     method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
+    headers: getAuthHeaders(token)
   });
 
   return handleApiResponse<DownloadResponseOut>(response);
@@ -413,9 +413,7 @@ export async function downloadOriginalResource(
 ): Promise<DownloadResponseOut> {
   const response = await fetch(`${API_BASE_URL}/resources/${resourceId}/download/`, {
     method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
+    headers: getAuthHeaders(token)
   });
 
   return handleApiResponse<DownloadResponseOut>(response);
