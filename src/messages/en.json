@@ -25,7 +25,7 @@
     "home": "Home",
     "about": "About",
     "contact": "Contact",
-    "store": "Assets Gallery",
+    "store": "Assets Library",
     "dashboard": "Dashboard",
     "contentStandards": "Content and Technical Standards",
     "publishers": "Publishers",
@@ -110,7 +110,7 @@
     "doItLater": "Later"
   },
   "store": {
-    "title": "Asset Gallery",
+    "title": "Asset Library",
     "searchPlaceholder": "Search resources",
     "filters": "Resource Filters",
     "categories": "Resource Categories",
@@ -203,7 +203,7 @@
     "hasAccess": "You have access to this asset",
     "viewDetails": "View Details",
     "licenseNotFound": "License not found",
-    "backToStore": "Back to Gallery",
+    "backToStore": "Back to Library",
     "permissions": "Permissions",
     "conditions": "Conditions",
     "limitations": "Limitations",
