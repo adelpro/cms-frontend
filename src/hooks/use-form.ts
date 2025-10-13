@@ -4,7 +4,7 @@
 
 import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
-import type { ValidationResult } from '@/lib/validations';
+import type { ValidationResult } from '@/lib/utils';
 
 interface UseFormOptions<T, R = Record<string, unknown>> {
   /** Initial form data */
@@ -82,7 +82,7 @@ export function useForm<T extends Record<string, string>, R = Record<string, unk
     const validation = validate(formData, t);
     if (!validation.isValid) {
       const fieldErrors: Record<string, string> = {};
-      validation.errors.forEach(error => {
+      validation.errors.forEach((error: { field: string; message: string }) => {
         fieldErrors[error.field] = error.message;
       });
       setErrors(fieldErrors);

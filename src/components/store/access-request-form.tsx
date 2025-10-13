@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { formLogical } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
-import { requestAssetAccess } from '@/lib/api/assets';
+import { requestAssetAccess } from '@/lib/api';
 import { tokenStorage } from '@/lib/auth';
 
 interface AccessRequestFormProps {

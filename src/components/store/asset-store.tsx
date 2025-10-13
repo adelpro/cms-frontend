@@ -20,7 +20,8 @@ import {
 import type { Locale } from '@/i18n';
 import { spacing } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
-import { getAssets, convertListAssetToAsset } from '@/lib/api/assets';
+import { getAssets } from '@/lib/api';
+import { convertListAssetToAsset } from '@/lib/utils';
 import { tokenStorage } from '@/lib/auth';
 
 interface Asset {
@@ -30,12 +31,12 @@ interface Asset {
   license: string;
   publisher: string;
   category: string;
-  licenseColor: 'green' | 'yellow' | 'red';
-  type: 'translation' | 'tafsir' | 'audio';
-  thumbnail_url?: string;
-  has_access?: boolean;
-  download_count?: number;
-  file_size?: string;
+  licenseColor?: 'green' | 'yellow' | 'red';
+  type?: 'translation' | 'tafsir' | 'audio';
+  thumbnailUrl?: string;
+  hasAccess?: boolean;
+  downloadCount?: number;
+  fileSize?: string;
 }
 
 interface AssetStoreProps {
@@ -355,7 +356,7 @@ export function AssetStore({ locale }: AssetStoreProps) {
                           </div>
                            
                            <div className="space-y-2">
-                             <div className="text-sm text-muted-foreground flex flex-col">
+                             <div className="text-sm text-muted-foreground">
                                <span className="font-medium">{t('ui.publisherLabel')}</span> {asset.publisher}
                              </div>
                            </div>

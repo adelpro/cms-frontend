@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/components/providers/auth-provider';
 import type { Locale } from '@/i18n';
-import { validateSignupForm } from '@/lib/validations';
+import { validateSignupForm } from '@/lib/utils';
 import { signupUser } from '@/lib/auth';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
@@ -56,7 +56,7 @@ export function SignupForm({ locale }: SignupFormProps) {
     const validation = validateSignupForm(formData, t);
     if (!validation.isValid) {
       const fieldErrors: Record<string, string> = {};
-      validation.errors.forEach(error => {
+      validation.errors.forEach((error: { field: string; message: string }) => {
         fieldErrors[error.field] = error.message;
       });
       setErrors(fieldErrors);

@@ -3,12 +3,16 @@
 import { 
   loginUser as apiLoginUser, 
   registerUser as apiRegisterUser,
-  convertUserProfileToUser,
   getUserProfile,
   updateUserProfile,
-  type TokenResponseSchema,
-  type UserProfileSchema
-} from '@/lib/api/auth';
+} from '@/lib/api';
+
+import { convertUserProfileToUser } from '@/lib/utils';
+
+import type {
+  TokenResponseSchema,
+  UserProfileSchema
+} from '@/lib/types/api/auth.types';
 
 /**
  * User interface for authenticated users
