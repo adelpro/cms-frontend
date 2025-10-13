@@ -40,7 +40,7 @@ import type { Locale } from "@/i18n";
 import { direction } from "@/lib/styles/logical";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
-import { getAssetDetails, downloadAsset, downloadOriginalResource } from "@/lib/api/assets";
+import { getAssetDetails, downloadAsset, downloadOriginalResource } from "@/lib/api";
 import { downloadFileFromUrl } from "@/lib/utils";
 import { tokenStorage } from "@/lib/auth";
 import { useTranslations } from "next-intl";
@@ -181,7 +181,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
             usage_count: 0,
             is_default: false,
           },
-          snapshots: assetData.snapshots.map(snapshot => ({
+          snapshots: assetData.snapshots.map((snapshot: { image_url: string; title: string; description: string }) => ({
             thumbnail_url: snapshot.image_url,
             title: snapshot.title,
             description: snapshot.description,

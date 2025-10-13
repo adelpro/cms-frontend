@@ -8,7 +8,7 @@ import { FormError } from '@/components/ui/form-error';
 import { useAuth } from '@/components/providers/auth-provider';
 import { useForm } from '@/hooks/use-form';
 import type { Locale } from '@/i18n';
-import { validateLoginForm } from '@/lib/validations';
+import { validateLoginForm } from '@/lib/utils';
 import { loginUser } from '@/lib/auth';
 import { useTranslations } from 'next-intl';
 

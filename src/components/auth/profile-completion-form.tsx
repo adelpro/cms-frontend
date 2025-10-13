@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/components/providers/auth-provider';
 import { useForm } from '@/hooks/use-form';
 import type { Locale } from '@/i18n';
-import { validateProfileCompletionForm } from '@/lib/validations';
+import { validateProfileCompletionForm } from '@/lib/utils';
 import { completeUserProfile } from '@/lib/auth';
 import { useTranslations } from 'next-intl';
 

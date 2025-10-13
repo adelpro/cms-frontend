@@ -20,7 +20,8 @@ import {
 import type { Locale } from '@/i18n';
 import { spacing } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
-import { getAssets, convertListAssetToAsset } from '@/lib/api/assets';
+import { getAssets } from '@/lib/api';
+import { convertListAssetToAsset } from '@/lib/utils';
 import { tokenStorage } from '@/lib/auth';
 
 interface Asset {

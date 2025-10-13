@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Building2, Globe, ArrowLeft, MapPin, CheckCircle2, Github, Twitter, Languages, Mic, ReceiptText, ScanSearch, Eye, ListFilter, ScrollText, ChevronDown, ChevronUp } from 'lucide-react';
+import { Building2, Globe, ArrowLeft, MapPin, Github, Twitter, Languages, Mic, ReceiptText, ScanSearch, Eye, ListFilter, ScrollText, ChevronDown, ChevronUp } from 'lucide-react';
 import {
   Pagination,
   PaginationContent,
@@ -21,9 +21,22 @@ import {
 import type { Locale } from '@/i18n';
 import { spacing } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
-import { getPublisherDetails, convertDetailPublisherToApiPublisherDetails, type ApiPublisherDetails, getAssets, convertListAssetToAsset } from '@/lib/api/assets';
+import { getPublisherDetails, getAssets } from '@/lib/api';
+import { convertListAssetToAsset } from '@/lib/utils';
 import { tokenStorage } from '@/lib/auth';
 import { env } from '../../lib/env';
+import type { DetailPublisherOut } from '@/lib/types';
+
+// Temporary type alias for compatibility
+type ApiPublisherDetails = DetailPublisherOut & {
+  stats?: {
+    resources_count: number;
+    assets_count: number;
+    total_downloads: number;
+    joined_at: string;
+  };
+  assets?: Asset[];
+};
 
 interface Asset {
   id: string;
