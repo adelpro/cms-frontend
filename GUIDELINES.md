@@ -627,7 +627,7 @@ const url = process.env.NEXT_PUBLIC_BACKEND_URL; // Wrong!
 // ✅ CRITICAL - next.config.ts structure
 const nextConfig: NextConfig = {
   experimental: {
-    optimizePackageImports: ['lucide-react'], // Package optimization
+    optimizePackageImports: ['@radix-ui/react-icons'], // Package optimization
   },
   async redirects() {
     return [

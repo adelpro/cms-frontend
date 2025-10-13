@@ -26,7 +26,6 @@ Itqan CMS is a modern, production-ready content management system built for mana
 - **Styling:** Tailwind CSS 4 with CSS logical properties
 - **UI Components:** shadcn/ui (Radix UI primitives)
 - **Internationalization:** next-intl
-- **Icons:** Lucide React
 
 ## ✨ Features
 
@@ -202,7 +201,6 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 - [shadcn/ui](https://ui.shadcn.com/) - Beautiful UI components
 - [Radix UI](https://www.radix-ui.com/) - Unstyled, accessible components
 - [next-intl](https://next-intl-docs.vercel.app/) - Internationalization for Next.js
-- [Lucide](https://lucide.dev/) - Beautiful icon library
 
 ## 📞 Support
 
