@@ -7,7 +7,7 @@
  */
 
 import { env } from '@/lib/env';
-import { getCurrentLocaleForHeaders } from '@/lib/locale-utils';
+import { getCurrentLocaleForHeaders } from '@/lib/utils';
 import { handleApiResponse } from './error-handler';
 
 /**

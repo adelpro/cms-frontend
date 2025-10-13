@@ -6,7 +6,7 @@
  */
 
 import { getDefaultError } from '@/lib/error-messages';
-import type { ApiErrorResponse } from '@/lib/types';
+import type { ApiErrorResponse } from '@/lib/types/api/common.types';
 
 /**
  * Handles API response errors consistently

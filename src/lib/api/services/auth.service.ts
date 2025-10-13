@@ -22,7 +22,7 @@ import type {
   RefreshTokenOut,
   LogoutIn,
   OAuth2AuthorizeResponseSchema,
-} from '@/lib/types';
+} from '@/lib/types/api/auth.types';
 
 // ============================================================================
 // Authentication Operations

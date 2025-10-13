@@ -12,7 +12,7 @@ import { convertUserProfileToUser } from '@/lib/utils';
 import type {
   TokenResponseSchema,
   UserProfileSchema
-} from '@/lib/types';
+} from '@/lib/types/api/auth.types';
 
 /**
  * User interface for authenticated users

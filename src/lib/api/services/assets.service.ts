@@ -27,10 +27,10 @@ import type {
   UpdateResourceIn,
   ResourceOut,
   DetailPublisherOut,
-  OkSchema,
   AssetListFilters,
   ResourceListFilters,
-} from '@/lib/types';
+} from '@/lib/types/api/assets.types';
+import type { OkSchema } from '@/lib/types/api/common.types';
 
 // ============================================================================
 // Asset Operations
@@ -61,7 +61,8 @@ export async function getAssets(
   token?: string,
   filters?: AssetListFilters
 ): Promise<PagedListAssetOut> {
-  const url = buildUrlWithParams('/assets/', filters);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const url = buildUrlWithParams('/assets/', filters as any);
   return apiGet<PagedListAssetOut>(url, token);
 }
 
@@ -201,7 +202,8 @@ export async function getResources(
   token?: string,
   filters?: ResourceListFilters
 ): Promise<PagedListResourceOut> {
-  const url = buildUrlWithParams('/resources/', filters);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const url = buildUrlWithParams('/resources/', filters as any);
   return apiGet<PagedListResourceOut>(url, token);
 }
 

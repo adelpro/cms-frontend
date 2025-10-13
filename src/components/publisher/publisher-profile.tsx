@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Building2, Globe, ArrowLeft, MapPin, Github, Twitter, Languages, Mic, ReceiptText, ScanSearch, Eye, ListFilter, ScrollText, ChevronDown, ChevronUp } from 'lucide-react';
+import { Building2, Globe, ArrowLeft, MapPin, Languages, Mic, ReceiptText, ScanSearch, Eye, ListFilter, ScrollText, ChevronDown, ChevronUp } from 'lucide-react';
 import {
   Pagination,
   PaginationContent,
@@ -25,10 +25,18 @@ import { getPublisherDetails, getAssets } from '@/lib/api';
 import { convertListAssetToAsset } from '@/lib/utils';
 import { tokenStorage } from '@/lib/auth';
 import { env } from '../../lib/env';
-import type { DetailPublisherOut } from '@/lib/types';
 
-// Temporary type alias for compatibility
-type ApiPublisherDetails = DetailPublisherOut & {
+// Publisher details type (from API)
+type ApiPublisherDetails = {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  address: string;
+  website: string;
+  is_verified: boolean;
+  contact_email: string;
+  icon_url: string | null;
   stats?: {
     resources_count: number;
     assets_count: number;
@@ -45,12 +53,12 @@ interface Asset {
   license: string;
   publisher: string;
   category: string;
-  licenseColor: 'green' | 'yellow' | 'red';
-  type: 'translation' | 'tafsir' | 'audio';
-  thumbnail_url?: string;
-  has_access?: boolean;
-  download_count?: number;
-  file_size?: string;
+  licenseColor?: 'green' | 'yellow' | 'red';
+  type?: 'translation' | 'tafsir' | 'audio';
+  thumbnailUrl?: string;
+  hasAccess?: boolean;
+  downloadCount?: number;
+  fileSize?: string;
 }
 
 interface PublisherProfileProps {
@@ -96,9 +104,8 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
         const token = tokenStorage.getToken();
         const publisherData = await getPublisherDetails(parseInt(publisherId), token || undefined);
         
-        // Convert new API format to expected format
-        const convertedPublisher = convertDetailPublisherToApiPublisherDetails(publisherData);
-        setPublisher(convertedPublisher);
+        // Use publisher data directly
+        setPublisher(publisherData as ApiPublisherDetails);
       } catch (err) {
         console.error('Error fetching publisher data:', err);
         setError(err instanceof Error ? err.message : t('ui.publisherNotFound'));
@@ -409,10 +416,10 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
                   </div>
                   
                   <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                    {publisher.location && (
+                    {publisher.address && (
                       <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4" />
-                        <span>{publisher.location}</span>
+                        <span>{publisher.address}</span>
                       </div>
                     )}
                     {publisher.website && (
@@ -428,7 +435,8 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
                         </a>
                       </div>
                     )}
-                    {publisher.social_links?.twitter && (
+                    {/* Social links not provided by current API */}
+                    {/* {publisher.social_links?.twitter && (
                       <div className="flex items-center gap-2">
                         <Twitter className="w-4 h-4" />
                         <a 
@@ -453,7 +461,7 @@ export function PublisherProfile({ publisherId, locale }: PublisherProfileProps)
                           {publisher.social_links.github}
                         </a>
                       </div>
-                    )}
+                    )} */}
                   </div>
 
                 </div>

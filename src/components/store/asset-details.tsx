@@ -190,7 +190,7 @@ export function AssetDetails({ assetId, locale }: AssetDetailsProps) {
             id: assetData.publisher.id,
             name: assetData.publisher.name,
             thumbnail_url: '',
-            bio: assetData.publisher.description,
+            bio: assetData.publisher.description || '',
             verified: false,
           },
           resource: {
