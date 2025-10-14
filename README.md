@@ -65,8 +65,8 @@ Itqan CMS is a modern, production-ready content management system built for mana
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-org/itqan-cms.git
-   cd itqan-cms
+   git clone https://github.com/Itqan-community/cms-frontend.git
+   cd cms-frontend
    ```
 
 2. **Install dependencies**
@@ -204,8 +204,7 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 ## 📞 Support
 
-- **Issues:** [GitHub Issues](https://github.com/your-org/itqan-cms/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/your-org/itqan-cms/discussions)
+- **Issues:** [GitHub Issues](https://github.com/Itqan-community/cms-frontend/issues)
 
 ---
 
@@ -213,6 +212,6 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 **Made with ❤️ by the Itqan Team**
 
-[Website](https://itqan.dev) • [Documentation](./docs) • [Report Bug](https://github.com/your-org/itqan-cms/issues)
+[Website](https://cms.itqan.dev) • [Documentation](./docs) • [Report Bug](https://github.com/Itqan-community/cms-frontend/issues)
 
 </div>

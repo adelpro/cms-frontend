@@ -43,13 +43,13 @@ Before you begin, ensure you have:
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/YOUR-USERNAME/itqan-cms.git
-   cd itqan-cms
+   git clone https://github.com/YOUR-USERNAME/cms-frontend.git
+   cd cms-frontend
    ```
 
 3. **Add upstream remote:**
    ```bash
-   git remote add upstream https://github.com/itqan/itqan-cms.git
+   git remote add upstream https://github.com/Itqan-community/cms-frontend.git
    ```
 
 4. **Install dependencies:**
@@ -420,9 +420,9 @@ export async function getAssets(
 
 ## ❓ Questions?
 
-- **General Questions:** Use [GitHub Discussions](https://github.com/itqan/itqan-cms/discussions)
-- **Bug Reports:** Open an [Issue](https://github.com/itqan/itqan-cms/issues)
-- **Feature Requests:** Start a [Discussion](https://github.com/itqan/itqan-cms/discussions)
+- **General Questions:** Use [GitHub Discussions](https://github.com/Itqan-community/cms-frontend/discussions)
+- **Bug Reports:** Open an [Issue](https://github.com/Itqan-community/cms-frontend/issues)
+- **Feature Requests:** Start a [Discussion](https://github.com/Itqan-community/cms-frontend/discussions)
 
 ## 🙏 Thank You!
 
