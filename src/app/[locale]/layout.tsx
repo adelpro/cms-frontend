@@ -1,3 +1,5 @@
+import pick from "lodash/pick";
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -22,23 +24,29 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export async function generateMetadata({ params }: RootLayoutProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: RootLayoutProps): Promise<Metadata> {
   const { locale } = await params;
-  
+
   if (!isValidLocale(locale)) {
     return {
       title: "ITQAN | Content Management System",
       description: "A modern content management system",
     };
   }
-  
+
   const validatedLocale = locale as Locale;
-  
+
   return {
-    title: validatedLocale === 'ar' ? 'إتقان | نظام إدارة المحتوى' : 'ITQAN | Content Management System',
-    description: validatedLocale === 'ar' 
-      ? 'منصة إتقان لإدارة المحتوى القرآني - حلول متقدمة تربط الناشرين بالمطورين والمستخدمين في بيئة تقنية متكاملة'
-      : 'ITQAN Quranic Content Management Platform - Advanced solutions connecting publishers with developers and users in an integrated technical environment',
+    title:
+      validatedLocale === "ar"
+        ? "إتقان | نظام إدارة المحتوى"
+        : "ITQAN | Content Management System",
+    description:
+      validatedLocale === "ar"
+        ? "منصة إتقان لإدارة المحتوى القرآني - حلول متقدمة تربط الناشرين بالمطورين والمستخدمين في بيئة تقنية متكاملة"
+        : "ITQAN Quranic Content Management Platform - Advanced solutions connecting publishers with developers and users in an integrated technical environment",
   };
 }
 
@@ -56,7 +64,7 @@ export default async function RootLayout({
   params,
 }: RootLayoutProps) {
   const { locale } = await params;
-  
+
   // Validate locale with proper type safety
   if (!isValidLocale(locale)) {
     notFound();
@@ -80,12 +88,13 @@ export default async function RootLayout({
         )}
       >
         <ThemeProvider>
-          <NextIntlProvider locale={validatedLocale} messages={messages}>
+          <NextIntlProvider
+            locale={validatedLocale}
+            messages={pick(messages, "Error")}
+          >
             <AuthProvider locale={validatedLocale}>
               <ConditionalHeader locale={validatedLocale} />
-              <main className="pt-16">
-                {children}
-              </main>
+              <main className="pt-16">{children}</main>
             </AuthProvider>
           </NextIntlProvider>
         </ThemeProvider>
