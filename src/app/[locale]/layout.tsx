@@ -1,5 +1,3 @@
-import pick from "lodash/pick";
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -88,10 +86,7 @@ export default async function RootLayout({
         )}
       >
         <ThemeProvider>
-          <NextIntlProvider
-            locale={validatedLocale}
-            messages={pick(messages, "Error")}
-          >
+          <NextIntlProvider locale={validatedLocale} messages={messages}>
             <AuthProvider locale={validatedLocale}>
               <ConditionalHeader locale={validatedLocale} />
               <main className="pt-16">{children}</main>
