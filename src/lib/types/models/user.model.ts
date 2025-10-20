@@ -1,6 +1,6 @@
 /**
  * User Domain Model
- * 
+ *
  * This file contains the internal user model used throughout the application.
  * This is separate from API types to allow for a clean separation between
  * API contracts and internal domain logic.
@@ -113,4 +113,3 @@ export interface UserRegistration extends UserCredentials {
   /** User's phone number (optional) */
   phoneNumber?: string;
 }
-

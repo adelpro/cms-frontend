@@ -1,17 +1,16 @@
 /**
  * Authentication API Service
- * 
+ *
  * This service handles all authentication-related API operations including:
  * - User registration and login
  * - Profile management
  * - Token refresh and logout
  * - OAuth2 flows (Google, GitHub)
- * 
+ *
  * All functions use the centralized API client for consistent error handling
  * and request formatting.
  */
 
-import { apiGet, apiPost, apiPut } from '../client';
 import type {
   UserProfileSchema,
   UserUpdateSchema,
@@ -24,20 +23,22 @@ import type {
   OAuth2AuthorizeResponseSchema,
 } from '@/lib/types/api/auth.types';
 
+import { apiGet, apiPost, apiPut } from '../client';
+
 // ============================================================================
 // Authentication Operations
 // ============================================================================
 
 /**
  * Registers a new user account
- * 
+ *
  * Creates a new user account with email and password authentication.
  * Returns access and refresh tokens upon successful registration.
- * 
+ *
  * @param data - User registration data (email, password, optional profile info)
  * @returns Promise resolving to tokens and user data
  * @throws Error if registration fails (e.g., email already exists)
- * 
+ *
  * @example
  * ```typescript
  * const response = await registerUser({
@@ -55,13 +56,13 @@ export async function registerUser(data: RegisterSchema): Promise<TokenResponseS
 
 /**
  * Authenticates a user with email and password
- * 
+ *
  * Logs in an existing user and returns access and refresh tokens.
- * 
+ *
  * @param data - Login credentials (email and password)
  * @returns Promise resolving to tokens and user data
  * @throws Error if credentials are invalid or user doesn't exist
- * 
+ *
  * @example
  * ```typescript
  * const response = await loginUser({
@@ -78,14 +79,14 @@ export async function loginUser(data: LoginSchema): Promise<TokenResponseSchema>
 
 /**
  * Logs out the current user
- * 
+ *
  * Invalidates the refresh token on the server. This is a best-effort operation;
  * local tokens are cleared regardless of API success.
- * 
+ *
  * @param token - Access token for authentication
  * @param refreshToken - Refresh token to invalidate (optional)
  * @returns Promise that resolves when logout completes
- * 
+ *
  * @example
  * ```typescript
  * await logoutUser(accessToken, refreshToken);
@@ -99,7 +100,7 @@ export async function logoutUser(token: string, refreshToken?: string): Promise<
   if (refreshToken) {
     body.refresh = refreshToken;
   }
-  
+
   try {
     await apiPost<void>('/auth/logout/', body, token);
   } catch (error) {
@@ -111,14 +112,14 @@ export async function logoutUser(token: string, refreshToken?: string): Promise<
 
 /**
  * Refreshes the access token
- * 
+ *
  * Exchanges a refresh token for a new access token. Optionally returns
  * a new refresh token as well (token rotation).
- * 
+ *
  * @param refreshToken - Valid refresh token
  * @returns Promise resolving to new access token and optionally new refresh token
  * @throws Error if refresh token is invalid or expired
- * 
+ *
  * @example
  * ```typescript
  * try {
@@ -144,13 +145,13 @@ export async function refreshToken(refreshToken: string): Promise<RefreshTokenOu
 
 /**
  * Retrieves the current user's profile
- * 
+ *
  * Fetches complete profile information for the authenticated user.
- * 
+ *
  * @param token - Access token for authentication
  * @returns Promise resolving to user profile data
  * @throws Error if token is invalid or user not found
- * 
+ *
  * @example
  * ```typescript
  * const profile = await getUserProfile(accessToken);
@@ -163,15 +164,15 @@ export async function getUserProfile(token: string): Promise<UserProfileSchema> 
 
 /**
  * Updates the current user's profile
- * 
+ *
  * Updates one or more profile fields. Only provided fields are updated;
  * omitted fields remain unchanged.
- * 
+ *
  * @param token - Access token for authentication
  * @param data - Profile fields to update
  * @returns Promise resolving to updated user profile
  * @throws Error if validation fails or token is invalid
- * 
+ *
  * @example
  * ```typescript
  * const updated = await updateUserProfile(token, {
@@ -194,13 +195,13 @@ export async function updateUserProfile(
 
 /**
  * Initiates Google OAuth2 authentication flow
- * 
+ *
  * Returns the authorization URL to redirect the user to for Google login.
  * The state parameter should be stored for CSRF protection.
- * 
+ *
  * @returns Promise resolving to authorization URL and state
  * @throws Error if OAuth provider configuration is invalid
- * 
+ *
  * @example
  * ```typescript
  * const { authorization_url, state } = await startGoogleOAuth();
@@ -214,13 +215,13 @@ export async function startGoogleOAuth(): Promise<OAuth2AuthorizeResponseSchema>
 
 /**
  * Initiates GitHub OAuth2 authentication flow
- * 
+ *
  * Returns the authorization URL to redirect the user to for GitHub login.
  * The state parameter should be stored for CSRF protection.
- * 
+ *
  * @returns Promise resolving to authorization URL and state
  * @throws Error if OAuth provider configuration is invalid
- * 
+ *
  * @example
  * ```typescript
  * const { authorization_url, state } = await startGitHubOAuth();
@@ -231,4 +232,3 @@ export async function startGoogleOAuth(): Promise<OAuth2AuthorizeResponseSchema>
 export async function startGitHubOAuth(): Promise<OAuth2AuthorizeResponseSchema> {
   return apiGet<OAuth2AuthorizeResponseSchema>('/auth/oauth/github/authorize/');
 }
-

@@ -1,19 +1,18 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { type ThemeProviderProps } from "next-themes";
+import { ThemeProvider as NextThemesProvider, type ThemeProviderProps } from 'next-themes';
+import * as React from 'react';
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
-    <NextThemesProvider 
+    <NextThemesProvider
       {...props}
       // Enhanced default props for better UX
-      attribute="class"
-      defaultTheme="light"
+      attribute='class'
+      defaultTheme='light'
       enableSystem={true}
       disableTransitionOnChange={false}
-      storageKey="itqan-theme"
+      storageKey='itqan-theme'
     >
       {children}
     </NextThemesProvider>

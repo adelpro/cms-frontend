@@ -12,58 +12,58 @@ const licenseData: License[] = [
     code: 'CC0',
     name: {
       en: 'Fully Open',
-      ar: 'مفتوح بالكامل'
+      ar: 'مفتوح بالكامل',
     },
-    deedUrl: 'https://creativecommons.org/publicdomain/zero/1.0/'
+    deedUrl: 'https://creativecommons.org/publicdomain/zero/1.0/',
   },
   {
     code: 'CC-BY',
     name: {
       en: 'Attribution',
-      ar: 'إسناد'
+      ar: 'إسناد',
     },
-    deedUrl: 'https://creativecommons.org/licenses/by/4.0/'
+    deedUrl: 'https://creativecommons.org/licenses/by/4.0/',
   },
   {
     code: 'CC-BY-SA',
     name: {
       en: 'Attribution ShareAlike',
-      ar: 'إسناد ومشاركة بالمثل'
+      ar: 'إسناد ومشاركة بالمثل',
     },
-    deedUrl: 'https://creativecommons.org/licenses/by-sa/4.0/'
+    deedUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
   },
   {
     code: 'CC-BY-ND',
     name: {
       en: 'Attribution No Derivatives',
-      ar: 'إسناد وبلا اشتقاق'
+      ar: 'إسناد وبلا اشتقاق',
     },
-    deedUrl: 'https://creativecommons.org/licenses/by-nd/4.0/'
+    deedUrl: 'https://creativecommons.org/licenses/by-nd/4.0/',
   },
   {
     code: 'CC-BY-NC',
     name: {
       en: 'Attribution Non-Commercial',
-      ar: 'إسناد واستخدام غير تجاري'
+      ar: 'إسناد واستخدام غير تجاري',
     },
-    deedUrl: 'https://creativecommons.org/licenses/by-nc/4.0/'
+    deedUrl: 'https://creativecommons.org/licenses/by-nc/4.0/',
   },
   {
     code: 'CC-BY-NC-SA',
     name: {
       en: 'Attribution Non-Commercial ShareAlike',
-      ar: 'إسناد واستخدام غير تجاري ومشاركة بالمثل'
+      ar: 'إسناد واستخدام غير تجاري ومشاركة بالمثل',
     },
-    deedUrl: 'https://creativecommons.org/licenses/by-nc-sa/4.0/'
+    deedUrl: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
   },
   {
     code: 'CC-BY-NC-ND',
     name: {
       en: 'Attribution Non-Commercial No Derivatives',
-      ar: 'إسناد واستخدام غير تجاري وبلا اشتقاق'
+      ar: 'إسناد واستخدام غير تجاري وبلا اشتقاق',
     },
-    deedUrl: 'https://creativecommons.org/licenses/by-nc-nd/4.0/'
-  }
+    deedUrl: 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
+  },
 ];
 
 // Create a lookup map with both uppercase and lowercase keys for compatibility

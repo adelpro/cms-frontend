@@ -1,17 +1,12 @@
-"use client";
+'use client';
 
-import React from 'react';
-// import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-// import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
-// import { ArrowLeft, ExternalLink, Info, RefreshCw, AlertCircle } from 'lucide-react';
-import type { Locale } from '@/i18n';
-// import { cn } from '@/lib/utils';
-// import { getLicenseDetails, type ApiLicenseDetails } from '@/lib/api/assets';
-// import { tokenStorage } from '@/lib/auth';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import React from 'react';
+
+import { Button } from '@/components/ui/button';
+import type { Locale } from '@/i18n';
 import { getLicense } from '@/lib/licenses';
 
 interface LicenseDetailsProps {
@@ -21,7 +16,7 @@ interface LicenseDetailsProps {
 
 export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
   const t = useTranslations();
-  
+
   // Get license data from static data
   const license = getLicense(licenseId || 'CC0');
 
@@ -33,7 +28,7 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
   //   const fetchLicenseData = async () => {
   //     setIsLoading(true);
   //     setError('');
-      
+
   //     try {
   //       const token = tokenStorage.getToken();
   //       const licenseData = await getLicenseDetails(licenseId || 'cc-by', token || undefined);
@@ -54,7 +49,7 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
   //   const greenLicenses = ['cc0', 'cc-by-4.0'];
   //   const yellowLicenses = ['cc-by-sa-4.0', 'cc-by-nd-4.0', 'cc-by-nc-4.0'];
   //   const redLicenses = ['cc-by-nc-sa-4.0', 'cc-by-nc-nd-4.0'];
-    
+
   //   if (greenLicenses.includes(code)) return 'green';
   //   if (yellowLicenses.includes(code)) return 'yellow';
   //   if (redLicenses.includes(code)) return 'red';
@@ -91,52 +86,46 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
 
   if (!license) {
     return (
-      <div className="container mx-auto max-w-4xl px-4 py-8">
-        <div className="text-center space-y-4">
-          <h2 className="text-xl font-semibold text-foreground">
-            {t('ui.licenseNotFound')}
-          </h2>
-          <p className="text-muted-foreground">{t('ui.licenseNotFound')}</p>
+      <div className='container mx-auto max-w-4xl px-4 py-8'>
+        <div className='text-center space-y-4'>
+          <h2 className='text-xl font-semibold text-foreground'>{t('ui.licenseNotFound')}</h2>
+          <p className='text-muted-foreground'>{t('ui.licenseNotFound')}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-8">
+    <div className='container mx-auto max-w-4xl px-4 py-8'>
       {/* Breadcrumb */}
-      <div className="mb-6">
-        <Link 
+      <div className='mb-6'>
+        <Link
           href={`/${locale}/store`}
-          className="flex items-center text-muted-foreground hover:text-primary transition-colors"
+          className='flex items-center text-muted-foreground hover:text-primary transition-colors'
         >
-          <ArrowLeft className="h-4 w-4 ms-2" />
+          <ArrowLeft className='h-4 w-4 ms-2' />
           {t('ui.backToStore')}
         </Link>
       </div>
 
       {/* Main Content */}
-      <div className="text-center space-y-8">
+      <div className='text-center space-y-8'>
         {/* Big heading (license code capitalized) */}
-        <h1 className="text-4xl font-bold uppercase">
-          {license.code}
-        </h1>
-        
+        <h1 className='text-4xl font-bold uppercase'>{license.code}</h1>
+
         {/* License name based on language */}
-        <h2 className="text-2xl font-semibold text-muted-foreground">
-          {license.name[locale]}
-        </h2>
-        
+        <h2 className='text-2xl font-semibold text-muted-foreground'>{license.name[locale]}</h2>
+
         {/* Button link to deed */}
-        <div className="pt-4">
-          <Button asChild size="lg">
-            <a 
-              href={license.deedUrl} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center gap-2"
+        <div className='pt-4'>
+          <Button asChild size='lg'>
+            <a
+              href={license.deedUrl}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='flex items-center gap-2'
             >
-              <ExternalLink className="h-5 w-5" />
+              <ExternalLink className='h-5 w-5' />
               {t('ui.viewLicenseDeed')}
             </a>
           </Button>

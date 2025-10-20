@@ -1,6 +1,6 @@
 /**
  * Validation Utilities
- * 
+ *
  * This file contains utility functions for validating user input,
  * particularly for forms and data submission.
  */
@@ -11,7 +11,7 @@
 export interface ValidationError {
   /** The field name that has the error */
   field: string;
-  
+
   /** The error message to display */
   message: string;
 }
@@ -22,14 +22,14 @@ export interface ValidationError {
 export interface ValidationResult {
   /** Whether the validation passed */
   isValid: boolean;
-  
+
   /** Array of validation errors if any */
   errors: ValidationError[];
 }
 
 /**
  * Type for the translations function
- * 
+ *
  * @param key - The translation key to retrieve
  * @returns The translated string
  */
@@ -63,11 +63,11 @@ const URL_REGEX = /^https?:\/\/.+\..+/;
 
 /**
  * Validates an email address
- * 
+ *
  * @param value - Email address to validate
  * @param t - Translation function
  * @returns Error message if invalid, null if valid
- * 
+ *
  * @example
  * const error = validators.email('test@example.com', t);
  */
@@ -137,7 +137,11 @@ export const validators = {
   /**
    * Validates maximum length
    */
-  maxLength: (value: string | undefined, maxLength: number, t: TranslationFunction): string | null => {
+  maxLength: (
+    value: string | undefined,
+    maxLength: number,
+    t: TranslationFunction
+  ): string | null => {
     if (value && value.trim().length > maxLength) {
       return t('forms.validation.fieldTooLong');
     }
@@ -147,7 +151,11 @@ export const validators = {
   /**
    * Validates minimum length
    */
-  minLength: (value: string | undefined, minLength: number, t: TranslationFunction): string | null => {
+  minLength: (
+    value: string | undefined,
+    minLength: number,
+    t: TranslationFunction
+  ): string | null => {
     if (value && value.trim().length < minLength) {
       return t('forms.validation.fieldTooShort');
     }
@@ -161,11 +169,11 @@ export const validators = {
 
 /**
  * Validates login form data
- * 
+ *
  * @param formData - Form data to validate
  * @param t - Translation function
  * @returns Validation result with errors if any
- * 
+ *
  * @example
  * const result = validateLoginForm({ email, password }, t);
  * if (!result.isValid) {
@@ -196,7 +204,7 @@ export function validateLoginForm(
 
 /**
  * Validates signup form data
- * 
+ *
  * @param formData - Form data to validate
  * @param t - Translation function
  * @returns Validation result with errors if any
@@ -215,13 +223,21 @@ export function validateSignupForm(
   const errors: ValidationError[] = [];
 
   // First name validation
-  const firstNameError = validators.required(formData.firstName, 'forms.validation.firstNameRequired', t);
+  const firstNameError = validators.required(
+    formData.firstName,
+    'forms.validation.firstNameRequired',
+    t
+  );
   if (firstNameError) {
     errors.push({ field: 'firstName', message: firstNameError });
   }
 
   // Last name validation
-  const lastNameError = validators.required(formData.lastName, 'forms.validation.lastNameRequired', t);
+  const lastNameError = validators.required(
+    formData.lastName,
+    'forms.validation.lastNameRequired',
+    t
+  );
   if (lastNameError) {
     errors.push({ field: 'lastName', message: lastNameError });
   }
@@ -258,7 +274,7 @@ export function validateSignupForm(
 
 /**
  * Validates profile completion form data
- * 
+ *
  * @param formData - Form data to validate
  * @param t - Translation function
  * @returns Validation result with errors if any
@@ -305,7 +321,7 @@ export function validateProfileCompletionForm(
 
 /**
  * Validates social profile form data
- * 
+ *
  * @param formData - Form data to validate
  * @param t - Translation function
  * @returns Validation result with errors if any
@@ -334,4 +350,3 @@ export function validateSocialProfileForm(
     errors,
   };
 }
-

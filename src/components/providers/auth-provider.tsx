@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import type { User } from '@/lib/auth';
-import { checkAuthStatus, logoutUser, tokenStorage, userStorage } from '@/lib/auth';
-import { httpInterceptor } from '@/lib/http-interceptor';
-import type { Locale } from '@/i18n';
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
+
 import { AuthLoading } from '@/components/auth/auth-loading';
+import type { Locale } from '@/i18n';
+import { checkAuthStatus, logoutUser, tokenStorage, userStorage, type User } from '@/lib/auth';
+import { httpInterceptor } from '@/lib/http-interceptor';
 
 interface AuthContextType {
   user: User | null;
@@ -30,7 +30,7 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [requiresProfileCompletion, setRequiresProfileCompletion] = useState(false);
-  
+
   const router = useRouter();
   const pathname = usePathname();
 
@@ -39,6 +39,10 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
     setUser(null);
     setIsAuthenticated(false);
     setRequiresProfileCompletion(false);
+    // Clear the skip flag when user logs out
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('skippedProfileCompletion');
+    }
     router.replace(`/${locale}/store`);
   }, [locale, router]);
 
@@ -71,22 +75,41 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
     if (isLoading) return;
 
     const isAuthRoute = pathname.includes('/auth/');
-    
+    const isProfileCompletionRoute = pathname.includes('/complete-profile');
+
+    // Check if user has skipped profile completion in this session
+    const hasSkippedProfileCompletion =
+      sessionStorage.getItem('skippedProfileCompletion') === 'true';
+
     // If user is authenticated
     if (isAuthenticated && user) {
-      // If user needs to complete profile and is trying to access dashboard specifically
-      if (requiresProfileCompletion && pathname.includes('/dashboard')) {
-        router.replace(`/${locale}/auth/complete-profile?provider=${user.provider}&firstName=${user.firstName}&lastName=${user.lastName}&email=${user.email}`);
+      // Only show profile completion if:
+      // 1. User needs to complete profile
+      // 2. They haven't skipped it in this session
+      // 3. They just logged in (not navigating between pages)
+      // 4. They're not already on the profile completion page
+      if (
+        requiresProfileCompletion &&
+        !hasSkippedProfileCompletion &&
+        !isProfileCompletionRoute &&
+        // Only redirect if they're coming from auth pages (login/signup) or home
+        (pathname.includes('/auth/login') ||
+          pathname.includes('/auth/signup') ||
+          pathname === `/${locale}`)
+      ) {
+        router.replace(
+          `/${locale}/auth/complete-profile?provider=${user.provider}&firstName=${user.firstName}&lastName=${user.lastName}&email=${user.email}`
+        );
         return;
       }
-      
+
       // If profile is completed and user is on auth pages (except complete-profile), redirect to store
-      if (!requiresProfileCompletion && isAuthRoute && !pathname.includes('/complete-profile')) {
+      if (!requiresProfileCompletion && isAuthRoute && !isProfileCompletionRoute) {
         router.replace(`/${locale}/store`);
         return;
       }
     }
-    
+
     // Don't block any routes - let users navigate freely
     // Authentication will be handled at the action level (download, etc.)
   }, [isAuthenticated, user, requiresProfileCompletion, pathname, locale, router, isLoading]);
@@ -97,10 +120,12 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
     setUser(userData);
     setIsAuthenticated(true);
     setRequiresProfileCompletion(!userData.profileCompleted);
-    
+
     // Redirect based on profile completion status
     if (!userData.profileCompleted) {
-      router.replace(`/${locale}/auth/complete-profile?provider=${userData.provider}&firstName=${userData.firstName}&lastName=${userData.lastName}&email=${userData.email}`);
+      router.replace(
+        `/${locale}/auth/complete-profile?provider=${userData.provider}&firstName=${userData.firstName}&lastName=${userData.lastName}&email=${userData.email}`
+      );
     } else {
       router.replace(`/${locale}/store`);
     }
@@ -119,7 +144,7 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
     requiresProfileCompletion,
     login,
     logout,
-    updateUser
+    updateUser,
   };
 
   // Show loading screen while checking authentication
@@ -128,11 +153,7 @@ export function AuthProvider({ children, locale }: AuthProviderProps) {
     return <AuthLoading message={loadingMessage} />;
   }
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

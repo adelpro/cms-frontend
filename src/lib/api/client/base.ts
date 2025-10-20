@@ -1,6 +1,6 @@
 /**
  * Base API Client
- * 
+ *
  * This file contains the base HTTP client configuration and utilities
  * for making API requests. It provides a centralized place for
  * authentication, headers, and common request logic.
@@ -8,6 +8,7 @@
 
 import { env } from '@/lib/env';
 import { getCurrentLocaleForHeaders } from '@/lib/utils';
+
 import { handleApiResponse } from './error-handler';
 
 /**
@@ -21,58 +22,61 @@ export const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
 export interface ApiRequestOptions extends RequestInit {
   /** Authentication token to include in headers */
   token?: string;
-  
+
   /** Additional custom headers */
   customHeaders?: HeadersInit;
-  
+
   /** Whether to include credentials */
   includeCredentials?: boolean;
 }
 
 /**
  * Constructs authorization headers for API requests
- * 
+ *
  * Creates a headers object with authentication, content-type,
  * and locale information.
- * 
+ *
  * @param token - Optional authentication token
  * @param customHeaders - Optional additional headers
  * @returns Headers object ready for fetch request
- * 
+ *
  * @example
  * ```typescript
  * const headers = getAuthHeaders(token);
  * fetch(url, { headers });
  * ```
  */
-export function getAuthHeaders(token?: string, customHeaders?: HeadersInit): Record<string, string> {
+export function getAuthHeaders(
+  token?: string,
+  customHeaders?: HeadersInit
+): Record<string, string> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    'Accept': 'application/json',
+    Accept: 'application/json',
     'Accept-Language': getCurrentLocaleForHeaders(),
   };
-  
+
   if (customHeaders) {
     Object.assign(headers, customHeaders);
   }
-  
+
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
-  
+
   return headers;
 }
 
 /**
  * Makes an authenticated API request
- * 
+ *
  * Generic HTTP client that handles authentication, headers,
  * and response parsing automatically.
- * 
+ *
  * @param endpoint - API endpoint path (relative to base URL)
  * @param options - Request options including token and method
  * @returns Promise resolving to the typed response data
- * 
+ *
  * @example
  * ```typescript
  * const user = await apiRequest<UserProfileSchema>('/auth/profile/', {
@@ -81,38 +85,35 @@ export function getAuthHeaders(token?: string, customHeaders?: HeadersInit): Rec
  * });
  * ```
  */
-export async function apiRequest<T>(
-  endpoint: string,
-  options: ApiRequestOptions = {}
-): Promise<T> {
+export async function apiRequest<T>(endpoint: string, options: ApiRequestOptions = {}): Promise<T> {
   const { token, customHeaders, includeCredentials, ...fetchOptions } = options;
-  
+
   const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
-  
+
   const headers = getAuthHeaders(token, customHeaders);
-  
+
   const requestOptions: RequestInit = {
     ...fetchOptions,
     headers,
   };
-  
+
   if (includeCredentials) {
     requestOptions.credentials = 'include';
   }
-  
+
   const response = await fetch(url, requestOptions);
-  
+
   return handleApiResponse<T>(response);
 }
 
 /**
  * Makes a GET request to the API
- * 
+ *
  * @param endpoint - API endpoint path
  * @param token - Optional authentication token
  * @param customHeaders - Optional additional headers
  * @returns Promise resolving to the typed response data
- * 
+ *
  * @example
  * ```typescript
  * const assets = await apiGet<PagedListAssetOut>('/assets/', token);
@@ -132,13 +133,13 @@ export async function apiGet<T>(
 
 /**
  * Makes a POST request to the API
- * 
+ *
  * @param endpoint - API endpoint path
  * @param data - Request body data
  * @param token - Optional authentication token
  * @param customHeaders - Optional additional headers
  * @returns Promise resolving to the typed response data
- * 
+ *
  * @example
  * ```typescript
  * const response = await apiPost<TokenResponseSchema>('/auth/login/', {
@@ -163,7 +164,7 @@ export async function apiPost<T>(
 
 /**
  * Makes a PUT request to the API
- * 
+ *
  * @param endpoint - API endpoint path
  * @param data - Request body data
  * @param token - Authentication token
@@ -186,7 +187,7 @@ export async function apiPut<T>(
 
 /**
  * Makes a PATCH request to the API
- * 
+ *
  * @param endpoint - API endpoint path
  * @param data - Request body data
  * @param token - Authentication token
@@ -209,7 +210,7 @@ export async function apiPatch<T>(
 
 /**
  * Makes a DELETE request to the API
- * 
+ *
  * @param endpoint - API endpoint path
  * @param token - Authentication token
  * @param customHeaders - Optional additional headers
@@ -229,14 +230,14 @@ export async function apiDelete<T>(
 
 /**
  * Builds URL with query parameters
- * 
+ *
  * Constructs a URL with query string from an object of parameters.
  * Handles arrays, null values, and proper encoding.
- * 
+ *
  * @param baseUrl - Base URL or endpoint
  * @param params - Object containing query parameters
  * @returns Complete URL with query string
- * 
+ *
  * @example
  * ```typescript
  * const url = buildUrlWithParams('/assets/', {
@@ -252,14 +253,14 @@ export function buildUrlWithParams(
   params?: Record<string, string | number | boolean | string[] | number[] | undefined | null>
 ): string {
   if (!params) return baseUrl;
-  
+
   const queryParts: string[] = [];
-  
+
   Object.entries(params).forEach(([key, value]) => {
     if (value === undefined || value === null) {
       return; // Skip undefined/null values
     }
-    
+
     if (Array.isArray(value)) {
       // Handle array parameters (e.g., category=mushaf&category=tafsir)
       value.forEach(item => {
@@ -270,12 +271,11 @@ export function buildUrlWithParams(
       queryParts.push(`${key}=${encodeURIComponent(String(value))}`);
     }
   });
-  
+
   if (queryParts.length === 0) {
     return baseUrl;
   }
-  
+
   const separator = baseUrl.includes('?') ? '&' : '?';
   return `${baseUrl}${separator}${queryParts.join('&')}`;
 }
-

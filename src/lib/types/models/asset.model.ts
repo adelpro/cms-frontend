@@ -1,6 +1,6 @@
 /**
  * Asset Domain Model
- * 
+ *
  * This file contains the internal asset models used throughout the application.
  * These models are separate from API types to allow for a clean separation
  * between API contracts and internal domain logic.
@@ -201,4 +201,3 @@ export interface AssetAccessRequest {
   /** Intended use type */
   intendedUse: 'commercial' | 'non-commercial';
 }
-

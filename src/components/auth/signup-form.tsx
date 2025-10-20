@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+
+import { useAuth } from '@/components/providers/auth-provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/components/providers/auth-provider';
 import type { Locale } from '@/i18n';
-import { validateSignupForm } from '@/lib/utils';
 import { signupUser } from '@/lib/auth';
-import { cn } from '@/lib/utils';
-import { useTranslations } from 'next-intl';
+import { validateSignupForm, cn } from '@/lib/utils';
 
 interface SignupFormProps {
   locale: Locale;
@@ -25,33 +25,34 @@ export function SignupForm({ locale }: SignupFormProps) {
     email: '',
     password: '',
     title: '',
-    phoneNumber: ''
+    phoneNumber: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string>('');
-  
+
   const { login } = useAuth();
 
-  const handleInputChange = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: e.target.value
-    }));
-    
-    // Clear field error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({
+  const handleInputChange =
+    (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData(prev => ({
         ...prev,
-        [field]: ''
+        [field]: e.target.value,
       }));
-    }
-  };
+
+      // Clear field error when user starts typing
+      if (errors[field]) {
+        setErrors(prev => ({
+          ...prev,
+          [field]: '',
+        }));
+      }
+    };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError('');
-    
+
     // Validate form
     const validation = validateSignupForm(formData, t);
     if (!validation.isValid) {
@@ -62,12 +63,12 @@ export function SignupForm({ locale }: SignupFormProps) {
       setErrors(fieldErrors);
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     try {
       const response = await signupUser(formData);
-      
+
       if (response.success && response.user && response.token) {
         login(response.user, response.token);
       } else {
@@ -81,25 +82,16 @@ export function SignupForm({ locale }: SignupFormProps) {
     }
   };
 
-
   return (
-    <div className="space-y-8">
+    <div className='space-y-8'>
       {/* Logo */}
-      <div className="text-center">
-        <Image
-          src="/logo.svg"
-          alt="Itqan"
-          width={50}
-          height={50}
-          className="mx-auto mb-3"
-        />
+      <div className='text-center'>
+        <Image src='/logo.svg' alt='Itqan' width={50} height={50} className='mx-auto mb-3' />
       </div>
 
       {/* Welcome Message */}
-      <div className="text-center space-y-3">
-        <h1 className="text-[32px] font-bold text-[#333333]">
-          {t('auth.signupTitle')}
-        </h1>
+      <div className='text-center space-y-3'>
+        <h1 className='text-[32px] font-bold text-[#333333]'>{t('auth.signupTitle')}</h1>
       </div>
 
       {/* Social Signup Buttons - Temporarily Commented Out */}
@@ -157,169 +149,171 @@ export function SignupForm({ locale }: SignupFormProps) {
       {/* Divider - Removed since social signup is commented out */}
 
       {/* Signup Form */}
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className='space-y-6'>
         {/* Show submit error */}
         {submitError && (
-          <div className="p-3 rounded-md border bg-destructive/10 border-destructive/20 text-destructive text-sm text-center">
+          <div className='p-3 rounded-md border bg-destructive/10 border-destructive/20 text-destructive text-sm text-center'>
             {submitError}
           </div>
         )}
 
         {/* Name Fields */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label htmlFor="firstName" className="block text-sm font-medium text-[#333333] text-start">
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+          <div className='space-y-2'>
+            <Label
+              htmlFor='firstName'
+              className='block text-sm font-medium text-[#333333] text-start'
+            >
               {t('auth.firstName')}
             </Label>
             <Input
-              id="firstName"
-              type="text"
+              id='firstName'
+              type='text'
               value={formData.firstName}
               onChange={handleInputChange('firstName')}
               className={cn(
-                "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-                "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-                errors.firstName && "border-destructive focus:ring-destructive"
+                'w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400',
+                'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
+                errors.firstName && 'border-destructive focus:ring-destructive'
               )}
               aria-invalid={!!errors.firstName}
             />
             {errors.firstName && (
-              <p className="text-destructive text-sm text-start">{errors.firstName}</p>
+              <p className='text-destructive text-sm text-start'>{errors.firstName}</p>
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="lastName" className="block text-sm font-medium text-[#333333] text-start">
+          <div className='space-y-2'>
+            <Label
+              htmlFor='lastName'
+              className='block text-sm font-medium text-[#333333] text-start'
+            >
               {t('auth.lastName')}
             </Label>
             <Input
-              id="lastName"
-              type="text"
+              id='lastName'
+              type='text'
               value={formData.lastName}
               onChange={handleInputChange('lastName')}
               className={cn(
-                "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-                "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-                errors.lastName && "border-destructive focus:ring-destructive"
+                'w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400',
+                'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
+                errors.lastName && 'border-destructive focus:ring-destructive'
               )}
               aria-invalid={!!errors.lastName}
             />
             {errors.lastName && (
-              <p className="text-destructive text-sm text-start">{errors.lastName}</p>
+              <p className='text-destructive text-sm text-start'>{errors.lastName}</p>
             )}
           </div>
         </div>
 
         {/* Email */}
-        <div className="space-y-2">
-          <Label htmlFor="email" className="block text-sm font-medium text-[#333333] text-start">
+        <div className='space-y-2'>
+          <Label htmlFor='email' className='block text-sm font-medium text-[#333333] text-start'>
             {t('auth.email')}
           </Label>
           <Input
-            id="email"
-            type="email"
+            id='email'
+            type='email'
             placeholder={t('forms.placeholders.email')}
             value={formData.email}
             onChange={handleInputChange('email')}
             className={cn(
-              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-              errors.email && "border-destructive focus:ring-destructive"
+              'w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400',
+              'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
+              errors.email && 'border-destructive focus:ring-destructive'
             )}
             aria-invalid={!!errors.email}
           />
-          {errors.email && (
-            <p className="text-destructive text-sm text-start">{errors.email}</p>
-          )}
+          {errors.email && <p className='text-destructive text-sm text-start'>{errors.email}</p>}
         </div>
 
         {/* Password */}
-        <div className="space-y-2">
-          <Label htmlFor="password" className="block text-sm font-medium text-[#333333] text-start">
+        <div className='space-y-2'>
+          <Label htmlFor='password' className='block text-sm font-medium text-[#333333] text-start'>
             {t('auth.password')}
           </Label>
           <Input
-            id="password"
-            type="password"
+            id='password'
+            type='password'
             placeholder={t('forms.placeholders.password')}
             value={formData.password}
             onChange={handleInputChange('password')}
             className={cn(
-              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-              errors.password && "border-destructive focus:ring-destructive"
+              'w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400',
+              'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
+              errors.password && 'border-destructive focus:ring-destructive'
             )}
             aria-invalid={!!errors.password}
           />
           {errors.password && (
-            <p className="text-destructive text-sm text-start">{errors.password}</p>
+            <p className='text-destructive text-sm text-start'>{errors.password}</p>
           )}
         </div>
 
         {/* Title */}
-        <div className="space-y-2">
-          <Label htmlFor="title" className="block text-sm font-medium text-[#333333] text-start">
+        <div className='space-y-2'>
+          <Label htmlFor='title' className='block text-sm font-medium text-[#333333] text-start'>
             {t('auth.title')}
           </Label>
           <Input
-            id="title"
-            type="text"
+            id='title'
+            type='text'
             placeholder={t('forms.placeholders.title')}
             value={formData.title}
             onChange={handleInputChange('title')}
             className={cn(
-              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-              errors.title && "border-destructive focus:ring-destructive"
+              'w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400',
+              'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
+              errors.title && 'border-destructive focus:ring-destructive'
             )}
             aria-invalid={!!errors.title}
           />
-          {errors.title && (
-            <p className="text-destructive text-sm text-start">{errors.title}</p>
-          )}
+          {errors.title && <p className='text-destructive text-sm text-start'>{errors.title}</p>}
         </div>
 
         {/* Phone Number */}
-        <div className="space-y-2">
-          <Label htmlFor="phoneNumber" className="block text-sm font-medium text-[#333333] text-start">
+        <div className='space-y-2'>
+          <Label
+            htmlFor='phoneNumber'
+            className='block text-sm font-medium text-[#333333] text-start'
+          >
             {t('auth.phoneNumber')}
           </Label>
           <Input
-            id="phoneNumber"
-            type="tel"
+            id='phoneNumber'
+            type='tel'
             placeholder={t('forms.placeholders.phoneNumber')}
             value={formData.phoneNumber}
             onChange={handleInputChange('phoneNumber')}
             className={cn(
-              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-              errors.phoneNumber && "border-destructive focus:ring-destructive"
+              'w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400',
+              'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
+              errors.phoneNumber && 'border-destructive focus:ring-destructive'
             )}
             aria-invalid={!!errors.phoneNumber}
           />
           {errors.phoneNumber && (
-            <p className="text-destructive text-sm text-start">{errors.phoneNumber}</p>
+            <p className='text-destructive text-sm text-start'>{errors.phoneNumber}</p>
           )}
         </div>
 
         <Button
-          type="submit"
-          className="w-full h-12 bg-[#2F504B] hover:bg-[#2F504B]/90 text-white rounded-md text-base font-medium flex items-center justify-center gap-2"
+          type='submit'
+          className='w-full h-12 bg-[#2F504B] hover:bg-[#2F504B]/90 text-white rounded-md text-base font-medium flex items-center justify-center gap-2'
           disabled={isLoading}
         >
-          <span className="text-lg">←</span>
+          <span className='text-lg'>←</span>
           {isLoading ? t('common.loading') : t('auth.signup')}
         </Button>
       </form>
 
       {/* Login Link */}
-      <div className="text-center">
-        <p className="text-sm text-[#333333]">
+      <div className='text-center'>
+        <p className='text-sm text-[#333333]'>
           {t('auth.alreadyHaveAccount')}{' '}
-          <Link
-            href={`/${locale}/auth/login`}
-            className="text-primary hover:underline font-medium"
-          >
+          <Link href={`/${locale}/auth/login`} className='text-primary hover:underline font-medium'>
             {t('auth.loginLink')}
           </Link>
         </p>

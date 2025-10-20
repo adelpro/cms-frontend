@@ -1,9 +1,9 @@
 /**
  * API Types Barrel Export
- * 
+ *
  * This file exports all API-related types for convenient importing.
  * Import from this file instead of individual type files.
- * 
+ *
  * @example
  * import type { UserProfileSchema, ListAssetOut, ApiErrorResponse } from '@/lib/types/api';
  */
@@ -63,4 +63,3 @@ export type {
   AssetListFilters,
   ResourceListFilters,
 } from './assets.types';
-

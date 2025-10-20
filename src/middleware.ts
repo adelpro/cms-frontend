@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { locales, defaultLocale } from '@/i18n';
-import type { Locale } from '@/i18n';
+import { NextResponse, type NextRequest } from 'next/server';
+
+import { locales, defaultLocale, type Locale } from '@/i18n';
 
 // Validate if a string is a valid locale with type safety
 function isValidLocale(locale: string): locale is Locale {
@@ -12,7 +12,7 @@ function getLocale(request: NextRequest): Locale {
   // Check if locale is in URL path
   const pathname = request.nextUrl.pathname;
   const pathSegments = pathname.split('/').filter(Boolean);
-  
+
   if (pathSegments.length > 0) {
     const potentialLocale = pathSegments[0];
     if (isValidLocale(potentialLocale)) {
@@ -41,19 +41,19 @@ export function middleware(request: NextRequest) {
 
   // Check if pathname already has a valid locale
   const pathnameHasLocale = locales.some(
-    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+    locale => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
   if (!pathnameHasLocale) {
     const locale = getLocale(request);
     const url = new URL(`/${locale}${pathname}`, request.url);
-    
+
     // Add security headers
     const response = NextResponse.redirect(url);
     response.headers.set('X-Content-Type-Options', 'nosniff');
     response.headers.set('X-Frame-Options', 'DENY');
     response.headers.set('X-XSS-Protection', '1; mode=block');
-    
+
     return response;
   }
 

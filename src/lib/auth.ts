@@ -1,18 +1,13 @@
-"use client";
+'use client';
 
-import { 
-  loginUser as apiLoginUser, 
+import {
+  loginUser as apiLoginUser,
   registerUser as apiRegisterUser,
   getUserProfile,
   updateUserProfile,
 } from '@/lib/api';
-
+import type { TokenResponseSchema, UserProfileSchema } from '@/lib/types/api/auth.types';
 import { convertUserProfileToUser } from '@/lib/utils';
-
-import type {
-  TokenResponseSchema,
-  UserProfileSchema
-} from '@/lib/types/api/auth.types';
 
 /**
  * User interface for authenticated users
@@ -74,7 +69,7 @@ export const tokenStorage = {
 
   isAuthenticated: (): boolean => {
     return !!tokenStorage.getToken();
-  }
+  },
 };
 
 /**
@@ -95,9 +90,8 @@ export const userStorage = {
   removeUser: (): void => {
     if (typeof window === 'undefined') return;
     localStorage.removeItem('user_data');
-  }
+  },
 };
-
 
 /**
  * Login user with email/password using real API
@@ -105,38 +99,38 @@ export const userStorage = {
 export const loginUser = async (email: string, password: string): Promise<AuthResponse> => {
   try {
     const apiResponse: TokenResponseSchema = await apiLoginUser({ email, password });
-    
+
     // Get user profile to get complete user data
     const userProfile: UserProfileSchema = await getUserProfile(apiResponse.access);
-    
+
     // Convert API user to internal user format
     const user = convertUserProfileToUser(userProfile);
-    
+
     // Store tokens and user data
     tokenStorage.setToken(apiResponse.access);
     userStorage.setUser(user);
-    
+
     return {
       success: true,
       token: apiResponse.access,
       user,
-      requiresProfileCompletion: !user.profileCompleted
+      requiresProfileCompletion: !user.profileCompleted,
     };
   } catch (error) {
     console.error('Login API error:', error);
-    
+
     // Handle API errors - the error message should already be properly formatted from the API
     if (error instanceof Error) {
       // Return the actual error message from the API instead of generic messages
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
-    
+
     return {
       success: false,
-      error: 'Network error. Please check your connection'
+      error: 'Network error. Please check your connection',
     };
   }
 };
@@ -158,44 +152,43 @@ export const signupUser = async (formData: {
       password: formData.password,
       name: `${formData.firstName} ${formData.lastName}`,
       phone: formData.phoneNumber,
-      job_title: formData.title
+      job_title: formData.title,
     });
-    
+
     // Get user profile to get complete user data
     const userProfile: UserProfileSchema = await getUserProfile(apiResponse.access);
-    
+
     // Convert API user to internal user format
     const user = convertUserProfileToUser(userProfile);
-    
+
     // Store tokens and user data
     tokenStorage.setToken(apiResponse.access);
     userStorage.setUser(user);
-    
+
     return {
       success: true,
       token: apiResponse.access,
       user,
-      requiresProfileCompletion: !user.profileCompleted
+      requiresProfileCompletion: !user.profileCompleted,
     };
   } catch (error) {
     console.error('Signup API error:', error);
-    
+
     // Handle API errors - the error message should already be properly formatted from the API
     if (error instanceof Error) {
       // Return the actual error message from the API instead of generic messages
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
-    
+
     return {
       success: false,
-      error: 'Network error. Please check your connection'
+      error: 'Network error. Please check your connection',
     };
   }
 };
-
 
 /**
  * Logout user
@@ -217,11 +210,11 @@ export const completeUserProfile = async (profileData: {
     // Get current user and token
     const currentUser = userStorage.getUser();
     const currentToken = tokenStorage.getToken();
-    
+
     if (!currentUser || !currentToken) {
       return {
         success: false,
-        error: 'No authenticated user found'
+        error: 'No authenticated user found',
       };
     }
 
@@ -230,37 +223,37 @@ export const completeUserProfile = async (profileData: {
       name: `${currentUser.firstName} ${currentUser.lastName}`,
       bio: profileData.bio,
       project_summary: profileData.project_summary,
-      project_url: profileData.project_url || ''
+      project_url: profileData.project_url || '',
     };
 
     await updateUserProfile(currentToken, updateData);
-    
+
     // Get updated user profile from API
     const updatedUserProfile = await getUserProfile(currentToken);
     const updatedUser = convertUserProfileToUser(updatedUserProfile);
-    
+
     // Store updated user data
     userStorage.setUser(updatedUser);
-    
+
     return {
       success: true,
       token: currentToken,
-      user: updatedUser
+      user: updatedUser,
     };
   } catch (error) {
     console.error('Profile completion error:', error);
-    
+
     // Handle API errors - the error message should already be properly formatted from the API
     if (error instanceof Error) {
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
-    
+
     return {
       success: false,
-      error: 'Profile completion failed'
+      error: 'Profile completion failed',
     };
   }
 };
@@ -275,10 +268,10 @@ export const checkAuthStatus = (): {
 } => {
   const isAuthenticated = tokenStorage.isAuthenticated();
   const user = userStorage.getUser();
-  
+
   return {
     isAuthenticated,
     user,
-    requiresProfileCompletion: isAuthenticated && user ? !user.profileCompleted : false
+    requiresProfileCompletion: isAuthenticated && user ? !user.profileCompleted : false,
   };
 };

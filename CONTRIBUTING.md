@@ -42,22 +42,26 @@ Before you begin, ensure you have:
 
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
+
    ```bash
    git clone https://github.com/YOUR-USERNAME/cms-frontend.git
    cd cms-frontend
    ```
 
 3. **Add upstream remote:**
+
    ```bash
    git remote add upstream https://github.com/Itqan-community/cms-frontend.git
    ```
 
 4. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 5. **Set up environment variables:**
+
    ```bash
    cp .env.example .env.local
    # Edit .env.local with your configuration
@@ -171,19 +175,19 @@ export function AssetStore() {}
 export default function HomePage() {}
 
 // ❌ INCORRECT
-export function assetStore() {}     // camelCase not allowed
-export function asset_store() {}    // snake_case not allowed
+export function assetStore() {} // camelCase not allowed
+export function asset_store() {} // snake_case not allowed
 ```
 
 ### Import Organization
 
 ```typescript
 // ✅ CORRECT - Organized imports
-import React from 'react';                    // External libraries
-import { useRouter } from 'next/navigation';  // Next.js imports
+import React from 'react'; // External libraries
+import { useRouter } from 'next/navigation'; // Next.js imports
 import { Button } from '@/components/ui/button'; // Internal components
-import { cn } from '@/lib/utils';             // Internal utilities
-import type { Asset } from '@/lib/types';     // Type imports last
+import { cn } from '@/lib/utils'; // Internal utilities
+import type { Asset } from '@/lib/types'; // Type imports last
 ```
 
 ### Internationalization Requirements
@@ -313,23 +317,28 @@ Ensure your PR meets these requirements:
 
 ```markdown
 ## Description
+
 Brief description of what this PR does.
 
 ## Type of Change
+
 - [ ] Bug fix (non-breaking change fixing an issue)
 - [ ] New feature (non-breaking change adding functionality)
 - [ ] Breaking change (fix or feature causing existing functionality to change)
 - [ ] Documentation update
 
 ## Changes Made
+
 - Change 1
 - Change 2
 - Change 3
 
 ## Screenshots (if applicable)
+
 Add screenshots showing the changes.
 
 ## Checklist
+
 - [ ] My code follows the project's coding standards
 - [ ] I have performed a self-review of my code
 - [ ] I have commented my code, particularly in hard-to-understand areas
@@ -393,14 +402,14 @@ When testing your changes:
 
 ### JSDoc Example
 
-```typescript
+````typescript
 /**
  * Retrieves a paginated list of assets
- * 
+ *
  * @param token - Optional access token for authenticated requests
  * @param filters - Filter and pagination options
  * @returns Promise resolving to paginated asset list
- * 
+ *
  * @example
  * ```typescript
  * const assets = await getAssets(token, {
@@ -416,7 +425,7 @@ export async function getAssets(
 ): Promise<PagedListAssetOut> {
   // Implementation
 }
-```
+````
 
 ## ❓ Questions?
 
@@ -433,4 +442,3 @@ Your contributions make this project better. We appreciate your time and effort 
 **Remember:** Quality over quantity. A small, well-crafted PR is better than a large, messy one.
 
 Happy Contributing! 🚀
-

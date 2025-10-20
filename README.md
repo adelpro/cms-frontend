@@ -30,24 +30,28 @@ Itqan CMS is a modern, production-ready content management system built for mana
 ## ✨ Features
 
 ### 🌍 Multilingual & Accessibility
+
 - **Native i18n Support:** Arabic (default) and English with seamless language switching
 - **RTL/LTR Layouts:** Automatic layout direction based on language
 - **CSS Logical Properties:** Future-proof, direction-agnostic styling
 - **WCAG Compliant:** Accessible design patterns throughout
 
 ### 📚 Asset Management
+
 - **Advanced Search & Filtering:** Category, license, and keyword-based discovery
 - **Rich Metadata:** Comprehensive asset information with preview snapshots
 - **License Management:** Clear license information and terms display
 - **Access Control:** Request-based access for restricted content
 
 ### 🔐 Authentication & Security
+
 - **Email/Password Auth:** Secure user registration and login
 - **OAuth2 Integration:** Google and GitHub authentication (ready)
 - **Profile Management:** Complete user profile with project information
 - **Token-based Auth:** JWT access and refresh token flow
 
 ### 🎨 Modern UX
+
 - **Dark/Light Modes:** System-aware theme with manual override
 - **Responsive Design:** Mobile-first, optimized for all screen sizes
 - **Loading States:** Skeleton screens and optimistic UI updates
@@ -64,42 +68,47 @@ Itqan CMS is a modern, production-ready content management system built for mana
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/Itqan-community/cms-frontend.git
    cd cms-frontend
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    # Copy the example environment file
    cp .env.example .env.local
-   
+
    # Edit .env.local with your configuration
    # Required: NEXT_PUBLIC_BACKEND_URL
    ```
 
 4. **Run the development server**
+
    ```bash
    npm run dev
    ```
 
 5. **Open your browser**
+
    ```
    http://localhost:3000
    ```
-   
+
    The app will redirect to `/ar/store` (Arabic store page) by default.
 
 ### Environment Variables
 
-| Variable | Description | Required | Default |
-|----------|-------------|----------|---------|
-| `NEXT_PUBLIC_BACKEND_URL` | Backend API URL | ✅ Yes | - |
+| Variable                  | Description     | Required | Default |
+| ------------------------- | --------------- | -------- | ------- |
+| `NEXT_PUBLIC_BACKEND_URL` | Backend API URL | ✅ Yes   | -       |
 
 See `.env.example` for a complete list of environment variables.
 
@@ -112,7 +121,6 @@ itqan-cms/
 │   │   ├── [locale]/            # Internationalized routes
 │   │   │   ├── auth/            # Authentication pages
 │   │   │   ├── store/           # Asset store pages
-│   │   │   ├── dashboard/       # User dashboard
 │   │   │   └── layout.tsx       # Root layout with i18n
 │   │   └── globals.css          # Global styles with theme
 │   │

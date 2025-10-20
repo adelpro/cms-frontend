@@ -1,5 +1,10 @@
 import createNextIntlPlugin from 'next-intl/plugin';
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
+
+// Bundle analyzer
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
 
@@ -26,7 +31,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  
+
   // Configure redirects to default to Arabic store page
   async redirects() {
     return [
@@ -47,7 +52,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  
+
   // Configure rewrites for clean URLs
   async rewrites() {
     return [
@@ -59,4 +64,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withNextIntl(nextConfig);
+export default withBundleAnalyzer(withNextIntl(nextConfig));

@@ -1,13 +1,13 @@
 /**
  * API Module Barrel Export
- * 
+ *
  * This is the main entry point for all API-related functionality.
  * It re-exports client utilities, services, and types.
- * 
+ *
  * @example
  * // Import services
  * import { loginUser, getAssets } from '@/lib/api';
- * 
+ *
  * // Import client utilities
  * import { apiGet, buildUrlWithParams } from '@/lib/api';
  */
@@ -31,9 +31,7 @@ export {
   getErrorMessage,
 } from './client';
 
-export type {
-  ApiRequestOptions,
-} from './client';
+export type { ApiRequestOptions } from './client';
 
 // Re-export all API services
 export {
@@ -46,7 +44,7 @@ export {
   updateUserProfile,
   startGoogleOAuth,
   startGitHubOAuth,
-  
+
   // Assets services
   getAssets,
   getAssetDetails,
@@ -62,4 +60,3 @@ export {
   downloadOriginalResource,
   getPublisherDetails,
 } from './services';
-

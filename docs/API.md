@@ -1,487 +1,958 @@
 # API Integration Guide
 
-This document provides a comprehensive guide to integrating with the Itqan CMS API.
+**Version**: 1.0  
+**Last Updated**: October 20, 2025  
+**Project**: Itqan CMS (Next.js 15 + TypeScript + ShadCN)
+
+---
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Authentication](#authentication)
-- [API Services](#api-services)
-- [Error Handling](#error-handling)
-- [Best Practices](#best-practices)
+1. [Overview](#overview)
+2. [Authentication](#authentication)
+3. [API Endpoints](#api-endpoints)
+4. [Request/Response Examples](#requestresponse-examples)
+5. [Error Handling](#error-handling)
+6. [Rate Limiting](#rate-limiting)
+7. [Pagination](#pagination)
+8. [TypeScript Integration](#typescript-integration)
+9. [Testing API Integration](#testing-api-integration)
+10. [Troubleshooting](#troubleshooting)
 
-## 🔍 Overview
+---
 
-The Itqan CMS uses a well-organized API layer with centralized client utilities and service-specific functions.
+## Overview
 
-### API Architecture
-
-```
-src/lib/api/
-├── client/              # HTTP client & utilities
-│   ├── base.ts         # Base fetch wrapper
-│   ├── error-handler.ts # Centralized error handling
-│   └── index.ts        # Barrel export
-│
-└── services/            # API service functions
-    ├── auth.service.ts  # Authentication operations
-    ├── assets.service.ts # Assets, resources, publishers
-    └── index.ts         # Barrel export
-```
+The Itqan CMS frontend integrates with a RESTful API backend to provide comprehensive digital asset management functionality. This guide covers all aspects of API integration, from authentication to error handling.
 
 ### Base URL Configuration
 
-The API base URL is configured via environment variables:
+```typescript
+// Environment-specific API URLs
+const API_URLS = {
+  development: 'https://develop.api.cms.itqan.dev',
+  staging: 'https://staging.api.cms.itqan.dev',
+  production: 'https://api.cms.itqan.dev',
+};
 
-```env
-NEXT_PUBLIC_BACKEND_URL=https://api.cms.itqan.dev
+// Current API base URL
+export const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 ```
 
-## 🔐 Authentication
-
-### Registration
+### API Client Architecture
 
 ```typescript
-import { registerUser } from '@/lib/api';
+// Centralized API client
+class ApiClient {
+  private baseURL: string;
+  private headers: Record<string, string>;
 
-const response = await registerUser({
-  email: 'user@example.com',
-  password: 'securePassword123',
-  name: 'John Doe',
-  job_title: 'Developer',
-  phone: '+1234567890',
-});
+  constructor(baseURL: string) {
+    this.baseURL = baseURL;
+    this.headers = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
+  }
 
-// Response structure
-{
-  access: 'eyJ...',      // JWT access token
-  refresh: 'eyJ...',     // JWT refresh token
-  user: { ... }          // User data
+  async request<T>(endpoint: string, options: RequestOptions): Promise<T> {
+    const url = `${this.baseURL}${endpoint}`;
+    const response = await fetch(url, {
+      ...options,
+      headers: { ...this.headers, ...options.headers },
+    });
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status}`);
+    }
+
+    return response.json();
+  }
 }
 ```
 
-### Login
+---
+
+## Authentication
+
+### Token-Based Authentication
+
+The API uses JWT (JSON Web Tokens) for authentication. Tokens are included in the `Authorization` header.
 
 ```typescript
-import { loginUser } from '@/lib/api';
+// Token storage utilities
+export const tokenStorage = {
+  getToken: (): string | null => {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem('auth_token');
+  },
 
-const response = await loginUser({
+  setToken: (token: string): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem('auth_token', token);
+  },
+
+  removeToken: (): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_data');
+  },
+};
+```
+
+### Authentication Headers
+
+```typescript
+// Get authentication headers
+export function getAuthHeaders(token?: string): Record<string, string> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    'Accept-Language': getCurrentLocaleForHeaders(),
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  return headers;
+}
+```
+
+### Login Flow
+
+```typescript
+// 1. User submits login form
+const loginData = {
   email: 'user@example.com',
   password: 'password123',
+};
+
+// 2. API call to login endpoint
+const response = await fetch(`${API_BASE_URL}/auth/login/`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(loginData),
 });
 
-// Store tokens
-localStorage.setItem('access_token', response.access);
-localStorage.setItem('refresh_token', response.refresh);
+// 3. Handle response
+if (response.ok) {
+  const data = await response.json();
+  // Store tokens
+  tokenStorage.setToken(data.access);
+  // Update auth context
+  login(data.user, data.access);
+} else {
+  // Handle error
+  const error = await response.json();
+  throw new Error(error.message);
+}
 ```
 
 ### Token Refresh
 
 ```typescript
-import { refreshToken } from '@/lib/api';
-
-try {
-  const response = await refreshToken(currentRefreshToken);
-  localStorage.setItem('access_token', response.access);
-  
-  // New refresh token might be provided (token rotation)
-  if (response.refresh) {
-    localStorage.setItem('refresh_token', response.refresh);
-  }
-} catch (error) {
-  // Refresh token expired, redirect to login
-  router.push('/login');
-}
-```
-
-### Logout
-
-```typescript
-import { logoutUser } from '@/lib/api';
-
-const accessToken = localStorage.getItem('access_token');
-const refreshToken = localStorage.getItem('refresh_token');
-
-await logoutUser(accessToken, refreshToken);
-
-// Clear local storage
-localStorage.removeItem('access_token');
-localStorage.removeItem('refresh_token');
-```
-
-### Profile Management
-
-```typescript
-import { getUserProfile, updateUserProfile } from '@/lib/api';
-
-// Get profile
-const profile = await getUserProfile(accessToken);
-
-// Update profile
-const updated = await updateUserProfile(accessToken, {
-  name: 'Jane Doe',
-  bio: 'Software engineer passionate about open source',
-  project_url: 'https://github.com/username/project',
-});
-```
-
-## 📚 API Services
-
-### Assets
-
-#### List Assets
-
-```typescript
-import { getAssets } from '@/lib/api';
-
-const assets = await getAssets(token, {
-  category: ['mushaf', 'tafsir'],  // Filter by categories
-  license_code: ['cc0'],            // Filter by licenses
-  search: 'quran',                  // Search query
-  page: 1,                          // Page number
-  page_size: 20,                    // Items per page
-  ordering: '-created_at',          // Sort by newest first
-});
-
-// Response structure
-{
-  results: [                        // Array of assets
-    {
-      id: 1,
-      name: 'Asset Name',
-      description: 'Description',
-      category: 'mushaf',
-      license: 'CC0 1.0',
-      publisher: {
-        id: 1,
-        name: 'Publisher Name'
-      }
+// Automatic token refresh
+export async function refreshToken(refreshToken: string): Promise<RefreshTokenOut> {
+  const response = await fetch(`${API_BASE_URL}/auth/token/refresh/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-    // ...
-  ],
-  count: 100                        // Total count
-}
-```
+    body: JSON.stringify({ refresh: refreshToken }),
+  });
 
-#### Get Asset Details
-
-```typescript
-import { getAssetDetails } from '@/lib/api';
-
-const asset = await getAssetDetails(assetId, token);
-
-// Response includes:
-// - Full asset information
-// - Publisher details
-// - Snapshots/previews
-// - License information
-```
-
-#### Check Access Status
-
-```typescript
-import { getAssetAccessStatus } from '@/lib/api';
-
-const status = await getAssetAccessStatus(assetId, token);
-
-if (status.has_access) {
-  // User can download
-} else if (status.requires_approval) {
-  // Show request access form
-}
-```
-
-#### Request Access
-
-```typescript
-import { requestAssetAccess } from '@/lib/api';
-
-const response = await requestAssetAccess(assetId, {
-  purpose: 'Research project on Quranic studies',
-  intended_use: 'non-commercial',
-}, token);
-
-if (response.access) {
-  // Access granted immediately
-  console.log('Access granted!');
-} else {
-  // Request pending approval
-  console.log('Request submitted for review');
-}
-```
-
-#### Download Asset
-
-```typescript
-import { downloadAsset, API_BASE_URL } from '@/lib/api';
-
-const { download_url } = await downloadAsset(assetId, token);
-
-// Construct full URL and trigger download
-const fullUrl = `${API_BASE_URL}${download_url}`;
-window.location.href = fullUrl;
-```
-
-### Resources
-
-#### List Resources
-
-```typescript
-import { getResources } from '@/lib/api';
-
-const resources = await getResources(token, {
-  category: ['mushaf'],
-  status: ['ready'],
-  publisher_id: [1, 2, 3],
-  search: 'tafsir',
-  page: 1,
-  page_size: 20,
-});
-```
-
-#### Create Resource
-
-```typescript
-import { createResource } from '@/lib/api';
-
-const resource = await createResource({
-  name: 'New Tafsir Collection',
-  description: 'Comprehensive tafsir texts',
-  category: 'tafsir',
-  publisher_id: 1,
-}, token);
-```
-
-#### Update Resource
-
-```typescript
-import { updateResource, partialUpdateResource } from '@/lib/api';
-
-// Full update (all fields required)
-const updated = await updateResource(resourceId, {
-  name: 'Updated Name',
-  description: 'Updated description',
-  category: 'tafsir',
-  status: 'ready',
-}, token);
-
-// Partial update (only provided fields)
-const updated = await partialUpdateResource(resourceId, {
-  status: 'ready',  // Only update status
-}, token);
-```
-
-#### Delete Resource
-
-```typescript
-import { deleteResource } from '@/lib/api';
-
-await deleteResource(resourceId, token);
-console.log('Resource deleted successfully');
-```
-
-### Publishers
-
-```typescript
-import { getPublisherDetails } from '@/lib/api';
-
-const publisher = await getPublisherDetails(publisherId, token);
-
-// Response includes:
-// - Publisher information
-// - Verification status
-// - Contact details
-// - Statistics
-```
-
-## ⚠️ Error Handling
-
-### Error Response Structure
-
-```typescript
-{
-  error_name: 'VALIDATION_ERROR',  // Error identifier
-  message: 'Email already exists',  // Human-readable message
-  extra: { ... }                    // Additional context (optional)
-}
-```
-
-### Handling Errors
-
-```typescript
-import { getErrorMessage, isAuthError, isNetworkError } from '@/lib/api';
-
-try {
-  const response = await getAssets(token);
-} catch (error) {
-  // Get user-friendly error message
-  const message = getErrorMessage(error);
-  
-  // Check error type
-  if (isAuthError(error)) {
-    // Redirect to login
-    router.push('/login');
-  } else if (isNetworkError(error)) {
-    // Show network error message
-    toast.error('Network error. Please check your connection.');
-  } else {
-    // Show generic error
-    toast.error(message);
+  if (!response.ok) {
+    throw new Error('Token refresh failed');
   }
+
+  return response.json();
 }
 ```
 
-### Common Error Codes
+---
 
-| Error Code | Description | Action |
-|------------|-------------|--------|
-| `AUTHENTICATION_ERROR` | Invalid or missing token | Redirect to login |
-| `VALIDATION_ERROR` | Invalid input data | Show validation errors |
-| `NOT_FOUND` | Resource not found | Show 404 page |
-| `PERMISSION_DENIED` | Insufficient permissions | Show error message |
-| `RATE_LIMIT_EXCEEDED` | Too many requests | Ask user to wait |
+## API Endpoints
 
-## 💡 Best Practices
+### Authentication Endpoints
 
-### 1. Use Centralized Services
+#### POST /auth/login/
+
+**Description**: Authenticate user with email and password  
+**Request Body**:
 
 ```typescript
-// ✅ CORRECT - Use service functions
-import { getAssets } from '@/lib/api';
-const assets = await getAssets(token, filters);
-
-// ❌ INCORRECT - Don't call fetch directly
-const response = await fetch(`${API_BASE_URL}/assets/`);
+interface LoginRequest {
+  email: string;
+  password: string;
+}
 ```
 
-### 2. Handle Errors Properly
+**Response**:
 
 ```typescript
-// ✅ CORRECT - Comprehensive error handling
-try {
-  const data = await apiCall();
-  return { success: true, data };
-} catch (error) {
-  console.error('API Error:', error);
-  return {
-    success: false,
-    error: getErrorMessage(error)
+interface LoginResponse {
+  access: string; // JWT access token
+  refresh: string; // JWT refresh token
+  user: UserProfile; // User profile data
+}
+```
+
+#### POST /auth/register/
+
+**Description**: Register new user account  
+**Request Body**:
+
+```typescript
+interface RegisterRequest {
+  email: string;
+  password: string;
+  name: string;
+  phone?: string;
+  job_title?: string;
+}
+```
+
+#### GET /auth/profile/
+
+**Description**: Get current user profile  
+**Headers**: `Authorization: Bearer <token>`
+
+**Response**:
+
+```typescript
+interface UserProfile {
+  id: number;
+  email: string;
+  name: string;
+  phone?: string;
+  bio?: string;
+  project_summary?: string;
+  project_url?: string;
+  job_title?: string;
+  profile_completed: boolean;
+  created_at: string;
+  updated_at: string;
+}
+```
+
+#### PUT /auth/profile/
+
+**Description**: Update user profile  
+**Headers**: `Authorization: Bearer <token>`  
+**Request Body**:
+
+```typescript
+interface UpdateProfileRequest {
+  name?: string;
+  bio?: string;
+  project_summary?: string;
+  project_url?: string;
+}
+```
+
+### Asset Endpoints
+
+#### GET /assets/
+
+**Description**: Get paginated list of assets  
+**Query Parameters**:
+
+```typescript
+interface AssetListFilters {
+  category?: string[]; // Filter by categories
+  license_code?: string[]; // Filter by license codes
+  search?: string; // Search query
+  ordering?: string; // Sort order
+  page?: number; // Page number
+  page_size?: number; // Items per page
+}
+```
+
+**Response**:
+
+```typescript
+interface AssetListResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Asset[];
+}
+
+interface Asset {
+  id: number;
+  name: string;
+  description: string;
+  category: string;
+  license: string;
+  publisher: {
+    id: number;
+    name: string;
   };
 }
 ```
 
-### 3. Use TypeScript Types
+#### GET /assets/{id}/
+
+**Description**: Get detailed asset information  
+**Headers**: `Authorization: Bearer <token>` (optional)
+
+**Response**:
 
 ```typescript
-import type { PagedListAssetOut, AssetListFilters } from '@/lib/types';
-
-async function fetchAssets(
-  filters: AssetListFilters
-): Promise<PagedListAssetOut> {
-  return getAssets(token, filters);
+interface AssetDetails {
+  id: number;
+  name: string;
+  description: string;
+  long_description: string;
+  category: string;
+  license: string;
+  thumbnail_url: string;
+  publisher: {
+    id: number;
+    name: string;
+    description: string;
+  };
+  resource: {
+    id: number;
+  };
+  snapshots: Array<{
+    image_url: string;
+    title: string;
+    description: string;
+  }>;
 }
 ```
 
-### 4. Build URLs with Parameters
+#### GET /assets/{id}/access-status/
+
+**Description**: Check user's access status for an asset  
+**Headers**: `Authorization: Bearer <token>`
+
+**Response**:
 
 ```typescript
-import { buildUrlWithParams } from '@/lib/api';
+interface AccessStatus {
+  has_access: boolean;
+  requires_approval: boolean;
+}
+```
 
-const url = buildUrlWithParams('/assets/', {
+#### POST /assets/{id}/request-access/
+
+**Description**: Request access to a restricted asset  
+**Headers**: `Authorization: Bearer <token>`  
+**Request Body**:
+
+```typescript
+interface AccessRequest {
+  purpose: string;
+  intended_use: 'commercial' | 'non-commercial';
+}
+```
+
+#### GET /assets/{id}/download/
+
+**Description**: Get download URL for an asset  
+**Headers**: `Authorization: Bearer <token>`
+
+**Response**:
+
+```typescript
+interface DownloadResponse {
+  download_url: string;
+}
+```
+
+### Publisher Endpoints
+
+#### GET /publishers/{id}/
+
+**Description**: Get publisher details  
+**Headers**: `Authorization: Bearer <token>` (optional)
+
+**Response**:
+
+```typescript
+interface PublisherDetails {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  address: string;
+  website: string;
+  is_verified: boolean;
+  contact_email: string;
+  icon_url: string | null;
+}
+```
+
+---
+
+## Request/Response Examples
+
+### Example 1: Get Assets with Filters
+
+```typescript
+// Request
+const filters = {
   category: ['mushaf', 'tafsir'],
+  license_code: ['CC0', 'CC-BY'],
+  search: 'quran',
   page: 1,
-  page_size: 20,
+  page_size: 20
+};
+
+const response = await fetch(`${API_BASE_URL}/assets/?${new URLSearchParams(filters)}`, {
+  headers: getAuthHeaders(token)
 });
-// Result: '/assets/?category=mushaf&category=tafsir&page=1&page_size=20'
-```
 
-### 5. Token Management
-
-```typescript
-// Store tokens securely
-import { tokenStorage } from '@/lib/auth';
-
-// Get token
-const token = tokenStorage.getToken();
-
-// Set token
-tokenStorage.setToken(accessToken);
-
-// Remove token
-tokenStorage.removeToken();
-
-// Check authentication
-const isAuth = tokenStorage.isAuthenticated();
-```
-
-## 🔄 Data Conversion
-
-Convert API responses to internal models using conversion utilities:
-
-```typescript
-import { convertListAssetToAsset } from '@/lib/utils';
-import type { ListAssetOut } from '@/lib/types';
-
-const apiAsset: ListAssetOut = { /* ... */ };
-const asset = convertListAssetToAsset(apiAsset);
-
-// Now asset has the internal Asset model structure
-```
-
-## 📝 Complete Example
-
-```typescript
-'use client';
-
-import { useState, useEffect } from 'react';
-import { getAssets } from '@/lib/api';
-import { convertListAssetToAsset, getErrorMessage } from '@/lib/utils';
-import { tokenStorage } from '@/lib/auth';
-import type { Asset } from '@/lib/types';
-
-export function AssetList() {
-  const [assets, setAssets] = useState<Asset[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string>('');
-
-  useEffect(() => {
-    async function fetchAssets() {
-      try {
-        const token = tokenStorage.getToken();
-        const response = await getAssets(token, {
-          category: ['mushaf'],
-          page: 1,
-          page_size: 20,
-        });
-        
-        const convertedAssets = response.results.map(convertListAssetToAsset);
-        setAssets(convertedAssets);
-      } catch (err) {
-        setError(getErrorMessage(err));
-      } finally {
-        setIsLoading(false);
+// Response
+{
+  "count": 150,
+  "next": "https://api.cms.itqan.dev/assets/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "name": "Al-Quran Al-Kareem",
+      "description": "Complete Quran text with proper formatting",
+      "category": "mushaf",
+      "license": "CC0",
+      "publisher": {
+        "id": 1,
+        "name": "Islamic Foundation"
       }
     }
-
-    fetchAssets();
-  }, []);
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
-  return (
-    <div>
-      {assets.map(asset => (
-        <div key={asset.id}>{asset.title}</div>
-      ))}
-    </div>
-  );
+  ]
 }
 ```
 
-## 🔗 Related Documentation
+### Example 2: User Login
 
-- [Type Definitions](../src/lib/types/api/README.md)
-- [Error Handling](../src/lib/api/client/error-handler.ts)
-- [Conversion Utilities](../src/lib/utils/conversion.utils.ts)
+```typescript
+// Request
+const loginData = {
+  email: 'user@example.com',
+  password: 'password123'
+};
 
+const response = await fetch(`${API_BASE_URL}/auth/login/`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(loginData)
+});
+
+// Response
+{
+  "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+  "user": {
+    "id": 1,
+    "email": "user@example.com",
+    "name": "John Doe",
+    "profile_completed": true
+  }
+}
+```
+
+### Example 3: Asset Access Request
+
+```typescript
+// Request
+const accessRequest = {
+  purpose: 'Research project on Quranic studies',
+  intended_use: 'non-commercial'
+};
+
+const response = await fetch(`${API_BASE_URL}/assets/123/request-access/`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  },
+  body: JSON.stringify(accessRequest)
+});
+
+// Response
+{
+  "request": {
+    "id": 456,
+    "asset_id": 123,
+    "purpose": "Research project on Quranic studies",
+    "intended_use": "non-commercial",
+    "status": "pending",
+    "created_at": "2025-10-20T10:30:00Z"
+  },
+  "access": null
+}
+```
+
+---
+
+## Error Handling
+
+### HTTP Status Codes
+
+| Status Code | Description           | Action                     |
+| ----------- | --------------------- | -------------------------- |
+| 200         | Success               | Process response data      |
+| 201         | Created               | Process created resource   |
+| 400         | Bad Request           | Show validation errors     |
+| 401         | Unauthorized          | Redirect to login          |
+| 403         | Forbidden             | Show access denied message |
+| 404         | Not Found             | Show not found message     |
+| 429         | Too Many Requests     | Show rate limit message    |
+| 500         | Internal Server Error | Show generic error message |
+
+### Error Response Format
+
+```typescript
+interface ApiErrorResponse {
+  message: string;
+  error_name?: string;
+  details?: Record<string, string[]>;
+  status_code: number;
+}
+```
+
+### Error Handling Implementation
+
+```typescript
+// Centralized error handler
+export async function handleApiResponse<T>(response: Response): Promise<T> {
+  if (!response.ok) {
+    await handleApiError(response);
+  }
+
+  return response.json();
+}
+
+export async function handleApiError(response: Response): Promise<never> {
+  try {
+    const errorData: ApiErrorResponse = await response.json();
+    const errorMessage = errorData.message || errorData.error_name || 'An error occurred';
+    throw new Error(errorMessage);
+  } catch (error) {
+    if (error instanceof Error && error.message !== 'An error occurred') {
+      throw error;
+    }
+    throw new Error('Network error. Please try again.');
+  }
+}
+```
+
+### Global Error Interceptor
+
+```typescript
+// HTTP interceptor for global error handling
+class HttpInterceptor {
+  private handleAuthError(response: Response): void {
+    if (response.status === 401 || response.status === 403) {
+      // Clear authentication
+      tokenStorage.removeToken();
+      // Update auth context
+      logout();
+      // Redirect to login
+      window.location.href = '/auth/login';
+    }
+  }
+}
+```
+
+---
+
+## Rate Limiting
+
+### Rate Limit Headers
+
+The API includes rate limiting headers in responses:
+
+```typescript
+interface RateLimitHeaders {
+  'X-RateLimit-Limit': string; // Requests per window
+  'X-RateLimit-Remaining': string; // Remaining requests
+  'X-RateLimit-Reset': string; // Reset timestamp
+}
+```
+
+### Rate Limit Handling
+
+```typescript
+// Check rate limit headers
+function checkRateLimit(response: Response): void {
+  const limit = response.headers.get('X-RateLimit-Limit');
+  const remaining = response.headers.get('X-RateLimit-Remaining');
+
+  if (remaining && parseInt(remaining) < 10) {
+    console.warn(`Rate limit warning: ${remaining}/${limit} requests remaining`);
+  }
+}
+```
+
+---
+
+## Pagination
+
+### Pagination Parameters
+
+```typescript
+interface PaginationParams {
+  page?: number; // Page number (1-based)
+  page_size?: number; // Items per page (default: 20, max: 100)
+}
+```
+
+### Pagination Response
+
+```typescript
+interface PaginatedResponse<T> {
+  count: number; // Total number of items
+  next: string | null; // URL for next page
+  previous: string | null; // URL for previous page
+  results: T[]; // Array of items
+}
+```
+
+### Pagination Implementation
+
+```typescript
+// Build pagination URL
+export function buildPaginationUrl(baseUrl: string, page: number, pageSize: number): string {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    page_size: pageSize.toString(),
+  });
+  return `${baseUrl}?${params}`;
+}
+
+// Handle pagination in components
+const [currentPage, setCurrentPage] = useState(1);
+const [totalPages, setTotalPages] = useState(0);
+
+const loadAssets = async (page: number) => {
+  const response = await getAssets(token, { page, page_size: 20 });
+  setAssets(response.results);
+  setTotalPages(Math.ceil(response.count / 20));
+};
+```
+
+---
+
+## TypeScript Integration
+
+### Generated Types
+
+```typescript
+// API response types
+export interface AssetListResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Asset[];
+}
+
+export interface Asset {
+  id: number;
+  name: string;
+  description: string;
+  category: string;
+  license: string;
+  publisher: Publisher;
+}
+
+// Request types
+export interface AssetListFilters {
+  category?: string[];
+  license_code?: string[];
+  search?: string;
+  ordering?: string;
+  page?: number;
+  page_size?: number;
+}
+```
+
+### Type-Safe API Calls
+
+```typescript
+// Type-safe service functions
+export async function getAssets(
+  token?: string,
+  filters?: AssetListFilters
+): Promise<AssetListResponse> {
+  const url = buildUrlWithParams('/assets/', filters);
+  return apiGet<AssetListResponse>(url, token);
+}
+
+export async function getAssetDetails(assetId: number, token?: string): Promise<AssetDetails> {
+  return apiGet<AssetDetails>(`/assets/${assetId}/`, token);
+}
+```
+
+### Runtime Validation
+
+```typescript
+// Validate API responses at runtime
+import { z } from 'zod';
+
+const AssetSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string(),
+  category: z.string(),
+  license: z.string(),
+  publisher: z.object({
+    id: z.number(),
+    name: z.string(),
+  }),
+});
+
+export function validateAsset(data: unknown): Asset {
+  return AssetSchema.parse(data);
+}
+```
+
+---
+
+## Testing API Integration
+
+### Mock API Responses
+
+```typescript
+// MSW handlers for testing
+import { http, HttpResponse } from 'msw';
+
+export const handlers = [
+  http.get(`${API_BASE_URL}/assets/`, () => {
+    return HttpResponse.json({
+      count: 2,
+      next: null,
+      previous: null,
+      results: [
+        {
+          id: 1,
+          name: 'Test Asset 1',
+          description: 'Test description',
+          category: 'mushaf',
+          license: 'CC0',
+          publisher: { id: 1, name: 'Test Publisher' },
+        },
+      ],
+    });
+  }),
+
+  http.post(`${API_BASE_URL}/auth/login/`, () => {
+    return HttpResponse.json({
+      access: 'mock-access-token',
+      refresh: 'mock-refresh-token',
+      user: {
+        id: 1,
+        email: 'test@example.com',
+        name: 'Test User',
+      },
+    });
+  }),
+];
+```
+
+### API Testing Utilities
+
+```typescript
+// Test utilities for API calls
+export async function mockApiCall<T>(endpoint: string, mockData: T): Promise<T> {
+  // Mock implementation
+  return new Promise(resolve => {
+    setTimeout(() => resolve(mockData), 100);
+  });
+}
+
+// Test API error handling
+export async function testApiError(status: number, message: string) {
+  const mockResponse = new Response(JSON.stringify({ message }), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  await expect(handleApiResponse(mockResponse)).rejects.toThrow(message);
+}
+```
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+#### 1. CORS Errors
+
+**Problem**: Cross-origin requests blocked  
+**Solution**: Ensure backend CORS configuration includes frontend domain
+
+```typescript
+// Backend CORS configuration should include:
+const corsOptions = {
+  origin: ['http://localhost:3000', 'https://cms.itqan.dev'],
+  credentials: true,
+};
+```
+
+#### 2. Token Expiration
+
+**Problem**: 401 Unauthorized errors  
+**Solution**: Implement automatic token refresh
+
+```typescript
+// Token refresh implementation
+export async function apiRequestWithRefresh<T>(
+  endpoint: string,
+  options: RequestOptions
+): Promise<T> {
+  try {
+    return await apiRequest<T>(endpoint, options);
+  } catch (error) {
+    if (error.message.includes('401')) {
+      // Attempt token refresh
+      const refreshed = await refreshToken();
+      if (refreshed) {
+        // Retry original request
+        return await apiRequest<T>(endpoint, options);
+      }
+    }
+    throw error;
+  }
+}
+```
+
+#### 3. Network Timeouts
+
+**Problem**: Requests timing out  
+**Solution**: Implement timeout handling
+
+```typescript
+// Timeout wrapper
+export async function fetchWithTimeout(
+  url: string,
+  options: RequestInit,
+  timeout: number = 10000
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error.name === 'AbortError') {
+      throw new Error('Request timeout');
+    }
+    throw error;
+  }
+}
+```
+
+#### 4. Large Response Handling
+
+**Problem**: Large API responses causing performance issues  
+**Solution**: Implement streaming or pagination
+
+```typescript
+// Stream large responses
+export async function* streamAssets(filters: AssetListFilters) {
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    const response = await getAssets(token, { ...filters, page });
+    yield* response.results;
+
+    hasMore = !!response.next;
+    page++;
+  }
+}
+```
+
+### Debugging Tools
+
+#### 1. Network Tab Inspection
+
+- Check request/response headers
+- Verify authentication tokens
+- Monitor response times
+
+#### 2. Console Logging
+
+```typescript
+// Debug API calls
+export async function debugApiCall<T>(endpoint: string, options: RequestOptions): Promise<T> {
+  console.log('API Call:', { endpoint, options });
+
+  const startTime = Date.now();
+  const response = await apiRequest<T>(endpoint, options);
+  const duration = Date.now() - startTime;
+
+  console.log('API Response:', { endpoint, duration, response });
+  return response;
+}
+```
+
+#### 3. API Response Validation
+
+```typescript
+// Validate API responses
+export function validateApiResponse<T>(data: unknown, schema: z.ZodSchema<T>): T {
+  try {
+    return schema.parse(data);
+  } catch (error) {
+    console.error('API Response Validation Error:', error);
+    throw new Error('Invalid API response format');
+  }
+}
+```
+
+---
+
+## Best Practices
+
+### 1. Error Handling
+
+- Always handle API errors gracefully
+- Provide user-friendly error messages
+- Log errors for debugging
+
+### 2. Performance
+
+- Implement request caching where appropriate
+- Use pagination for large datasets
+- Debounce search requests
+
+### 3. Security
+
+- Never expose API keys in client code
+- Validate all API responses
+- Implement proper token management
+
+### 4. User Experience
+
+- Show loading states during API calls
+- Provide offline fallbacks where possible
+- Implement optimistic updates
+
+---
+
+**Document Version**: 1.0  
+**Last Updated**: October 20, 2025  
+**Authors**: Itqan Development Team  
+**Status**: Draft - Ready for Review
+
+---
+
+_This API integration guide is a living document and should be updated as the API evolves._

@@ -3,10 +3,12 @@
  */
 
 import React from 'react';
+
+import { cn } from '@/lib/utils';
+
 import { Input } from './input';
 import { Label } from './label';
 import { Textarea } from './textarea';
-import { cn } from '@/lib/utils';
 
 interface BaseFormFieldProps {
   /** Field identifier */
@@ -66,31 +68,28 @@ export function FormField({
   ...props
 }: FormFieldProps) {
   const baseInputClasses = cn(
-    "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-    "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-    "disabled:opacity-50 disabled:cursor-not-allowed",
-    error && "border-destructive focus:ring-destructive",
+    'w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400',
+    'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
+    'disabled:opacity-50 disabled:cursor-not-allowed',
+    error && 'border-destructive focus:ring-destructive',
     className
   );
 
   const textareaClasses = cn(
-    "w-full bg-white border border-gray-300 rounded-md px-4 py-3 text-start placeholder:text-gray-400",
-    "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-    "disabled:opacity-50 disabled:cursor-not-allowed resize-none",
-    error && "border-destructive focus:ring-destructive",
+    'w-full bg-white border border-gray-300 rounded-md px-4 py-3 text-start placeholder:text-gray-400',
+    'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
+    'disabled:opacity-50 disabled:cursor-not-allowed resize-none',
+    error && 'border-destructive focus:ring-destructive',
     className
   );
 
   return (
-    <div className="space-y-2">
-      <Label 
-        htmlFor={id} 
-        className="block text-sm font-medium text-[#333333] text-start"
-      >
+    <div className='space-y-2'>
+      <Label htmlFor={id} className='block text-sm font-medium text-[#333333] text-start'>
         {label}
-        {required && <span className="text-red-500 ms-1">*</span>}
+        {required && <span className='text-red-500 ms-1'>*</span>}
       </Label>
-      
+
       {props.variant === 'textarea' ? (
         <Textarea
           id={id}
@@ -119,13 +118,9 @@ export function FormField({
           aria-describedby={error ? `${id}-error` : undefined}
         />
       )}
-      
+
       {error && (
-        <p 
-          id={`${id}-error`}
-          className="text-destructive text-sm text-start"
-          role="alert"
-        >
+        <p id={`${id}-error`} className='text-destructive text-sm text-start' role='alert'>
           {error}
         </p>
       )}

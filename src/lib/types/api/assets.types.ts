@@ -1,11 +1,16 @@
 /**
  * Assets, Resources, and Publishers API Types
- * 
+ *
  * This file contains all type definitions related to assets, resources,
  * publishers, and access management.
  */
 
-import type { CategoryChoice, StatusChoice, IntendedUseChoice, PagedResponse } from './common.types';
+import type {
+  CategoryChoice,
+  StatusChoice,
+  IntendedUseChoice,
+  PagedResponse,
+} from './common.types';
 
 // ============================================================================
 // Publisher Types
@@ -489,4 +494,3 @@ export interface ResourceListFilters {
   /** Items per page */
   page_size?: number;
 }
-

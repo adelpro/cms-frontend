@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { logoutUser } from '@/lib/auth';
 import { getLocalizedError } from '@/lib/error-messages';
@@ -52,14 +52,10 @@ class HttpInterceptor {
     try {
       const urlObj = new URL(url);
       const pathname = urlObj.pathname;
-      
+
       // Exclude login and register endpoints to prevent redirect loops
-      const excludedPaths = [
-        '/auth/login',
-        '/auth/register',
-        '/auth/signup'
-      ];
-      
+      const excludedPaths = ['/auth/login', '/auth/register', '/auth/signup'];
+
       return excludedPaths.some(path => pathname.includes(path));
     } catch {
       return false;
@@ -74,7 +70,7 @@ class HttpInterceptor {
       status: response.status,
       statusText: response.statusText,
       url: response.url,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     // Clear local storage
@@ -106,18 +102,19 @@ class HttpInterceptor {
       try {
         // Call the original fetch function
         const response = await this.originalFetch(input, init);
-        
+
         // Check for auth errors on all responses
         if (!response.ok && this.isAuthError(response)) {
           // Get the URL from the request
-          const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
-          
+          const url =
+            typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
+
           // Skip auth error handling for excluded URLs
           if (!this.shouldExcludeFromAuthHandling(url)) {
             await this.handleAuthError(response);
           }
         }
-        
+
         return response;
       } catch (error) {
         // Re-throw any errors that aren't auth-related

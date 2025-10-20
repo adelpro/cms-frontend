@@ -3,8 +3,10 @@
  */
 
 import React from 'react';
-import { Button } from './button';
+
 import { cn } from '@/lib/utils';
+
+import { Button } from './button';
 
 interface SubmitButtonProps {
   /** Button text when not loading */
@@ -42,34 +44,33 @@ export function SubmitButton({
   size = 'default',
   showArrow = false,
   onClick,
-  type = 'submit'
+  type = 'submit',
 }: SubmitButtonProps) {
   const baseClasses = cn(
     // Base styles
-    "flex items-center justify-center gap-2 font-medium transition-colors",
+    'flex items-center justify-center gap-2 font-medium transition-colors',
     // Size variants
-    size === 'sm' && "h-9 px-3 text-sm",
-    size === 'default' && "h-10 px-4 text-base",
-    size === 'lg' && "h-12 px-6 text-base",
+    size === 'sm' && 'h-9 px-3 text-sm',
+    size === 'default' && 'h-10 px-4 text-base',
+    size === 'lg' && 'h-12 px-6 text-base',
     // Variant styles
-    variant === 'primary' && "bg-[#2F504B] hover:bg-[#2F504B]/90 text-white rounded-md",
-    variant === 'default' && "bg-primary hover:bg-primary/90 text-primary-foreground rounded-md",
-    variant === 'outline' && "border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md",
-    variant === 'secondary' && "bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded-md",
+    variant === 'primary' && 'bg-[#2F504B] hover:bg-[#2F504B]/90 text-white rounded-md',
+    variant === 'default' && 'bg-primary hover:bg-primary/90 text-primary-foreground rounded-md',
+    variant === 'outline' &&
+      'border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md',
+    variant === 'secondary' &&
+      'bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded-md',
     className
   );
 
   const isDisabled = disabled || isLoading;
 
   return (
-    <Button
-      type={type}
-      className={baseClasses}
-      disabled={isDisabled}
-      onClick={onClick}
-    >
+    <Button type={type} className={baseClasses} disabled={isDisabled} onClick={onClick}>
       {showArrow && !isLoading && (
-        <span className="text-lg" aria-hidden="true">←</span>
+        <span className='text-lg' aria-hidden='true'>
+          ←
+        </span>
       )}
       {isLoading ? loadingText : children}
     </Button>

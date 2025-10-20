@@ -4,8 +4,8 @@
  */
 
 // Import the translation messages
-import enMessages from '@/messages/en.json';
 import arMessages from '@/messages/ar.json';
+import enMessages from '@/messages/en.json';
 
 /**
  * Get a localized error message
@@ -15,11 +15,11 @@ import arMessages from '@/messages/ar.json';
  */
 export function getLocalizedErrorMessage(key: string, locale: string = 'en'): string {
   const messages = locale === 'ar' ? arMessages : enMessages;
-  
+
   // Navigate through nested object structure using dot notation
   const keys = key.split('.');
   let result: unknown = messages;
-  
+
   for (const k of keys) {
     if (result && typeof result === 'object' && k in result) {
       result = (result as Record<string, unknown>)[k];
@@ -37,7 +37,7 @@ export function getLocalizedErrorMessage(key: string, locale: string = 'en'): st
       return typeof enResult === 'string' ? enResult : key;
     }
   }
-  
+
   return typeof result === 'string' ? result : key;
 }
 
@@ -58,14 +58,14 @@ export function getCurrentLocale(): string {
   if (typeof window === 'undefined') {
     return 'en'; // Default for server-side rendering
   }
-  
+
   // Try to get locale from the URL path
   const pathname = window.location.pathname;
   const localeMatch = pathname.match(/^\/([a-z]{2})\//);
   if (localeMatch) {
     return localeMatch[1];
   }
-  
+
   // Fallback to browser language
   const browserLang = navigator.language.split('-')[0];
   return browserLang === 'ar' ? 'ar' : 'en';

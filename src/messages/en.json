@@ -26,7 +26,6 @@
     "about": "About",
     "contact": "Contact",
     "store": "Assets Library",
-    "dashboard": "Dashboard",
     "contentStandards": "Content and Technical Standards",
     "publishers": "Publishers",
     "aboutProject": "About the Project"
@@ -266,7 +265,7 @@
       "description": "To access verses, follow the following standards",
       "guidelines": "Guidelines",
       "guideline1": "Use correct verse identifier format",
-      "guideline2": "Ensure correct verse indexing", 
+      "guideline2": "Ensure correct verse indexing",
       "guideline3": "Verify latest updates in verse database",
       "exampleText": "Example: To access verse 2:255, use getVerse('2:255')",
       "exampleCode": "getVerse('2:255')"
@@ -282,7 +281,7 @@
       "exampleCode": "getWord(\"الله\")"
     },
     "tafsirUsage": {
-      "title": "Tafsir Usage Standards", 
+      "title": "Tafsir Usage Standards",
       "description": "When accessing tafsir, follow the following guidelines",
       "guidelines": "Guidelines",
       "guideline1": "Use correct tafsir reference",

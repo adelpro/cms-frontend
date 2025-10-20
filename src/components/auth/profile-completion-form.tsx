@@ -1,17 +1,18 @@
-"use client";
+'use client';
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+
+import { useAuth } from '@/components/providers/auth-provider';
+import { Button } from '@/components/ui/button';
+import { FormError } from '@/components/ui/form-error';
 import { FormField } from '@/components/ui/form-field';
 import { SubmitButton } from '@/components/ui/submit-button';
-import { FormError } from '@/components/ui/form-error';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/components/providers/auth-provider';
 import { useForm } from '@/hooks/use-form';
 import type { Locale } from '@/i18n';
-import { validateProfileCompletionForm } from '@/lib/utils';
 import { completeUserProfile } from '@/lib/auth';
-import { useTranslations } from 'next-intl';
+import { validateProfileCompletionForm } from '@/lib/utils';
 
 interface ProfileCompletionFormProps {
   locale: Locale;
@@ -22,73 +23,66 @@ export function ProfileCompletionForm({ locale }: ProfileCompletionFormProps) {
   const router = useRouter();
   const { login } = useAuth();
 
-  const {
-    formData,
-    errors,
-    isLoading,
-    submitError,
-    handleInputChange,
-    handleSubmit
-  } = useForm({
+  const { formData, errors, isLoading, submitError, handleInputChange, handleSubmit } = useForm({
     initialData: {
       project_summary: '',
       project_url: '',
-      bio: ''
+      bio: '',
     },
     validate: validateProfileCompletionForm,
-    onSubmit: async (data) => {
+    onSubmit: async data => {
       const response = await completeUserProfile(data);
       return response;
     },
-    onSuccess: (result) => {
+    onSuccess: result => {
       if (result.user && result.token) {
+        // Clear the skip flag since user completed their profile
+        if (typeof window !== 'undefined') {
+          sessionStorage.removeItem('skippedProfileCompletion');
+        }
         login(result.user, result.token);
         // Redirect to store page after successful completion
         router.push(`/${locale}/store`);
       }
-    }
+    },
   });
 
   const handleSkip = () => {
+    // Mark that user has skipped profile completion in this session
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('skippedProfileCompletion', 'true');
+    }
     // Redirect to store page if skipped
     router.push(`/${locale}/store`);
   };
 
   return (
-    <div className="space-y-8">
+    <div className='space-y-8'>
       {/* Logo */}
-      <div className="text-center">
-        <Image
-          src="/logo.svg"
-          alt="Itqan"
-          width={50}
-          height={50}
-          className="mx-auto mb-3"
-        />
+      <div className='text-center'>
+        <Image src='/logo.svg' alt='Itqan' width={50} height={50} className='mx-auto mb-3' />
       </div>
 
       {/* Header */}
-      <div className="text-center space-y-3">
-        <h1 className="text-[32px] font-bold text-[#333333]">
+      <div className='text-center space-y-3'>
+        <h1 className='text-[32px] font-bold text-[#333333]'>
           {t('profile.completeProfileTitle')}
         </h1>
-        <p className="text-[18px] text-[#333333]">
-          {t('profile.completeProfileDescription')}
-        </p>
+        <p className='text-[18px] text-[#333333]'>{t('profile.completeProfileDescription')}</p>
       </div>
 
       {/* Profile Completion Form */}
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className='space-y-6'>
         {/* Show submit error */}
         <FormError message={submitError} />
 
         {/* Project Information Section */}
-        <div className="space-y-6">
+        <div className='space-y-6'>
           {/* Project Summary */}
           <FormField
-            id="project_summary"
-            name="project_summary"
-            variant="textarea"
+            id='project_summary'
+            name='project_summary'
+            variant='textarea'
             label={t('profile.projectQuestion')}
             value={formData.project_summary}
             onChange={handleInputChange('project_summary')}
@@ -100,9 +94,9 @@ export function ProfileCompletionForm({ locale }: ProfileCompletionFormProps) {
 
           {/* Project URL */}
           <FormField
-            id="project_url"
-            name="project_url"
-            type="url"
+            id='project_url'
+            name='project_url'
+            type='url'
             label={t('profile.projectLinkLabel')}
             value={formData.project_url}
             onChange={handleInputChange('project_url')}
@@ -112,11 +106,11 @@ export function ProfileCompletionForm({ locale }: ProfileCompletionFormProps) {
         </div>
 
         {/* Personal Information Section */}
-        <div className="space-y-4">
+        <div className='space-y-4'>
           <FormField
-            id="bio"
-            name="bio"
-            variant="textarea"
+            id='bio'
+            name='bio'
+            variant='textarea'
             label={t('profile.aboutYourself')}
             value={formData.bio}
             onChange={handleInputChange('bio')}
@@ -128,25 +122,25 @@ export function ProfileCompletionForm({ locale }: ProfileCompletionFormProps) {
         </div>
 
         {/* Action Buttons */}
-        <div className="space-y-4">
+        <div className='space-y-4'>
           {/* Save and Continue Button */}
           <SubmitButton
             isLoading={isLoading}
             loadingText={t('common.loading')}
-            className="w-full bg-[#2F504B] hover:bg-[#2F504B]/90"
-            size="lg"
+            className='w-full bg-[#2F504B] hover:bg-[#2F504B]/90'
+            size='lg'
           >
             {t('profile.saveAndContinue')}
           </SubmitButton>
 
           {/* Skip Button */}
           <Button
-            type="button"
-            variant="outline"
-            size="lg"
+            type='button'
+            variant='outline'
+            size='lg'
             onClick={handleSkip}
             disabled={isLoading}
-            className="w-full text-base bg-white hover:bg-gray-50"
+            className='w-full text-base bg-white hover:bg-gray-50'
           >
             {t('profile.doItLater')}
           </Button>

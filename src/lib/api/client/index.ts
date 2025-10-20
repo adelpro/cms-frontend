@@ -1,8 +1,8 @@
 /**
  * API Client Barrel Export
- * 
+ *
  * This file exports all API client utilities for convenient importing.
- * 
+ *
  * @example
  * import { apiGet, apiPost, buildUrlWithParams } from '@/lib/api/client';
  */
@@ -19,9 +19,7 @@ export {
   buildUrlWithParams,
 } from './base';
 
-export type {
-  ApiRequestOptions,
-} from './base';
+export type { ApiRequestOptions } from './base';
 
 export {
   handleApiError,
@@ -31,4 +29,3 @@ export {
   isAuthError,
   getErrorMessage,
 } from './error-handler';
-

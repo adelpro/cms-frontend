@@ -1,6 +1,6 @@
 /**
  * Conversion Utilities
- * 
+ *
  * This file contains utility functions for converting between different data formats,
  * particularly between API types and domain models.
  */
@@ -26,16 +26,16 @@ import type {
 
 /**
  * Converts API user profile to internal user model
- * 
+ *
  * @param userProfile - User profile data from API
  * @returns Internal user model
- * 
+ *
  * @example
  * const user = convertUserProfileToUser(apiUserProfile);
  */
 export function convertUserProfileToUser(userProfile: UserProfileSchema): User {
   const nameParts = userProfile.name.split(' ');
-  
+
   return {
     id: userProfile.id,
     email: userProfile.email,
@@ -61,10 +61,10 @@ export function convertUserProfileToUser(userProfile: UserProfileSchema): User {
 
 /**
  * Converts API list asset to internal asset model
- * 
+ *
  * @param listAsset - Asset data from list API
  * @returns Internal asset model
- * 
+ *
  * @example
  * const asset = convertListAssetToAsset(apiAsset);
  */
@@ -87,10 +87,10 @@ export function convertListAssetToAsset(listAsset: ListAssetOut): Asset {
 
 /**
  * Converts API detail asset to internal asset details model
- * 
+ *
  * @param detailAsset - Detailed asset data from API
  * @returns Internal asset details model
- * 
+ *
  * @example
  * const assetDetails = convertDetailAssetToAssetDetails(apiAssetDetail);
  */
@@ -122,10 +122,10 @@ export function convertDetailAssetToAssetDetails(detailAsset: DetailAssetOut): A
 
 /**
  * Converts API publisher details to internal publisher model
- * 
+ *
  * @param detailPublisher - Publisher data from API
  * @returns Internal publisher model
- * 
+ *
  * @example
  * const publisher = convertDetailPublisherToPublisher(apiPublisher);
  */
@@ -146,31 +146,38 @@ export function convertDetailPublisherToPublisher(detailPublisher: DetailPublish
 
 /**
  * Determines license color based on license code
- * 
+ *
  * @param licenseCode - License code (e.g., 'cc0', 'cc-by-4.0')
  * @returns License color indicator
- * 
+ *
  * @example
  * const color = getLicenseColor('cc0'); // returns 'green'
  */
 export function getLicenseColor(licenseCode: string): LicenseColor {
   const greenLicenses = ['cc0', 'cc-by', 'cc-by-4.0'];
-  const yellowLicenses = ['cc-by-sa', 'cc-by-sa-4.0', 'cc-by-nd', 'cc-by-nd-4.0', 'cc-by-nc', 'cc-by-nc-4.0'];
+  const yellowLicenses = [
+    'cc-by-sa',
+    'cc-by-sa-4.0',
+    'cc-by-nd',
+    'cc-by-nd-4.0',
+    'cc-by-nc',
+    'cc-by-nc-4.0',
+  ];
   const redLicenses = ['cc-by-nc-sa', 'cc-by-nc-sa-4.0', 'cc-by-nc-nd', 'cc-by-nc-nd-4.0'];
-  
+
   if (greenLicenses.includes(licenseCode)) return 'green';
   if (yellowLicenses.includes(licenseCode)) return 'yellow';
   if (redLicenses.includes(licenseCode)) return 'red';
-  
+
   return 'green'; // default to green for unknown licenses
 }
 
 /**
  * Determines asset type based on category
- * 
+ *
  * @param category - Asset category
  * @returns Asset type
- * 
+ *
  * @example
  * const type = getAssetType('mushaf'); // returns 'translation'
  */
@@ -189,10 +196,10 @@ export function getAssetType(category: string): AssetType {
 
 /**
  * Converts internal user registration data to API format
- * 
+ *
  * @param registration - User registration data
  * @returns API registration schema
- * 
+ *
  * @example
  * const apiData = convertUserRegistrationToApiFormat(registration);
  */
@@ -215,10 +222,10 @@ export function convertUserRegistrationToApiFormat(registration: {
 
 /**
  * Converts internal user profile update to API format
- * 
+ *
  * @param update - User profile update data
  * @returns API update schema
- * 
+ *
  * @example
  * const apiData = convertUserProfileUpdateToApiFormat(updateData);
  */
@@ -239,4 +246,3 @@ export function convertUserProfileUpdateToApiFormat(update: {
     job_title: update.jobTitle,
   };
 }
-

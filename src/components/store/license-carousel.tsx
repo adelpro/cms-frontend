@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
+import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { useTranslations } from 'next-intl';
 
 interface LicenseCarouselProps {
   assetTitle: string;
@@ -15,7 +16,7 @@ interface LicenseCarouselProps {
 export function LicenseCarousel({ assetTitle, license, onAccept, onCancel }: LicenseCarouselProps) {
   const t = useTranslations();
   const [hasReadToEnd, setHasReadToEnd] = useState(false);
-  
+
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
     const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
@@ -56,45 +57,40 @@ ${t('license.acceptanceText')}
   `;
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="text-center mb-6">
-        <h3 className="text-xl font-medium mb-2">{t('ui.licenseTermsTitle')}</h3>
-        <p className="text-sm text-muted-foreground">
+    <div className='max-w-4xl mx-auto'>
+      <div className='text-center mb-6'>
+        <h3 className='text-xl font-medium mb-2'>{t('ui.licenseTermsTitle')}</h3>
+        <p className='text-sm text-muted-foreground'>
           {assetTitle} - {license.toUpperCase()} {t('ui.licenseInfo')}
         </p>
       </div>
 
-      <Card className="mb-6">
-        <CardContent className="p-0">
-          <div 
-            className="h-96 overflow-y-auto p-6 text-sm leading-relaxed text-start"
+      <Card className='mb-6'>
+        <CardContent className='p-0'>
+          <div
+            className='h-96 overflow-y-auto p-6 text-sm leading-relaxed text-start'
             onScroll={handleScroll}
           >
-            <pre className="whitespace-pre-wrap font-sans">{licenseContent}</pre>
+            <pre className='whitespace-pre-wrap font-sans'>{licenseContent}</pre>
           </div>
-          
+
           {!hasReadToEnd && (
-            <div className="text-center py-3 bg-muted/50 text-sm text-muted-foreground">
+            <div className='text-center py-3 bg-muted/50 text-sm text-muted-foreground'>
               {t('ui.pleaseReadFullContent')}
             </div>
           )}
         </CardContent>
       </Card>
 
-      <div className="flex gap-3">
-        <Button 
-          type="button" 
-          variant="outline" 
-          onClick={onCancel}
-          className="flex-1"
-        >
+      <div className='flex gap-3'>
+        <Button type='button' variant='outline' onClick={onCancel} className='flex-1'>
           {t('common.cancel')}
         </Button>
-        <Button 
-          type="button"
+        <Button
+          type='button'
           onClick={onAccept}
           disabled={!hasReadToEnd}
-          className="flex-1 bg-primary hover:bg-primary/90"
+          className='flex-1 bg-primary hover:bg-primary/90'
         >
           {t('common.confirm')}
         </Button>
