@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -20,17 +20,10 @@ export function LoginForm({ locale }: LoginFormProps) {
   const t = useTranslations();
   const { login } = useAuth();
 
-  const {
-    formData,
-    errors,
-    isLoading,
-    submitError,
-    handleInputChange,
-    handleSubmit
-  } = useForm({
+  const { formData, errors, isLoading, submitError, handleInputChange, handleSubmit } = useForm({
     initialData: {
       email: '',
-      password: ''
+      password: '',
     },
     validate: validateLoginForm,
     onSubmit: async (data) => {
@@ -41,30 +34,20 @@ export function LoginForm({ locale }: LoginFormProps) {
       if (result.user && result.token) {
         login(result.user, result.token);
       }
-    }
+    },
   });
 
   return (
     <div className="space-y-8">
       {/* Logo */}
       <div className="text-center">
-        <Image
-          src="/logo.svg"
-          alt="Itqan"
-          width={50}
-          height={50}
-          className="mx-auto mb-3"
-        />
+        <Image src="/logo.svg" alt="Itqan" width={50} height={50} className="mx-auto mb-3" />
       </div>
 
       {/* Welcome Message */}
-      <div className="text-center space-y-3">
-        <h1 className="text-[32px] font-bold text-[#333333]">
-          {t('auth.loginTitle')}
-        </h1>
-        <p className="text-[18px] text-[#333333]">
-          {t('auth.loginSubtitle')}
-        </p>
+      <div className="space-y-3 text-center">
+        <h1 className="text-[32px] font-bold text-[#333333]">{t('auth.loginTitle')}</h1>
+        <p className="text-[18px] text-[#333333]">{t('auth.loginSubtitle')}</p>
       </div>
 
       {/* Email/Password Form */}
@@ -113,7 +96,7 @@ export function LoginForm({ locale }: LoginFormProps) {
           {t('auth.noAccount')}{' '}
           <Link
             href={`/${locale}/auth/signup`}
-            className="text-primary hover:underline font-medium"
+            className="text-primary font-medium hover:underline"
           >
             {t('auth.register')}
           </Link>

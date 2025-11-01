@@ -11,13 +11,15 @@ import type { ValidatedLocale } from './types';
  * @param params Page params containing locale
  * @returns Validated locale
  */
-export async function validateAndGetLocale(params: Promise<{ locale: string }>): Promise<ValidatedLocale> {
+export async function validateAndGetLocale(
+  params: Promise<{ locale: string }>,
+): Promise<ValidatedLocale> {
   const { locale } = await params;
-  
+
   if (!isValidLocale(locale)) {
     notFound();
   }
-  
+
   return locale as ValidatedLocale;
 }
 
@@ -26,13 +28,15 @@ export async function validateAndGetLocale(params: Promise<{ locale: string }>):
  * @param params Page params containing locale
  * @returns Validated locale or null if invalid
  */
-export async function validateLocaleForMetadata(params: Promise<{ locale: string }>): Promise<ValidatedLocale | null> {
+export async function validateLocaleForMetadata(
+  params: Promise<{ locale: string }>,
+): Promise<ValidatedLocale | null> {
   const { locale } = await params;
-  
+
   if (!isValidLocale(locale)) {
     return null;
   }
-  
+
   return locale as ValidatedLocale;
 }
 

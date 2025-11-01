@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { AlertTriangle, RefreshCw } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useParams } from "next/navigation";
-import { useTranslations } from "next-intl";
-import type { Locale } from "@/i18n";
+import { useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import type { Locale } from '@/i18n';
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -23,46 +23,39 @@ export default function Error({ error, reset }: ErrorProps) {
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="max-w-md w-full text-center space-y-6">
+    <div className="flex min-h-screen items-center justify-center p-4">
+      <div className="w-full max-w-md space-y-6 text-center">
         <div className="flex justify-center">
-          <AlertTriangle className="h-16 w-16 text-destructive" />
+          <AlertTriangle className="text-destructive h-16 w-16" />
         </div>
-        
+
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold text-foreground">
-            {t('errors.somethingWentWrong')}
-          </h1>
-          <p className="text-muted-foreground">
-            {t('errors.errorDescription')}
-          </p>
+          <h1 className="text-foreground text-2xl font-bold">{t('errors.somethingWentWrong')}</h1>
+          <p className="text-muted-foreground">{t('errors.errorDescription')}</p>
         </div>
 
         {process.env.NODE_ENV === 'development' && (
-          <div className="p-4 bg-muted rounded-lg text-start">
-            <p className="text-sm font-mono text-muted-foreground break-all">
-              {error.message}
-            </p>
+          <div className="bg-muted rounded-lg p-4 text-start">
+            <p className="text-muted-foreground font-mono text-sm break-all">{error.message}</p>
             {error.digest && (
-              <p className="text-xs text-muted-foreground mt-2">
+              <p className="text-muted-foreground mt-2 text-xs">
                 {t('errors.errorId')} {error.digest}
               </p>
             )}
           </div>
         )}
 
-        <div className="flex gap-4 justify-center">
-          <Button
-            onClick={reset}
-            className={cn("gap-2")}
-          >
+        <div className="flex justify-center gap-4">
+          <Button onClick={reset} className={cn('gap-2')}>
             <RefreshCw className="h-4 w-4" />
             {t('ui.tryAgain')}
           </Button>
-          
+
           <Button
             variant="outline"
-            onClick={() => { window.location.href = `/${locale}`; }}
+            onClick={() => {
+              window.location.href = `/${locale}`;
+            }}
           >
             {t('ui.goHome')}
           </Button>

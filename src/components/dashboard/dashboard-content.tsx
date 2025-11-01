@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/auth-provider';
@@ -22,16 +22,16 @@ export function DashboardContent({ locale }: DashboardContentProps) {
   }
 
   return (
-    <div className={cn("min-h-screen bg-background", logical.paddingInline('4'), "py-8")}>
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className={cn('bg-background min-h-screen', logical.paddingInline('4'), 'py-8')}>
+      <div className="mx-auto max-w-4xl space-y-6">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className={cn(typography.heading, "text-3xl font-bold")}>
-              {t('dashboard.title')}
-            </h1>
+            <h1 className={cn(typography.heading, 'text-3xl font-bold')}>{t('dashboard.title')}</h1>
             <p className="text-muted-foreground mt-2">
-              {t('dashboard.welcomeUser', { name: `${user.firstName} ${user.lastName}` })}
+              {t('dashboard.welcomeUser', {
+                name: `${user.firstName} ${user.lastName}`,
+              })}
             </p>
           </div>
           <Button variant="outline" onClick={logout}>
@@ -40,12 +40,10 @@ export function DashboardContent({ locale }: DashboardContentProps) {
         </div>
 
         {/* User Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle className={typography.heading}>
-                {t('dashboard.accountInfo')}
-              </CardTitle>
+              <CardTitle className={typography.heading}>{t('dashboard.accountInfo')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div>
@@ -72,27 +70,21 @@ export function DashboardContent({ locale }: DashboardContentProps) {
 
           <Card>
             <CardHeader>
-              <CardTitle className={typography.heading}>
-                {t('dashboard.accountStatus')}
-              </CardTitle>
+              <CardTitle className={typography.heading}>{t('dashboard.accountStatus')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div>
                 <strong>{t('dashboard.accountType')}:</strong>{' '}
-                {user.provider === 'email' 
+                {user.provider === 'email'
                   ? t('dashboard.emailAccount')
                   : user.provider === 'google'
-                  ? 'Google'
-                  : 'GitHub'
-                }
+                    ? 'Google'
+                    : 'GitHub'}
               </div>
               <div>
                 <strong>{t('dashboard.profileStatus')}:</strong>{' '}
                 <span className={user.profileCompleted ? 'text-green-600' : 'text-orange-600'}>
-                  {user.profileCompleted 
-                    ? t('common.complete')
-                    : t('common.incomplete')
-                  }
+                  {user.profileCompleted ? t('common.complete') : t('common.incomplete')}
                 </span>
               </div>
               <div>
@@ -106,32 +98,24 @@ export function DashboardContent({ locale }: DashboardContentProps) {
         {/* Welcome Message */}
         <Card>
           <CardHeader>
-            <CardTitle className={typography.heading}>
-              {t('dashboard.welcomeToPlatform')}
-            </CardTitle>
+            <CardTitle className={typography.heading}>{t('dashboard.welcomeToPlatform')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className={cn(typography.paragraph, "text-muted-foreground")}>
+            <p className={cn(typography.paragraph, 'text-muted-foreground')}>
               {t('dashboard.loginSuccessMessage')}
             </p>
-            
+
             <div className="mt-6 flex flex-wrap gap-4">
               <Button asChild>
-                <Link href={`/${locale}/store`}>
-                  {t('store.title')}
-                </Link>
+                <Link href={`/${locale}/store`}>{t('store.title')}</Link>
               </Button>
               <Button variant="outline" asChild>
                 <Link href={`/${locale}/documentation/standards`}>
                   {t('documentation.standards')}
                 </Link>
               </Button>
-              <Button variant="outline">
-                {t('dashboard.academy')}
-              </Button>
-              <Button variant="outline">
-                {t('dashboard.projects')}
-              </Button>
+              <Button variant="outline">{t('dashboard.academy')}</Button>
+              <Button variant="outline">{t('dashboard.projects')}</Button>
             </div>
           </CardContent>
         </Card>

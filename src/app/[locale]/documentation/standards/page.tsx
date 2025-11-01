@@ -9,11 +9,11 @@ interface ContentStandardsPageProps {
 
 export default async function ContentStandardsPage({ params }: ContentStandardsPageProps) {
   const { locale } = await params;
-  
+
   if (!isValidLocale(locale)) {
     notFound();
   }
-  
+
   const validatedLocale = locale as Locale;
 
   return <ContentStandards locale={validatedLocale} />;

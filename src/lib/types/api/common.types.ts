@@ -1,6 +1,6 @@
 /**
  * Common API Types
- * 
+ *
  * This file contains shared types used across different API endpoints.
  * These types are used for consistent API communication and error handling.
  */
@@ -12,10 +12,10 @@
 export interface ApiErrorResponse {
   /** Error identifier/code */
   error_name: string;
-  
+
   /** Human-readable error message */
   message: string;
-  
+
   /** Additional error context (optional) */
   extra?: unknown;
 }
@@ -36,13 +36,13 @@ export interface OkSchema {
 export interface ApiResponse<T = unknown> {
   /** Whether the request was successful */
   success: boolean;
-  
+
   /** Response data (if successful) */
   data?: T;
-  
+
   /** Error message (if failed) */
   error?: string;
-  
+
   /** Additional message */
   message?: string;
 }
@@ -54,13 +54,13 @@ export interface ApiResponse<T = unknown> {
 export interface PagedResponse<T> {
   /** Array of result items */
   results: T[];
-  
+
   /** Total count of items */
   count: number;
-  
+
   /** URL to next page (if available) */
   next?: string | null;
-  
+
   /** URL to previous page (if available) */
   previous?: string | null;
 }
@@ -83,7 +83,13 @@ export type IntendedUseChoice = 'commercial' | 'non-commercial';
 /**
  * Sort ordering options
  */
-export type OrderingOption = 'created_at' | '-created_at' | 'name' | '-name' | 'updated_at' | '-updated_at';
+export type OrderingOption =
+  | 'created_at'
+  | '-created_at'
+  | 'name'
+  | '-name'
+  | 'updated_at'
+  | '-updated_at';
 
 /**
  * Common filter parameters for list endpoints
@@ -91,14 +97,13 @@ export type OrderingOption = 'created_at' | '-created_at' | 'name' | '-name' | '
 export interface BaseListFilters {
   /** Search query */
   search?: string;
-  
+
   /** Sort ordering */
   ordering?: OrderingOption | string;
-  
+
   /** Page number (1-indexed) */
   page?: number;
-  
+
   /** Items per page */
   page_size?: number;
 }
-

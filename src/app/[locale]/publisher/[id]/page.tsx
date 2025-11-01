@@ -9,11 +9,11 @@ interface PublisherPageProps {
 
 export default async function PublisherPage({ params }: PublisherPageProps) {
   const { locale, id } = await params;
-  
+
   if (!isValidLocale(locale)) {
     notFound();
   }
-  
+
   const validatedLocale = locale as Locale;
 
   return <PublisherProfile publisherId={id} locale={validatedLocale} />;

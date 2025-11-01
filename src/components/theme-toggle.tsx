@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
+import * as React from 'react';
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
-import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl";
+import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 export function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
@@ -27,10 +27,10 @@ export function ThemeToggle() {
     );
   }
 
-  const isDark = resolvedTheme === "dark";
+  const isDark = resolvedTheme === 'dark';
 
   const toggleTheme = () => {
-    setTheme(isDark ? "light" : "dark");
+    setTheme(isDark ? 'light' : 'dark');
   };
 
   return (
@@ -40,11 +40,9 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       className="relative shadow-[0_10px_15px_-3px_rgba(0,0,0,0.06)]"
     >
-      <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-      <span className="sr-only">
-        {isDark ? t('theme.lightMode') : t('theme.darkMode')}
-      </span>
+      <Sun className="h-4 w-4 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+      <Moon className="absolute h-4 w-4 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+      <span className="sr-only">{isDark ? t('theme.lightMode') : t('theme.darkMode')}</span>
     </Button>
   );
 }

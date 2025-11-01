@@ -9,11 +9,11 @@ interface AssetPageProps {
 
 export default async function AssetPage({ params }: AssetPageProps) {
   const { locale, id } = await params;
-  
+
   if (!isValidLocale(locale)) {
     notFound();
   }
-  
+
   const validatedLocale = locale as Locale;
 
   return <AssetDetails assetId={id} locale={validatedLocale} />;

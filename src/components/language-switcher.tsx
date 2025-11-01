@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useRouter, usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Languages } from "lucide-react";
-import type { Locale } from "@/i18n";
-import { getOppositeLocale, localeNames } from "@/i18n";
+import { useRouter, usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Languages } from 'lucide-react';
+import type { Locale } from '@/i18n';
+import { getOppositeLocale, localeNames } from '@/i18n';
 
 interface LanguageSwitcherProps {
   currentLocale: Locale;
@@ -37,9 +37,7 @@ export function LanguageSwitcher({ currentLocale }: LanguageSwitcherProps) {
       aria-label={`Switch to ${getLanguageLabel(otherLocale)}`}
     >
       <Languages className="h-4 w-4" />
-      <span className="sr-only">
-        Switch to {getLanguageLabel(otherLocale)}
-      </span>
+      <span className="sr-only">Switch to {getLanguageLabel(otherLocale)}</span>
     </Button>
   );
 }

@@ -14,24 +14,29 @@ This document provides a high-level overview of the Itqan CMS architecture, desi
 ## 🛠️ Technology Stack
 
 ### Frontend Framework
+
 - **Next.js 15:** React framework with App Router
 - **React 19:** UI library with latest features
 - **TypeScript 5:** Type-safe JavaScript
 
 ### Styling
+
 - **Tailwind CSS 4:** Utility-first CSS framework
 - **CSS Logical Properties:** RTL/LTR support
 - **shadcn/ui:** Accessible component library
 
 ### Internationalization
+
 - **next-intl:** i18n routing and translations
 - **Locale Support:** Arabic (RTL) and English (LTR)
 
 ### State Management
+
 - **React Context:** Global state (auth, theme)
 - **Local State:** Component-level state with hooks
 
 ### HTTP Client
+
 - **Native Fetch API:** Modern browser API
 - **Custom Wrappers:** Centralized error handling
 
@@ -172,7 +177,7 @@ Centralized API communication:
 // Service function
 export async function getAssets(
   token?: string,
-  filters?: AssetListFilters
+  filters?: AssetListFilters,
 ): Promise<PagedListAssetOut> {
   const url = buildUrlWithParams('/assets/', filters);
   return apiGet<PagedListAssetOut>(url, token);
@@ -188,9 +193,7 @@ Data access abstraction:
 
 ```typescript
 // API types → Domain models conversion
-export function convertListAssetToAsset(
-  listAsset: ListAssetOut
-): Asset {
+export function convertListAssetToAsset(listAsset: ListAssetOut): Asset {
   return {
     id: listAsset.id.toString(),
     title: listAsset.name,
@@ -207,11 +210,11 @@ Global state management:
 // Auth Provider
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
-  
+
   const login = async (email: string, password: string) => {
     // Login logic
   };
-  
+
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
       {children}
@@ -226,19 +229,15 @@ Reusable logic extraction:
 
 ```typescript
 // Custom form hook
-export function useForm<T>({
-  initialData,
-  validate,
-  onSubmit
-}: UseFormOptions<T>) {
+export function useForm<T>({ initialData, validate, onSubmit }: UseFormOptions<T>) {
   const [formData, setFormData] = useState<T>(initialData);
   // Form state management logic
-  
+
   return {
     formData,
     errors,
     handleInputChange,
-    handleSubmit
+    handleSubmit,
   };
 }
 ```
@@ -310,7 +309,7 @@ const text = t('key.path');
 
 ```typescript
 // Automatic direction based on locale
-<html dir={direction} lang={locale}>
+<html dir={direction} lang={locale} class="dark">
 
 // CSS Logical Properties
 className={cn(
@@ -418,4 +417,3 @@ Production   → Netlify environment variables
 - [Development Guidelines](../GUIDELINES.md)
 - [API Integration Guide](./API.md)
 - [Contributing Guide](../CONTRIBUTING.md)
-

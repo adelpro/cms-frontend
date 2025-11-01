@@ -1,11 +1,11 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { LanguageSwitcher } from "@/components/language-switcher";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { typography, spacing } from "@/lib/styles/logical";
-import type { Locale } from "@/i18n";
-import { cn } from "@/lib/utils";
-import { getTranslations } from "next-intl/server";
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { LanguageSwitcher } from '@/components/language-switcher';
+import { ThemeToggle } from '@/components/theme-toggle';
+import { typography, spacing } from '@/lib/styles/logical';
+import type { Locale } from '@/i18n';
+import { cn } from '@/lib/utils';
+import { getTranslations } from 'next-intl/server';
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;
@@ -13,31 +13,29 @@ interface HomePageProps {
 
 export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params;
-  
+
   // Validate and cast locale
   const validatedLocale = locale as Locale;
   const t = await getTranslations();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-8 container-padding">
+    <div className="container-padding flex min-h-screen flex-col items-center justify-center gap-8">
       {/* Header with title and controls */}
-      <div className="flex items-center gap-4 flex-wrap justify-center">
-        <h1 className="text-4xl font-bold text-center">
-          {t('common.welcome')}
-        </h1>
+      <div className="flex flex-wrap items-center justify-center gap-4">
+        <h1 className="text-center text-4xl font-bold">{t('common.welcome')}</h1>
         <div className="flex items-center gap-2">
           <LanguageSwitcher currentLocale={validatedLocale} />
           <ThemeToggle />
         </div>
       </div>
-      
+
       {/* Description */}
-      <p className={cn(typography.paragraph, "text-lg text-muted-foreground text-center max-w-md")}>
+      <p className={cn(typography.paragraph, 'text-muted-foreground max-w-md text-center text-lg')}>
         {t('common.description')}
       </p>
-      
+
       {/* Action buttons - automatically flow with text direction */}
-      <div className={cn("flex", spacing.gapMd)}>
+      <div className={cn('flex', spacing.gapMd)}>
         <Button variant="default" className="min-w-[120px]">
           {t('common.getStarted')}
         </Button>
@@ -47,11 +45,11 @@ export default async function HomePage({ params }: HomePageProps) {
       </div>
 
       {/* Main Navigation */}
-      <div className="mt-8 p-6 border rounded-lg bg-card">
-        <h3 className="text-lg font-semibold mb-4 text-center">
+      <div className="bg-card mt-8 rounded-lg border p-6">
+        <h3 className="mb-4 text-center text-lg font-semibold">
           {validatedLocale === 'ar' ? 'استكشف المحتوى' : 'Explore Content'}
         </h3>
-        <div className={cn("flex flex-wrap justify-center", spacing.gapMd)}>
+        <div className={cn('flex flex-wrap justify-center', spacing.gapMd)}>
           <Button asChild variant="default">
             <Link href={`/${validatedLocale}/store`}>
               {validatedLocale === 'ar' ? 'متجر المحتوى' : 'Content Store'}
@@ -64,7 +62,7 @@ export default async function HomePage({ params }: HomePageProps) {
           </Button>
         </div>
       </div>
-      
+
       {/* Dashboard link */}
       <Button variant="outline" className="mt-8" asChild>
         <Link href={`/${validatedLocale}/dashboard`}>

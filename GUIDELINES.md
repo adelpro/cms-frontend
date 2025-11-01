@@ -7,6 +7,7 @@ This document establishes the development standards, best practices, and guideli
 ## 🎯 Core Principles
 
 ### 1. **Quality Standards**
+
 - **Type Safety First**: Everything must be strictly typed with TypeScript
 - **SSR Compliance**: Maintain server-side rendering excellence
 - **Performance Focus**: Optimize for speed and minimal bundle size
@@ -14,18 +15,21 @@ This document establishes the development standards, best practices, and guideli
 - **Accessibility**: Ensure WCAG compliance
 
 ### 2. **UI/UX Standards**
+
 - **shadcn/ui Only**: Use ONLY shadcn/ui components for UI implementation
 - **Tailwind CSS**: All styling must use Tailwind CSS classes
 - **Design System**: Maintain consistency with established design tokens
 - **Responsive Design**: Responsive design with proper breakpoint consistency
 
 ### 3. **Localization Standards**
+
 - **Multilingual First**: ALL text content MUST be localized from day one
 - **No Single-Language Text**: NEVER use hardcoded strings in any language
 - **Translation-Driven Development**: Add translations before implementing UI
 - **Cultural Adaptation**: Consider RTL/LTR and cultural differences
 
 ### 4. **Consistency Rules**
+
 - **Uniform Naming**: Follow established naming conventions
 - **Structured Organization**: Maintain clean file/folder hierarchy
 - **Code Style**: Use consistent formatting and patterns
@@ -72,6 +76,7 @@ src/
 ### **Protected/Critical Files - REQUIRE SPECIAL CARE**
 
 #### 🔒 **CRITICAL FILES (Extreme caution required)**
+
 - `src/middleware.ts` - Routing and security
 - `src/app/[locale]/layout.tsx` - SSR root layout
 - `src/lib/i18n/types.ts` - Type definitions
@@ -82,6 +87,7 @@ src/
 - `tsconfig.json` - TypeScript configuration
 
 #### 🛡️ **PROTECTED DIRECTORIES (Review required)**
+
 - `src/lib/i18n/` - Internationalization system
 - `src/components/providers/` - React contexts
 - `src/dictionaries/` - Translation files
@@ -90,16 +96,18 @@ src/
 ## 📝 Naming Conventions
 
 ### **Files and Directories**
+
 ```typescript
 // ✅ CORRECT
-components/language-switcher.tsx    // kebab-case for files
-lib/i18n/utils.ts                  // kebab-case for files
+components / language - switcher.tsx; // kebab-case for files
+lib / i18n / utils.ts; // kebab-case for files
 // ❌ INCORRECT
-components/LanguageSwitcher.tsx     // PascalCase not allowed
-lib/i18n/Utils.ts                  // PascalCase not allowed
+components / LanguageSwitcher.tsx; // PascalCase not allowed
+lib / i18n / Utils.ts; // PascalCase not allowed
 ```
 
 ### **React Components**
+
 ```typescript
 // ✅ CORRECT - PascalCase for component names
 export function LanguageSwitcher() {}
@@ -107,11 +115,12 @@ export function ThemeProvider() {}
 export default function HomePage() {}
 
 // ❌ INCORRECT
-export function languageSwitcher() {}  // camelCase not allowed
-export function theme_provider() {}    // snake_case not allowed
+export function languageSwitcher() {} // camelCase not allowed
+export function theme_provider() {} // snake_case not allowed
 ```
 
 ### **Variables and Functions**
+
 ```typescript
 // ✅ CORRECT - camelCase
 const currentLocale = 'ar';
@@ -119,11 +128,12 @@ const isValidLocale = (locale: string) => {};
 const getDictionary = async () => {};
 
 // ❌ INCORRECT
-const current_locale = 'ar';           // snake_case not allowed
-const IsValidLocale = () => {};        // PascalCase not allowed
+const current_locale = 'ar'; // snake_case not allowed
+const IsValidLocale = () => {}; // PascalCase not allowed
 ```
 
 ### **Types and Interfaces**
+
 ```typescript
 // ✅ CORRECT - PascalCase
 type Locale = 'ar' | 'en';
@@ -131,11 +141,12 @@ interface HomePageProps {}
 interface LocaleContextType {}
 
 // ❌ INCORRECT
-type locale = 'ar' | 'en';             // camelCase not allowed
-interface homePageProps {}             // camelCase not allowed
+type locale = 'ar' | 'en'; // camelCase not allowed
+interface homePageProps {} // camelCase not allowed
 ```
 
 ### **Constants**
+
 ```typescript
 // ✅ CORRECT - SCREAMING_SNAKE_CASE for global constants
 const DEFAULT_LOCALE = 'ar';
@@ -151,6 +162,7 @@ const locales = ['ar', 'en'] as const;
 ### **CRITICAL RULES - NEVER VIOLATE**
 
 #### 1. **Locale Type Safety**
+
 ```typescript
 // ✅ ALWAYS use the Locale type
 import type { Locale } from '@/lib/i18n/types';
@@ -166,6 +178,7 @@ const locale: string = 'ar'; // Wrong!
 ```
 
 #### 2. **Translation Loading**
+
 ```typescript
 // ✅ CORRECT - Server components
 const dict = await getDictionary(locale);
@@ -178,6 +191,7 @@ import ar from '@/dictionaries/ar.json'; // Wrong!
 ```
 
 #### 3. **RTL/LTR Handling**
+
 ```typescript
 // ✅ ALWAYS use logical properties
 import { logical, direction } from '@/lib/styles/logical';
@@ -191,6 +205,7 @@ className="pl-4 text-left" // Wrong! Not RTL-aware
 ```
 
 #### 4. **URL Structure**
+
 ```typescript
 // ✅ CORRECT pattern
 /ar/            // Arabic homepage
@@ -206,16 +221,18 @@ className="pl-4 text-left" // Wrong! Not RTL-aware
 ### **Translation Management**
 
 #### **🚨 MANDATORY LOCALIZATION RULE**
+
 **ALL TEXT CONTENT MUST BE LOCALIZED - NO HARDCODED STRINGS ALLOWED**
 
 - ✅ **ALL user-facing text** must use dictionary translations
-- ✅ **ALL placeholders** must use dictionary translations  
+- ✅ **ALL placeholders** must use dictionary translations
 - ✅ **ALL error messages** must use dictionary translations
 - ✅ **ALL accessibility labels** must use dictionary translations
 - ✅ **ALL button labels** must use dictionary translations
 - ✅ **ALL form labels** must use dictionary translations
 
 #### ❌ **FORBIDDEN PRACTICES**
+
 ```typescript
 // ❌ NEVER use hardcoded strings
 <Button>Download</Button>                    // Wrong!
@@ -233,13 +250,14 @@ aria-label={dict.ui.closeDialog}           // Correct!
 ```
 
 #### Adding New Translations
+
 ```json
 // 1. Add to src/dictionaries/ar.json
 {
   "newKey": "النص العربي"
 }
 
-// 2. Add to src/dictionaries/en.json  
+// 2. Add to src/dictionaries/en.json
 {
   "newKey": "English text"
 }
@@ -252,13 +270,14 @@ export type Dictionary = {
 ```
 
 #### Using Translations
+
 ```typescript
 // ✅ Server components
 export default async function MyPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const validatedLocale = locale as Locale;
   const dict = await getDictionary(validatedLocale);
-  
+
   return <h1>{dict.newKey}</h1>;
 }
 
@@ -275,6 +294,7 @@ export function MyComponent() {
 **CRITICAL: Translations MUST be added BEFORE implementing UI components**
 
 #### **Step 1: Plan Text Content**
+
 ```typescript
 // ✅ CORRECT - Plan all text content first
 /*
@@ -289,6 +309,7 @@ Required translations for UserProfile component:
 ```
 
 #### **Step 2: Add Translations to Dictionaries**
+
 ```json
 // src/dictionaries/ar.json
 {
@@ -306,7 +327,7 @@ Required translations for UserProfile component:
 {
   "profile": {
     "title": "User Profile",
-    "editButton": "Edit Profile", 
+    "editButton": "Edit Profile",
     "avatarAlt": "User avatar",
     "avatarFallback": "U",
     "saveButton": "Save Changes",
@@ -316,6 +337,7 @@ Required translations for UserProfile component:
 ```
 
 #### **Step 3: Update Type Definitions**
+
 ```typescript
 // src/lib/i18n/types.ts
 export type Dictionary = {
@@ -332,6 +354,7 @@ export type Dictionary = {
 ```
 
 #### **Step 4: Implement UI with Translations**
+
 ```typescript
 // ✅ CORRECT - UI implementation after translations are ready
 "use client";
@@ -344,7 +367,7 @@ import { logical } from '@/lib/styles/logical';
 
 export function UserProfile() {
   const { t } = useTranslation();
-  
+
   return (
     <Card>
       <CardHeader>
@@ -386,6 +409,7 @@ export function UserProfile() {
 ```
 
 #### **Translation Workflow Checklist**
+
 - [ ] **Plan**: List all text content needed
 - [ ] **Translate**: Add to both `ar.json` and `en.json`
 - [ ] **Type**: Update type definitions
@@ -400,6 +424,7 @@ export function UserProfile() {
 **ALL UI components MUST be implemented using shadcn/ui. No custom UI components without explicit approval.**
 
 #### **✅ REQUIRED shadcn/ui Usage**
+
 ```typescript
 // ✅ CORRECT - Use shadcn/ui components
 import { Button } from '@/components/ui/button';
@@ -412,7 +437,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 // ✅ CORRECT - Component implementation
 export function UserProfile() {
   const { t } = useTranslation();
-  
+
   return (
     <Card>
       <CardHeader>
@@ -439,6 +464,7 @@ const MyCard = ({ children }) => <div className="custom-card">...</div>; // Wron
 ```
 
 #### **Adding New shadcn/ui Components**
+
 ```bash
 # ✅ CORRECT - Add components via shadcn CLI
 npx shadcn@latest add button
@@ -450,6 +476,7 @@ npx shadcn@latest add button input label card
 ```
 
 #### **Component Customization Rules**
+
 ```typescript
 // ✅ CORRECT - Extend shadcn/ui components with Tailwind
 import { Button } from '@/components/ui/button';
@@ -457,7 +484,7 @@ import { cn } from '@/lib/utils';
 
 export function CustomButton({ className, ...props }) {
   return (
-    <Button 
+    <Button
       className={cn(
         "custom-additional-styles",
         logical.paddingX('6'),
@@ -479,6 +506,7 @@ export function CustomButton() {
 **ALL styling MUST use Tailwind CSS. No CSS modules, styled-components, or custom CSS allowed.**
 
 #### **✅ MANDATORY Tailwind Patterns**
+
 ```typescript
 // ✅ CORRECT - Tailwind with logical properties
 import { logical, layoutPatterns, spacing } from '@/lib/styles/logical';
@@ -509,6 +537,7 @@ className={cn(
 ```
 
 #### **❌ FORBIDDEN Styling Approaches**
+
 ```typescript
 // ❌ NEVER use inline styles
 <div style={{ padding: '16px', color: 'red' }}>...</div>
@@ -530,25 +559,27 @@ const StyledDiv = styled.div`
 ### **CSS Logical Properties - MANDATORY**
 
 #### Always Use Logical Properties
+
 ```css
 /* ✅ CORRECT - Logical properties */
 .element {
-  padding-inline-start: 1rem;    /* ps-4 */
-  padding-inline-end: 1rem;      /* pe-4 */
-  margin-inline-start: auto;     /* ms-auto */
-  text-align: start;             /* text-start */
+  padding-inline-start: 1rem; /* ps-4 */
+  padding-inline-end: 1rem; /* pe-4 */
+  margin-inline-start: auto; /* ms-auto */
+  text-align: start; /* text-start */
 }
 
 /* ❌ WRONG - Physical properties */
 .element {
-  padding-left: 1rem;            /* Not RTL-aware */
-  padding-right: 1rem;           /* Not RTL-aware */
-  margin-left: auto;             /* Not RTL-aware */
-  text-align: left;              /* Not RTL-aware */
+  padding-left: 1rem; /* Not RTL-aware */
+  padding-right: 1rem; /* Not RTL-aware */
+  margin-left: auto; /* Not RTL-aware */
+  text-align: left; /* Not RTL-aware */
 }
 ```
 
 #### Tailwind Class Usage
+
 ```typescript
 // ✅ CORRECT - Use logical utilities
 import { logical, layoutPatterns, spacing } from '@/lib/styles/logical';
@@ -565,6 +596,7 @@ className="pl-4 text-left ml-auto" // Not RTL-aware
 ```
 
 ### **Component Styling Patterns**
+
 ```typescript
 // ✅ CORRECT - Use cn() utility for class merging
 import { cn } from '@/lib/utils';
@@ -582,6 +614,7 @@ className={"base-classes " + (conditionalClass ? "conditional-classes" : "")}
 ## 🔒 Theme System Guidelines
 
 ### **Theme Provider Usage**
+
 ```typescript
 // ✅ CORRECT - Use the enhanced provider
 import { ThemeProvider } from '@/components/providers/theme-provider';
@@ -595,9 +628,10 @@ import { ThemeProvider } from 'next-themes'; // Wrong!
 ```
 
 ### **Theme-Aware Components**
+
 ```typescript
 // ✅ CORRECT - Client component with theme
-"use client";
+'use client';
 import { useTheme } from 'next-themes';
 
 export function ThemeAwareComponent() {
@@ -609,6 +643,7 @@ export function ThemeAwareComponent() {
 ## ⚙️ Configuration Guidelines
 
 ### **Environment Variables**
+
 ```typescript
 // ✅ ALWAYS use the env utility
 import { env, isDevelopment } from '@/lib/env';
@@ -623,6 +658,7 @@ const url = process.env.NEXT_PUBLIC_BACKEND_URL; // Wrong!
 ```
 
 ### **Next.js Configuration**
+
 ```typescript
 // ✅ CRITICAL - next.config.ts structure
 const nextConfig: NextConfig = {
@@ -633,7 +669,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/',
-        destination: '/ar',     // CRITICAL - Default to Arabic
+        destination: '/ar', // CRITICAL - Default to Arabic
         permanent: false,
       },
     ];
@@ -641,11 +677,10 @@ const nextConfig: NextConfig = {
 };
 ```
 
-
-
 ## 📦 Dependency Management
 
 ### **Package Installation Rules**
+
 ```bash
 # ✅ CORRECT - Always specify exact versions for critical deps
 npm install next@15.5.0
@@ -660,20 +695,17 @@ npm install next  # Could break compatibility
 ```
 
 ### **Import Guidelines**
+
 ```typescript
 // ✅ CORRECT - Import order
-import React from 'react';                    // External libraries
-import { NextRequest } from 'next/server';    // Next.js imports
+import React from 'react'; // External libraries
+import { NextRequest } from 'next/server'; // Next.js imports
 import { Button } from '@/components/ui/button'; // Internal components
-import { cn } from '@/lib/utils';             // Internal utilities
+import { cn } from '@/lib/utils'; // Internal utilities
 import type { Locale } from '@/lib/i18n/types'; // Type imports last
 
 // ✅ CORRECT - Group imports
-import { 
-  logical, 
-  layoutPatterns, 
-  spacing 
-} from '@/lib/styles/logical';
+import { logical, layoutPatterns, spacing } from '@/lib/styles/logical';
 
 // ❌ WRONG - Scattered imports
 import { logical } from '@/lib/styles/logical';
@@ -684,6 +716,7 @@ import { spacing } from '@/lib/styles/logical';
 ## 🚨 Critical Security Rules
 
 ### **Middleware Security**
+
 ```typescript
 // ✅ CRITICAL - Always include security headers
 const response = NextResponse.next();
@@ -693,6 +726,7 @@ response.headers.set('X-XSS-Protection', '1; mode=block');
 ```
 
 ### **Input Validation**
+
 ```typescript
 // ✅ ALWAYS validate user inputs
 function isValidLocale(locale: string): locale is Locale {
@@ -710,12 +744,14 @@ if (!isValidLocale(userInput)) {
 ### **Before Submitting Changes**
 
 #### ✅ **Type Safety**
+
 - [ ] All variables are properly typed
 - [ ] No `any` types used
 - [ ] Proper type guards implemented
 - [ ] Interface definitions updated
 
 #### ✅ **UI Implementation**
+
 - [ ] Uses ONLY shadcn/ui components
 - [ ] No custom UI components created
 - [ ] All styling uses Tailwind CSS classes
@@ -724,33 +760,35 @@ if (!isValidLocale(userInput)) {
 - [ ] Theme-aware styling applied
 
 #### ✅ **Internationalization**
+
 - [ ] Uses Locale type correctly
 - [ ] **NO HARDCODED STRINGS ANYWHERE** (use translations)
-- [ ] ALL text uses dict.* pattern
-- [ ] ALL placeholders use dict.* pattern
-- [ ] ALL accessibility labels use dict.* pattern
-- [ ] ALL button text uses dict.* pattern
-- [ ] ALL error messages use dict.* pattern
-- [ ] ALL tooltips use dict.* pattern
+- [ ] ALL text uses dict.\* pattern
+- [ ] ALL placeholders use dict.\* pattern
+- [ ] ALL accessibility labels use dict.\* pattern
+- [ ] ALL button text uses dict.\* pattern
+- [ ] ALL error messages use dict.\* pattern
+- [ ] ALL tooltips use dict.\* pattern
 - [ ] Translations added BEFORE UI implementation
 - [ ] RTL/LTR compatibility maintained
 - [ ] Logical properties used for styling
 
 #### ✅ **Performance**
+
 - [ ] Server components preferred over client components
 - [ ] Proper code splitting maintained
 - [ ] No unnecessary re-renders
 - [ ] Bundle size impact considered
 
 #### ✅ **Architecture**
+
 - [ ] File placed in correct directory
 - [ ] Naming conventions followed
 - [ ] No circular dependencies
 - [ ] Proper error handling
 
-
-
 #### ✅ **Build & Lint**
+
 - [ ] `npm run build` succeeds
 - [ ] `npm run lint` passes
 - [ ] `npm run type-check` passes
@@ -805,6 +843,7 @@ const isDark = document.body.classList.contains('dark'); // Use useTheme()
 ## 🔧 Development Workflow
 
 ### **Adding New Features**
+
 1. **Plan**: Review architecture impact
 2. **Design**: Follow established patterns
 3. **Implement**: Use guidelines and conventions
@@ -812,6 +851,7 @@ const isDark = document.body.classList.contains('dark'); // Use useTheme()
 5. **Document**: Update relevant documentation
 
 ### **Modifying Existing Features**
+
 1. **Understand**: Read existing code thoroughly
 2. **Preserve**: Maintain backward compatibility
 3. **Enhance**: Follow improvement patterns
@@ -819,6 +859,7 @@ const isDark = document.body.classList.contains('dark'); // Use useTheme()
 5. **Document**: Update changed behavior
 
 ### **Emergency Fixes**
+
 1. **Assess**: Understand the urgency
 2. **Isolate**: Minimize change scope
 3. **Validate**: Verify fix doesn't break core features
@@ -828,6 +869,7 @@ const isDark = document.body.classList.contains('dark'); // Use useTheme()
 ## 📚 Reference Quick Guide
 
 ### **Import Statements**
+
 ```typescript
 // Type imports
 import type { Locale } from '@/lib/i18n/types';
@@ -836,7 +878,7 @@ import type { Locale } from '@/lib/i18n/types';
 import { isValidLocale, direction } from '@/lib/i18n/utils';
 import { getDictionary } from '@/lib/i18n/dictionaries';
 
-// Styling utilities  
+// Styling utilities
 import { logical, layoutPatterns } from '@/lib/styles/logical';
 import { cn } from '@/lib/utils';
 
@@ -852,13 +894,14 @@ import { ThemeProvider } from '@/components/providers/theme-provider';
 ```
 
 ### **Common Patterns**
+
 ```typescript
 // Page component pattern with shadcn/ui
 export default async function MyPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const validatedLocale = locale as Locale;
   const dict = await getDictionary(validatedLocale);
-  
+
   return (
     <Card>
       <CardHeader>
@@ -875,11 +918,11 @@ export default async function MyPage({ params }: { params: Promise<{ locale: str
 "use client";
 export function MyClientComponent() {
   const { t, locale, isRTL } = useTranslation();
-  
+
   return (
     <div className={cn(logical.textStart)}>
       <Badge variant="secondary">{t('status.active')}</Badge>
-      <Input 
+      <Input
         placeholder={t('form.searchPlaceholder')}
         className={cn(logical.marginStart('2'))}
       />
@@ -894,7 +937,7 @@ export function MyClientComponent() {
 "use client";
 export function ContactForm() {
   const { t } = useTranslation();
-  
+
   return (
     <Card>
       <CardHeader>
@@ -903,7 +946,7 @@ export function ContactForm() {
       <CardContent className="space-y-4">
         <div>
           <Label htmlFor="email">{t('form.emailLabel')}</Label>
-          <Input 
+          <Input
             id="email"
             type="email"
             placeholder={t('form.emailPlaceholder')}
@@ -923,8 +966,9 @@ export function ContactForm() {
 ## 🎯 **REMEMBER: These guidelines are MANDATORY**
 
 Following these guidelines ensures:
+
 - **Consistency** across the entire codebase
-- **Quality** that meets production standards  
+- **Quality** that meets production standards
 - **Maintainability** for future development
 - **Protection** of critical features
 - **Performance** optimization

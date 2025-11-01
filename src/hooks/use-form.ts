@@ -27,7 +27,9 @@ interface UseFormReturn<T> {
   /** Submit error message */
   submitError: string;
   /** Handle input change */
-  handleInputChange: (field: keyof T) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleInputChange: (
+    field: keyof T,
+  ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   /** Handle form submission */
   handleSubmit: (e: React.FormEvent) => Promise<void>;
   /** Reset form to initial state */
@@ -47,65 +49,70 @@ export function useForm<T extends Record<string, string>, R = Record<string, unk
   initialData,
   validate,
   onSubmit,
-  onSuccess
+  onSuccess,
 }: UseFormOptions<T, R>): UseFormReturn<T> {
   const t = useTranslations();
-  
+
   const [formData, setFormData] = useState<T>(initialData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string>('');
 
-  const handleInputChange = useCallback((field: keyof T) => 
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = useCallback(
+    (field: keyof T) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = e.target.value;
-      
-      setFormData(prev => ({
+
+      setFormData((prev) => ({
         ...prev,
-        [field]: value
+        [field]: value,
       }));
-      
+
       // Clear field error when user starts typing
       if (errors[field as string]) {
-        setErrors(prev => ({
+        setErrors((prev) => ({
           ...prev,
-          [field]: ''
+          [field]: '',
         }));
       }
-    }, [errors]);
+    },
+    [errors],
+  );
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitError('');
-    
-    // Validate form
-    const validation = validate(formData, t);
-    if (!validation.isValid) {
-      const fieldErrors: Record<string, string> = {};
-      validation.errors.forEach((error: { field: string; message: string }) => {
-        fieldErrors[error.field] = error.message;
-      });
-      setErrors(fieldErrors);
-      return;
-    }
-    
-    setIsLoading(true);
-    
-    try {
-      const result = await onSubmit(formData);
-      
-      if (result.success) {
-        onSuccess?.(result);
-      } else {
-        setSubmitError(result.error || t('errors.validationError'));
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      setSubmitError('');
+
+      // Validate form
+      const validation = validate(formData, t);
+      if (!validation.isValid) {
+        const fieldErrors: Record<string, string> = {};
+        validation.errors.forEach((error: { field: string; message: string }) => {
+          fieldErrors[error.field] = error.message;
+        });
+        setErrors(fieldErrors);
+        return;
       }
-    } catch (error) {
-      console.error('Form submission error:', error);
-      setSubmitError(t('errors.networkError'));
-    } finally {
-      setIsLoading(false);
-    }
-  }, [formData, validate, onSubmit, onSuccess, t]);
+
+      setIsLoading(true);
+
+      try {
+        const result = await onSubmit(formData);
+
+        if (result.success) {
+          onSuccess?.(result);
+        } else {
+          setSubmitError(result.error || t('errors.validationError'));
+        }
+      } catch (error) {
+        console.error('Form submission error:', error);
+        setSubmitError(t('errors.networkError'));
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [formData, validate, onSubmit, onSuccess, t],
+  );
 
   const resetForm = useCallback(() => {
     setFormData(initialData);
@@ -115,16 +122,16 @@ export function useForm<T extends Record<string, string>, R = Record<string, unk
   }, [initialData]);
 
   const setFieldValue = useCallback((field: keyof T, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   }, []);
 
   const setFieldError = useCallback((field: keyof T, error: string) => {
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      [field]: error
+      [field]: error,
     }));
   }, []);
 
@@ -143,6 +150,6 @@ export function useForm<T extends Record<string, string>, R = Record<string, unk
     resetForm,
     setFieldValue,
     setFieldError,
-    clearErrors
+    clearErrors,
   };
 }

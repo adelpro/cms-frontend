@@ -17,9 +17,11 @@ export interface PageProps {
  * Page props with additional dynamic params
  */
 export interface DynamicPageProps<T extends Record<string, string> = Record<string, string>> {
-  params: Promise<{
-    locale: string;
-  } & T>;
+  params: Promise<
+    {
+      locale: string;
+    } & T
+  >;
 }
 
 /**

@@ -9,11 +9,11 @@ interface LicensePageProps {
 
 export default async function LicensePage({ params }: LicensePageProps) {
   const { locale, id } = await params;
-  
+
   if (!isValidLocale(locale)) {
     notFound();
   }
-  
+
   const validatedLocale = locale as Locale;
 
   return <LicenseDetails licenseId={id} locale={validatedLocale} />;

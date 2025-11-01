@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -22,18 +22,11 @@ export function ProfileCompletionForm({ locale }: ProfileCompletionFormProps) {
   const router = useRouter();
   const { login } = useAuth();
 
-  const {
-    formData,
-    errors,
-    isLoading,
-    submitError,
-    handleInputChange,
-    handleSubmit
-  } = useForm({
+  const { formData, errors, isLoading, submitError, handleInputChange, handleSubmit } = useForm({
     initialData: {
       project_summary: '',
       project_url: '',
-      bio: ''
+      bio: '',
     },
     validate: validateProfileCompletionForm,
     onSubmit: async (data) => {
@@ -46,7 +39,7 @@ export function ProfileCompletionForm({ locale }: ProfileCompletionFormProps) {
         // Redirect to store page after successful completion
         router.push(`/${locale}/store`);
       }
-    }
+    },
   });
 
   const handleSkip = () => {
@@ -58,23 +51,15 @@ export function ProfileCompletionForm({ locale }: ProfileCompletionFormProps) {
     <div className="space-y-8">
       {/* Logo */}
       <div className="text-center">
-        <Image
-          src="/logo.svg"
-          alt="Itqan"
-          width={50}
-          height={50}
-          className="mx-auto mb-3"
-        />
+        <Image src="/logo.svg" alt="Itqan" width={50} height={50} className="mx-auto mb-3" />
       </div>
 
       {/* Header */}
-      <div className="text-center space-y-3">
+      <div className="space-y-3 text-center">
         <h1 className="text-[32px] font-bold text-[#333333]">
           {t('profile.completeProfileTitle')}
         </h1>
-        <p className="text-[18px] text-[#333333]">
-          {t('profile.completeProfileDescription')}
-        </p>
+        <p className="text-[18px] text-[#333333]">{t('profile.completeProfileDescription')}</p>
       </div>
 
       {/* Profile Completion Form */}
@@ -146,7 +131,7 @@ export function ProfileCompletionForm({ locale }: ProfileCompletionFormProps) {
             size="lg"
             onClick={handleSkip}
             disabled={isLoading}
-            className="w-full text-base bg-white hover:bg-gray-50"
+            className="w-full bg-white text-base hover:bg-gray-50"
           >
             {t('profile.doItLater')}
           </Button>

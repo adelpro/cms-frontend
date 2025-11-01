@@ -11,12 +11,12 @@ interface DashboardPageProps {
 
 export default async function DashboardPage({ params }: DashboardPageProps) {
   const { locale } = await params;
-  
+
   // Validate locale
   if (!isValidLocale(locale)) {
     notFound();
   }
-  
+
   const validatedLocale = locale as Locale;
 
   return <DashboardContent locale={validatedLocale} />;
@@ -24,15 +24,16 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
 
 export async function generateMetadata({ params }: DashboardPageProps) {
   const { locale } = await params;
-  
+
   if (!isValidLocale(locale)) {
     return {};
   }
-  
+
   const validatedLocale = locale as Locale;
 
   return {
-    title: validatedLocale === 'ar' ? 'لوحة التحكم - منصة المطورين' : 'Dashboard - Developer Platform',
+    title:
+      validatedLocale === 'ar' ? 'لوحة التحكم - منصة المطورين' : 'Dashboard - Developer Platform',
     description: 'Developer dashboard for managing projects and resources',
   };
 }

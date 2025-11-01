@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -25,33 +25,34 @@ export function SignupForm({ locale }: SignupFormProps) {
     email: '',
     password: '',
     title: '',
-    phoneNumber: ''
+    phoneNumber: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string>('');
-  
+
   const { login } = useAuth();
 
-  const handleInputChange = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: e.target.value
-    }));
-    
-    // Clear field error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({
+  const handleInputChange =
+    (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData((prev) => ({
         ...prev,
-        [field]: ''
+        [field]: e.target.value,
       }));
-    }
-  };
+
+      // Clear field error when user starts typing
+      if (errors[field]) {
+        setErrors((prev) => ({
+          ...prev,
+          [field]: '',
+        }));
+      }
+    };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError('');
-    
+
     // Validate form
     const validation = validateSignupForm(formData, t);
     if (!validation.isValid) {
@@ -62,12 +63,12 @@ export function SignupForm({ locale }: SignupFormProps) {
       setErrors(fieldErrors);
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     try {
       const response = await signupUser(formData);
-      
+
       if (response.success && response.user && response.token) {
         login(response.user, response.token);
       } else {
@@ -81,25 +82,16 @@ export function SignupForm({ locale }: SignupFormProps) {
     }
   };
 
-
   return (
     <div className="space-y-8">
       {/* Logo */}
       <div className="text-center">
-        <Image
-          src="/logo.svg"
-          alt="Itqan"
-          width={50}
-          height={50}
-          className="mx-auto mb-3"
-        />
+        <Image src="/logo.svg" alt="Itqan" width={50} height={50} className="mx-auto mb-3" />
       </div>
 
       {/* Welcome Message */}
-      <div className="text-center space-y-3">
-        <h1 className="text-[32px] font-bold text-[#333333]">
-          {t('auth.signupTitle')}
-        </h1>
+      <div className="space-y-3 text-center">
+        <h1 className="text-[32px] font-bold text-[#333333]">{t('auth.signupTitle')}</h1>
       </div>
 
       {/* Social Signup Buttons - Temporarily Commented Out */}
@@ -160,15 +152,18 @@ export function SignupForm({ locale }: SignupFormProps) {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Show submit error */}
         {submitError && (
-          <div className="p-3 rounded-md border bg-destructive/10 border-destructive/20 text-destructive text-sm text-center">
+          <div className="bg-destructive/10 border-destructive/20 text-destructive rounded-md border p-3 text-center text-sm">
             {submitError}
           </div>
         )}
 
         {/* Name Fields */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="firstName" className="block text-sm font-medium text-[#333333] text-start">
+            <Label
+              htmlFor="firstName"
+              className="block text-start text-sm font-medium text-[#333333]"
+            >
               {t('auth.firstName')}
             </Label>
             <Input
@@ -177,19 +172,22 @@ export function SignupForm({ locale }: SignupFormProps) {
               value={formData.firstName}
               onChange={handleInputChange('firstName')}
               className={cn(
-                "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-                "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-                errors.firstName && "border-destructive focus:ring-destructive"
+                'h-10 w-full rounded-md border border-gray-300 bg-white px-4 text-start placeholder:text-gray-400',
+                'focus:ring-primary focus:border-transparent focus:ring-2 focus:outline-none',
+                errors.firstName && 'border-destructive focus:ring-destructive',
               )}
               aria-invalid={!!errors.firstName}
             />
             {errors.firstName && (
-              <p className="text-destructive text-sm text-start">{errors.firstName}</p>
+              <p className="text-destructive text-start text-sm">{errors.firstName}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="lastName" className="block text-sm font-medium text-[#333333] text-start">
+            <Label
+              htmlFor="lastName"
+              className="block text-start text-sm font-medium text-[#333333]"
+            >
               {t('auth.lastName')}
             </Label>
             <Input
@@ -198,21 +196,21 @@ export function SignupForm({ locale }: SignupFormProps) {
               value={formData.lastName}
               onChange={handleInputChange('lastName')}
               className={cn(
-                "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-                "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-                errors.lastName && "border-destructive focus:ring-destructive"
+                'h-10 w-full rounded-md border border-gray-300 bg-white px-4 text-start placeholder:text-gray-400',
+                'focus:ring-primary focus:border-transparent focus:ring-2 focus:outline-none',
+                errors.lastName && 'border-destructive focus:ring-destructive',
               )}
               aria-invalid={!!errors.lastName}
             />
             {errors.lastName && (
-              <p className="text-destructive text-sm text-start">{errors.lastName}</p>
+              <p className="text-destructive text-start text-sm">{errors.lastName}</p>
             )}
           </div>
         </div>
 
         {/* Email */}
         <div className="space-y-2">
-          <Label htmlFor="email" className="block text-sm font-medium text-[#333333] text-start">
+          <Label htmlFor="email" className="block text-start text-sm font-medium text-[#333333]">
             {t('auth.email')}
           </Label>
           <Input
@@ -222,20 +220,18 @@ export function SignupForm({ locale }: SignupFormProps) {
             value={formData.email}
             onChange={handleInputChange('email')}
             className={cn(
-              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-              errors.email && "border-destructive focus:ring-destructive"
+              'h-10 w-full rounded-md border border-gray-300 bg-white px-4 text-start placeholder:text-gray-400',
+              'focus:ring-primary focus:border-transparent focus:ring-2 focus:outline-none',
+              errors.email && 'border-destructive focus:ring-destructive',
             )}
             aria-invalid={!!errors.email}
           />
-          {errors.email && (
-            <p className="text-destructive text-sm text-start">{errors.email}</p>
-          )}
+          {errors.email && <p className="text-destructive text-start text-sm">{errors.email}</p>}
         </div>
 
         {/* Password */}
         <div className="space-y-2">
-          <Label htmlFor="password" className="block text-sm font-medium text-[#333333] text-start">
+          <Label htmlFor="password" className="block text-start text-sm font-medium text-[#333333]">
             {t('auth.password')}
           </Label>
           <Input
@@ -245,20 +241,20 @@ export function SignupForm({ locale }: SignupFormProps) {
             value={formData.password}
             onChange={handleInputChange('password')}
             className={cn(
-              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-              errors.password && "border-destructive focus:ring-destructive"
+              'h-10 w-full rounded-md border border-gray-300 bg-white px-4 text-start placeholder:text-gray-400',
+              'focus:ring-primary focus:border-transparent focus:ring-2 focus:outline-none',
+              errors.password && 'border-destructive focus:ring-destructive',
             )}
             aria-invalid={!!errors.password}
           />
           {errors.password && (
-            <p className="text-destructive text-sm text-start">{errors.password}</p>
+            <p className="text-destructive text-start text-sm">{errors.password}</p>
           )}
         </div>
 
         {/* Title */}
         <div className="space-y-2">
-          <Label htmlFor="title" className="block text-sm font-medium text-[#333333] text-start">
+          <Label htmlFor="title" className="block text-start text-sm font-medium text-[#333333]">
             {t('auth.title')}
           </Label>
           <Input
@@ -268,20 +264,21 @@ export function SignupForm({ locale }: SignupFormProps) {
             value={formData.title}
             onChange={handleInputChange('title')}
             className={cn(
-              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-              errors.title && "border-destructive focus:ring-destructive"
+              'h-10 w-full rounded-md border border-gray-300 bg-white px-4 text-start placeholder:text-gray-400',
+              'focus:ring-primary focus:border-transparent focus:ring-2 focus:outline-none',
+              errors.title && 'border-destructive focus:ring-destructive',
             )}
             aria-invalid={!!errors.title}
           />
-          {errors.title && (
-            <p className="text-destructive text-sm text-start">{errors.title}</p>
-          )}
+          {errors.title && <p className="text-destructive text-start text-sm">{errors.title}</p>}
         </div>
 
         {/* Phone Number */}
         <div className="space-y-2">
-          <Label htmlFor="phoneNumber" className="block text-sm font-medium text-[#333333] text-start">
+          <Label
+            htmlFor="phoneNumber"
+            className="block text-start text-sm font-medium text-[#333333]"
+          >
             {t('auth.phoneNumber')}
           </Label>
           <Input
@@ -291,20 +288,20 @@ export function SignupForm({ locale }: SignupFormProps) {
             value={formData.phoneNumber}
             onChange={handleInputChange('phoneNumber')}
             className={cn(
-              "w-full h-10 bg-white border border-gray-300 rounded-md px-4 text-start placeholder:text-gray-400",
-              "focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent",
-              errors.phoneNumber && "border-destructive focus:ring-destructive"
+              'h-10 w-full rounded-md border border-gray-300 bg-white px-4 text-start placeholder:text-gray-400',
+              'focus:ring-primary focus:border-transparent focus:ring-2 focus:outline-none',
+              errors.phoneNumber && 'border-destructive focus:ring-destructive',
             )}
             aria-invalid={!!errors.phoneNumber}
           />
           {errors.phoneNumber && (
-            <p className="text-destructive text-sm text-start">{errors.phoneNumber}</p>
+            <p className="text-destructive text-start text-sm">{errors.phoneNumber}</p>
           )}
         </div>
 
         <Button
           type="submit"
-          className="w-full h-12 bg-[#2F504B] hover:bg-[#2F504B]/90 text-white rounded-md text-base font-medium flex items-center justify-center gap-2"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-md bg-[#2F504B] text-base font-medium text-white hover:bg-[#2F504B]/90"
           disabled={isLoading}
         >
           <span className="text-lg">←</span>
@@ -316,10 +313,7 @@ export function SignupForm({ locale }: SignupFormProps) {
       <div className="text-center">
         <p className="text-sm text-[#333333]">
           {t('auth.alreadyHaveAccount')}{' '}
-          <Link
-            href={`/${locale}/auth/login`}
-            className="text-primary hover:underline font-medium"
-          >
+          <Link href={`/${locale}/auth/login`} className="text-primary font-medium hover:underline">
             {t('auth.loginLink')}
           </Link>
         </p>

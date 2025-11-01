@@ -15,7 +15,7 @@ export default async function SignupPage({ params }: PageProps) {
 
 export async function generateMetadata({ params }: PageProps) {
   const locale = await validateLocaleForMetadata(params);
-  
+
   if (!locale) {
     return {};
   }

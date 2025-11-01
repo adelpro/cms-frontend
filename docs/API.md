@@ -83,7 +83,7 @@ import { refreshToken } from '@/lib/api';
 try {
   const response = await refreshToken(currentRefreshToken);
   localStorage.setItem('access_token', response.access);
-  
+
   // New refresh token might be provided (token rotation)
   if (response.refresh) {
     localStorage.setItem('refresh_token', response.refresh);
@@ -196,10 +196,14 @@ if (status.has_access) {
 ```typescript
 import { requestAssetAccess } from '@/lib/api';
 
-const response = await requestAssetAccess(assetId, {
-  purpose: 'Research project on Quranic studies',
-  intended_use: 'non-commercial',
-}, token);
+const response = await requestAssetAccess(
+  assetId,
+  {
+    purpose: 'Research project on Quranic studies',
+    intended_use: 'non-commercial',
+  },
+  token,
+);
 
 if (response.access) {
   // Access granted immediately
@@ -244,12 +248,15 @@ const resources = await getResources(token, {
 ```typescript
 import { createResource } from '@/lib/api';
 
-const resource = await createResource({
-  name: 'New Tafsir Collection',
-  description: 'Comprehensive tafsir texts',
-  category: 'tafsir',
-  publisher_id: 1,
-}, token);
+const resource = await createResource(
+  {
+    name: 'New Tafsir Collection',
+    description: 'Comprehensive tafsir texts',
+    category: 'tafsir',
+    publisher_id: 1,
+  },
+  token,
+);
 ```
 
 #### Update Resource
@@ -258,17 +265,25 @@ const resource = await createResource({
 import { updateResource, partialUpdateResource } from '@/lib/api';
 
 // Full update (all fields required)
-const updated = await updateResource(resourceId, {
-  name: 'Updated Name',
-  description: 'Updated description',
-  category: 'tafsir',
-  status: 'ready',
-}, token);
+const updated = await updateResource(
+  resourceId,
+  {
+    name: 'Updated Name',
+    description: 'Updated description',
+    category: 'tafsir',
+    status: 'ready',
+  },
+  token,
+);
 
 // Partial update (only provided fields)
-const updated = await partialUpdateResource(resourceId, {
-  status: 'ready',  // Only update status
-}, token);
+const updated = await partialUpdateResource(
+  resourceId,
+  {
+    status: 'ready', // Only update status
+  },
+  token,
+);
 ```
 
 #### Delete Resource
@@ -316,7 +331,7 @@ try {
 } catch (error) {
   // Get user-friendly error message
   const message = getErrorMessage(error);
-  
+
   // Check error type
   if (isAuthError(error)) {
     // Redirect to login
@@ -333,13 +348,13 @@ try {
 
 ### Common Error Codes
 
-| Error Code | Description | Action |
-|------------|-------------|--------|
-| `AUTHENTICATION_ERROR` | Invalid or missing token | Redirect to login |
-| `VALIDATION_ERROR` | Invalid input data | Show validation errors |
-| `NOT_FOUND` | Resource not found | Show 404 page |
-| `PERMISSION_DENIED` | Insufficient permissions | Show error message |
-| `RATE_LIMIT_EXCEEDED` | Too many requests | Ask user to wait |
+| Error Code             | Description              | Action                 |
+| ---------------------- | ------------------------ | ---------------------- |
+| `AUTHENTICATION_ERROR` | Invalid or missing token | Redirect to login      |
+| `VALIDATION_ERROR`     | Invalid input data       | Show validation errors |
+| `NOT_FOUND`            | Resource not found       | Show 404 page          |
+| `PERMISSION_DENIED`    | Insufficient permissions | Show error message     |
+| `RATE_LIMIT_EXCEEDED`  | Too many requests        | Ask user to wait       |
 
 ## 💡 Best Practices
 
@@ -365,7 +380,7 @@ try {
   console.error('API Error:', error);
   return {
     success: false,
-    error: getErrorMessage(error)
+    error: getErrorMessage(error),
   };
 }
 ```
@@ -375,9 +390,7 @@ try {
 ```typescript
 import type { PagedListAssetOut, AssetListFilters } from '@/lib/types';
 
-async function fetchAssets(
-  filters: AssetListFilters
-): Promise<PagedListAssetOut> {
+async function fetchAssets(filters: AssetListFilters): Promise<PagedListAssetOut> {
   return getAssets(token, filters);
 }
 ```
@@ -422,7 +435,9 @@ Convert API responses to internal models using conversion utilities:
 import { convertListAssetToAsset } from '@/lib/utils';
 import type { ListAssetOut } from '@/lib/types';
 
-const apiAsset: ListAssetOut = { /* ... */ };
+const apiAsset: ListAssetOut = {
+  /* ... */
+};
 const asset = convertListAssetToAsset(apiAsset);
 
 // Now asset has the internal Asset model structure
@@ -453,7 +468,7 @@ export function AssetList() {
           page: 1,
           page_size: 20,
         });
-        
+
         const convertedAssets = response.results.map(convertListAssetToAsset);
         setAssets(convertedAssets);
       } catch (err) {
@@ -484,4 +499,3 @@ export function AssetList() {
 - [Type Definitions](../src/lib/types/api/README.md)
 - [Error Handling](../src/lib/api/client/error-handler.ts)
 - [Conversion Utilities](../src/lib/utils/conversion.utils.ts)
-

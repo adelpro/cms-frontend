@@ -1,16 +1,16 @@
 /**
  * Types Module Barrel Export
- * 
+ *
  * This is the main entry point for all type definitions in the application.
  * Import types from this file for better organization and maintainability.
- * 
+ *
  * @example
  * // API types
  * import type { UserProfileSchema, ListAssetOut } from '@/lib/types';
- * 
+ *
  * // Domain models
  * import type { User, Asset } from '@/lib/types';
- * 
+ *
  * // Common types
  * import type { PageProps, ApiResponse } from '@/lib/types';
  */
@@ -27,7 +27,7 @@ export type {
   IntendedUseChoice,
   OrderingOption,
   BaseListFilters,
-  
+
   // Auth API types
   UserProfileSchema,
   UserUpdateSchema,
@@ -40,7 +40,7 @@ export type {
   OAuth2AuthorizeResponseSchema,
   AuthProvider,
   UserRole,
-  
+
   // Assets API types
   ListAssetPublisherOut,
   DetailAssetPublisherOut,
@@ -75,7 +75,7 @@ export type {
   UserProfileUpdate,
   UserCredentials,
   UserRegistration,
-  
+
   // Asset models
   AssetCategory,
   LicenseColor,
@@ -107,9 +107,11 @@ export interface PageProps {
  * Page props with additional dynamic params
  */
 export interface DynamicPageProps<T extends Record<string, string> = Record<string, string>> {
-  params: Promise<{
-    locale: string;
-  } & T>;
+  params: Promise<
+    {
+      locale: string;
+    } & T
+  >;
 }
 
 /**
@@ -131,4 +133,3 @@ export interface FormState<T> {
  * Theme type for consistent theming
  */
 export type Theme = 'light' | 'dark' | 'system';
-

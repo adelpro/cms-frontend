@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { NextIntlClientProvider } from 'next-intl';
 import { ReactNode } from 'react';

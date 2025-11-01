@@ -1,4 +1,3 @@
-
 import { isValidLocale } from '@/i18n';
 import { notFound } from 'next/navigation';
 import { AuthLayout } from '@/components/auth';
@@ -12,7 +11,7 @@ interface PageProps {
 
 export default async function CompleteProfilePage({ params }: PageProps) {
   const { locale } = await params;
-  
+
   if (!isValidLocale(locale)) {
     notFound();
   }
@@ -21,9 +20,7 @@ export default async function CompleteProfilePage({ params }: PageProps) {
 
   return (
     <AuthLayout locale={validatedLocale}>
-      <ProfileCompletionForm 
-        locale={validatedLocale}
-      />
+      <ProfileCompletionForm locale={validatedLocale} />
     </AuthLayout>
   );
 }

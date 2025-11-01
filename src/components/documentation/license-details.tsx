@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 // import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,7 +21,7 @@ interface LicenseDetailsProps {
 
 export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
   const t = useTranslations();
-  
+
   // Get license data from static data
   const license = getLicense(licenseId || 'CC0');
 
@@ -33,7 +33,7 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
   //   const fetchLicenseData = async () => {
   //     setIsLoading(true);
   //     setError('');
-      
+
   //     try {
   //       const token = tokenStorage.getToken();
   //       const licenseData = await getLicenseDetails(licenseId || 'cc-by', token || undefined);
@@ -54,7 +54,7 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
   //   const greenLicenses = ['cc0', 'cc-by-4.0'];
   //   const yellowLicenses = ['cc-by-sa-4.0', 'cc-by-nd-4.0', 'cc-by-nc-4.0'];
   //   const redLicenses = ['cc-by-nc-sa-4.0', 'cc-by-nc-nd-4.0'];
-    
+
   //   if (greenLicenses.includes(code)) return 'green';
   //   if (yellowLicenses.includes(code)) return 'yellow';
   //   if (redLicenses.includes(code)) return 'red';
@@ -92,10 +92,8 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
   if (!license) {
     return (
       <div className="container mx-auto max-w-4xl px-4 py-8">
-        <div className="text-center space-y-4">
-          <h2 className="text-xl font-semibold text-foreground">
-            {t('ui.licenseNotFound')}
-          </h2>
+        <div className="space-y-4 text-center">
+          <h2 className="text-foreground text-xl font-semibold">{t('ui.licenseNotFound')}</h2>
           <p className="text-muted-foreground">{t('ui.licenseNotFound')}</p>
         </div>
       </div>
@@ -106,33 +104,29 @@ export function LicenseDetails({ licenseId, locale }: LicenseDetailsProps) {
     <div className="container mx-auto max-w-4xl px-4 py-8">
       {/* Breadcrumb */}
       <div className="mb-6">
-        <Link 
+        <Link
           href={`/${locale}/store`}
-          className="flex items-center text-muted-foreground hover:text-primary transition-colors"
+          className="text-muted-foreground hover:text-primary flex items-center transition-colors"
         >
-          <ArrowLeft className="h-4 w-4 ms-2" />
+          <ArrowLeft className="ms-2 h-4 w-4" />
           {t('ui.backToStore')}
         </Link>
       </div>
 
       {/* Main Content */}
-      <div className="text-center space-y-8">
+      <div className="space-y-8 text-center">
         {/* Big heading (license code capitalized) */}
-        <h1 className="text-4xl font-bold uppercase">
-          {license.code}
-        </h1>
-        
+        <h1 className="text-4xl font-bold uppercase">{license.code}</h1>
+
         {/* License name based on language */}
-        <h2 className="text-2xl font-semibold text-muted-foreground">
-          {license.name[locale]}
-        </h2>
-        
+        <h2 className="text-muted-foreground text-2xl font-semibold">{license.name[locale]}</h2>
+
         {/* Button link to deed */}
         <div className="pt-4">
           <Button asChild size="lg">
-            <a 
-              href={license.deedUrl} 
-              target="_blank" 
+            <a
+              href={license.deedUrl}
+              target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2"
             >

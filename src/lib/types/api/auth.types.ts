@@ -1,6 +1,6 @@
 /**
  * Authentication API Types
- * 
+ *
  * This file contains all type definitions related to authentication,
  * user management, and OAuth operations.
  */
@@ -170,4 +170,3 @@ export type AuthProvider = 'email' | 'google' | 'github';
  * User role type for authorization
  */
 export type UserRole = 'user' | 'publisher' | 'admin';
-

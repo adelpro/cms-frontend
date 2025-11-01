@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import type { Locale } from '@/i18n';
 import { direction, logical, responsive } from '@/lib/styles/logical';
@@ -20,20 +20,17 @@ export function AuthLayout({ children, locale, className }: AuthLayoutProps) {
   const t = useTranslations();
 
   return (
-    <div 
-      className={cn(
-        "min-h-screen bg-[#F8F8F8] flex flex-col",
-        className
-      )}
+    <div
+      className={cn('flex min-h-screen flex-col bg-[#F8F8F8]', className)}
       dir={direction.getDir(locale)}
     >
       {/* Dark grey top bar */}
-      <div className="h-16 flex items-center justify-between px-4">
+      <div className="flex h-16 items-center justify-between px-4">
         <LanguageSwitcher currentLocale={locale} />
         <Button
           variant="ghost"
           size="lg"
-          className="h-10 px-4  border-[#0A0A0A] border-[1.25px]"
+          className="h-10 border-[1.25px] border-[#0A0A0A] px-4"
           asChild
         >
           <Link href={`/${locale}`}>
@@ -46,12 +43,12 @@ export function AuthLayout({ children, locale, className }: AuthLayoutProps) {
       </div>
 
       {/* Main content area */}
-      <div className="flex-1 flex items-center justify-center">
-        <div 
+      <div className="flex flex-1 items-center justify-center">
+        <div
           className={cn(
-            "w-full max-w-md",
+            'w-full max-w-md',
             logical.paddingInline('4'),
-            responsive.paddingInlineResponsive
+            responsive.paddingInlineResponsive,
           )}
         >
           {children}

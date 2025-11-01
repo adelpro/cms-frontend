@@ -24,15 +24,16 @@ export function FormError({
   message,
   className,
   showIcon = true,
-  variant = 'default'
+  variant = 'default',
 }: FormErrorProps) {
   if (!message) return null;
 
   const baseClasses = cn(
-    "text-destructive",
-    variant === 'default' && "p-3 rounded-md border bg-destructive/10 border-destructive/20 text-center",
-    variant === 'inline' && "text-sm text-start",
-    className
+    'text-destructive',
+    variant === 'default' &&
+      'p-3 rounded-md border bg-destructive/10 border-destructive/20 text-center',
+    variant === 'inline' && 'text-sm text-start',
+    className,
   );
 
   if (variant === 'inline') {

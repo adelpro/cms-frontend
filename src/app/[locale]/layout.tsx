@@ -1,36 +1,34 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { notFound } from "next/navigation";
-import "../globals.css";
-import { locales, isValidLocale } from "@/i18n";
-import type { Locale } from "@/i18n";
-import { cn } from "@/lib/utils";
-import { ThemeProvider } from "@/components/providers/theme-provider";
-import { AuthProvider } from "@/components/providers/auth-provider";
-import { NextIntlProvider } from "@/components/providers/next-intl-provider";
-import { direction } from "@/lib/styles/logical";
-import { ConditionalHeader } from "@/components/layout/conditional-header";
-import { getMessages } from "@/i18n";
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import { notFound } from 'next/navigation';
+import '../globals.css';
+import { locales, isValidLocale } from '@/i18n';
+import type { Locale } from '@/i18n';
+import { cn } from '@/lib/utils';
+import { ThemeProvider } from '@/components/providers/theme-provider';
+import { AuthProvider } from '@/components/providers/auth-provider';
+import { NextIntlProvider } from '@/components/providers/next-intl-provider';
+import { direction } from '@/lib/styles/logical';
+import { ConditionalHeader } from '@/components/layout/conditional-header';
+import { getMessages } from '@/i18n';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
-export async function generateMetadata({
-  params,
-}: RootLayoutProps): Promise<Metadata> {
+export async function generateMetadata({ params }: RootLayoutProps): Promise<Metadata> {
   const { locale } = await params;
 
   if (!isValidLocale(locale)) {
     return {
-      title: "ITQAN | Content Management System",
-      description: "A modern content management system",
+      title: 'ITQAN | Content Management System',
+      description: 'A modern content management system',
     };
   }
 
@@ -38,13 +36,11 @@ export async function generateMetadata({
 
   return {
     title:
-      validatedLocale === "ar"
-        ? "إتقان | نظام إدارة المحتوى"
-        : "ITQAN | Content Management System",
+      validatedLocale === 'ar' ? 'إتقان | نظام إدارة المحتوى' : 'ITQAN | Content Management System',
     description:
-      validatedLocale === "ar"
-        ? "منصة إتقان لإدارة المحتوى القرآني - حلول متقدمة تربط الناشرين بالمطورين والمستخدمين في بيئة تقنية متكاملة"
-        : "ITQAN Quranic Content Management Platform - Advanced solutions connecting publishers with developers and users in an integrated technical environment",
+      validatedLocale === 'ar'
+        ? 'منصة إتقان لإدارة المحتوى القرآني - حلول متقدمة تربط الناشرين بالمطورين والمستخدمين في بيئة تقنية متكاملة'
+        : 'ITQAN Quranic Content Management Platform - Advanced solutions connecting publishers with developers and users in an integrated technical environment',
   };
 }
 
@@ -57,10 +53,7 @@ interface RootLayoutProps {
   params: Promise<{ locale: string }>;
 }
 
-export default async function RootLayout({
-  children,
-  params,
-}: RootLayoutProps) {
+export default async function RootLayout({ children, params }: RootLayoutProps) {
   const { locale } = await params;
 
   // Validate locale with proper type safety
@@ -80,9 +73,9 @@ export default async function RootLayout({
         className={cn(
           geistSans.variable,
           geistMono.variable,
-          "antialiased",
-          isRTL && "font-arabic",
-          "bg-[#F8F8F8]"
+          'antialiased',
+          isRTL && 'font-arabic',
+          'bg-[#F8F8F8]',
         )}
       >
         <ThemeProvider>

@@ -9,11 +9,11 @@ interface StorePageProps {
 
 export default async function StorePage({ params }: StorePageProps) {
   const { locale } = await params;
-  
+
   if (!isValidLocale(locale)) {
     notFound();
   }
-  
+
   const validatedLocale = locale as Locale;
 
   return <AssetStore locale={validatedLocale} />;
