@@ -1,65 +1,80 @@
+# Pull Request
+
 ## Description
 
-<!-- Provide a brief description of your changes -->
+<!-- Provide a clear and concise description of your changes -->
 
 ## Type of Change
 
-- [ ] Bug fix (non-breaking change fixing an issue)
-- [ ] New feature (non-breaking change adding functionality)
-- [ ] Breaking change (fix or feature causing existing functionality to change)
+<!-- Mark the relevant option with an "x" -->
+
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] Documentation update
-- [ ] Performance improvement
 - [ ] Code refactoring
-- [ ] Test addition/update
-- [ ] Chore (maintenance tasks)
+- [ ] Performance improvement
+- [ ] Test update
 
-## Related Issues
+## Related Issue
 
-<!-- Link related issues using #issue_number -->
+<!-- Link to the issue this PR addresses -->
 
-Closes #
-Fixes #
-Resolves #
+Closes #(issue number)
 
 ## Changes Made
 
-## <!-- List the specific changes you made -->
+<!-- List the main changes made in this PR -->
 
--
--
-
-## Testing Done
-
-<!-- Describe the testing you performed -->
-
-- [ ] Unit tests added/updated
-- [ ] Integration tests added/updated
-- [ ] Manual testing performed
-- [ ] Tested in both Arabic (RTL) and English (LTR)
-- [ ] Tested in light and dark modes
-- [ ] Tested on mobile and desktop viewports
-- [ ] Tested with keyboard navigation
-- [ ] All existing tests pass
+- 
+- 
+- 
 
 ## Screenshots (if applicable)
 
-<!-- Add screenshots showing your changes -->
+<!-- Add screenshots to help explain your changes -->
+
+## Testing
+
+<!-- Describe the tests you ran to verify your changes -->
+
+- [ ] Unit tests pass locally
+- [ ] Build succeeds without errors
+- [ ] Tested on Chrome
+- [ ] Tested on Firefox
+- [ ] Tested on Safari
+- [ ] Tested on mobile browsers
+- [ ] Tested in development environment
+- [ ] Tested in staging environment (if applicable)
 
 ## Checklist
 
-- [ ] My code follows the project's coding standards
-- [ ] I have performed a self-review of my code
-- [ ] I have commented complex logic where necessary
+<!-- Mark completed items with an "x" -->
+
+- [ ] My code follows the project's style guidelines
+- [ ] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix/feature works
-- [ ] All new and existing tests pass locally
-- [ ] All text is properly translated (no hardcoded strings)
-- [ ] I have used CSS logical properties (no ml-/mr-/left/right)
-- [ ] I have tested the changes in both RTL and LTR layouts
-- [ ] I have verified accessibility requirements
-- [ ] I have checked for performance implications
+- [ ] My changes generate no new warnings or errors
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+- [ ] Any dependent changes have been merged and published
+- [ ] I have updated the README.md (if needed)
+- [ ] I have updated the CHANGELOG.md (if needed)
 
-## Additional Notes
+## Additional Context
 
-<!-- Any additional information that reviewers should know -->
+<!-- Add any other context about the PR here -->
+
+## Dependencies
+
+<!-- List any new dependencies added -->
+
+## Breaking Changes
+
+<!-- If this is a breaking change, describe what breaks and how to migrate -->
+
+## Reviewer Notes
+
+<!-- Any specific areas you'd like reviewers to focus on? -->
+

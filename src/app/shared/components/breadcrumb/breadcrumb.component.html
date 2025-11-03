@@ -1,0 +1,15 @@
+<nz-breadcrumb *ngIf="breadcrumbs.length > 0">
+  <nz-breadcrumb-item>
+    <a routerLink="/" class="va-top">
+      <i class="bx bx-home"></i>
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item *ngFor="let crumb of breadcrumbs">
+    <a *ngIf="!crumb.isActive" [routerLink]="crumb.url">
+      {{ crumb.label }}
+    </a>
+    <span *ngIf="crumb.isActive">
+      {{ crumb.label }}
+    </span>
+  </nz-breadcrumb-item>
+</nz-breadcrumb>

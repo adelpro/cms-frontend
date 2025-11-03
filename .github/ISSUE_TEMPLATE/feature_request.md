@@ -2,97 +2,80 @@
 name: Feature Request
 about: Suggest an idea for this project
 title: '[FEATURE] '
-labels: ['enhancement', 'needs-triage']
+labels: enhancement
 assignees: ''
 ---
 
-## Feature Description
+## Feature Summary
 
-<!-- A clear and concise description of the feature you'd like to see -->
+<!-- A clear and concise description of the feature you'd like -->
 
 ## Problem Statement
 
-<!-- Is your feature request related to a problem? Please describe -->
-<!-- A clear and concise description of what the problem is -->
+<!-- Is your feature request related to a problem? Please describe. -->
+<!-- Example: I'm always frustrated when [...] -->
 
 ## Proposed Solution
 
-<!-- Describe the solution you'd like -->
 <!-- A clear and concise description of what you want to happen -->
 
 ## Alternative Solutions
 
-<!-- Describe any alternative solutions or features you've considered -->
+<!-- A clear and concise description of any alternative solutions or features you've considered -->
 
 ## Use Cases
 
 <!-- Describe the use cases for this feature -->
 
-1. Use case 1
-2. Use case 2
-3. Use case 3
+1. As a [user type], I want to [action] so that [benefit]
+2. 
 
-## User Stories
+## Implementation Details
 
-<!-- If applicable, describe user stories -->
+<!-- Optional: Technical details about how this could be implemented -->
 
-- As a [user type], I want [functionality] so that [benefit]
-- As a [user type], I want [functionality] so that [benefit]
+## Benefits
 
-## Acceptance Criteria
+<!-- What are the benefits of implementing this feature? -->
 
-<!-- Define what "done" looks like -->
+- 
+- 
+- 
 
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
+## Drawbacks
 
-## Mockups/Designs
+<!-- Are there any potential drawbacks or challenges? -->
 
-<!-- If applicable, add mockups, designs, or wireframes -->
+- 
+- 
 
-## Technical Considerations
+## Dependencies
 
-<!-- Any technical considerations or constraints -->
+<!-- Does this feature depend on other features or external services? -->
 
-- Performance impact:
-- Breaking changes:
-- Dependencies:
-- Browser compatibility:
+## Design Mockups
 
-## Implementation Ideas
-
-<!-- If you have ideas about how this could be implemented -->
-
-- Technical approach:
-- Required changes:
-- New dependencies:
-
-## Priority
-
-<!-- How important is this feature? -->
-
-- [ ] Critical (blocking other work)
-- [ ] High (important for next release)
-- [ ] Medium (nice to have)
-- [ ] Low (future consideration)
+<!-- If applicable, add mockups or design examples -->
 
 ## Additional Context
 
-<!-- Add any other context or screenshots about the feature request here -->
+<!-- Add any other context, screenshots, or examples about the feature request here -->
 
-## Related Issues
+## Priority
 
-<!-- Link any related issues -->
+<!-- How important is this feature to you? -->
 
-- Related to #
-- Duplicate of #
-- Blocked by #
+- [ ] Critical - Blocks my workflow
+- [ ] High - Would significantly improve my experience
+- [ ] Medium - Nice to have
+- [ ] Low - Minor improvement
 
-## Community Impact
+## Willing to Contribute
 
-<!-- How would this feature impact the community? -->
+<!-- Are you willing to work on this feature? -->
 
-- Number of users affected:
-- Use case frequency:
-- Community feedback:
+- [ ] Yes, I can work on this feature
+- [ ] Yes, I can help with testing
+- [ ] Yes, I can help with documentation
+- [ ] No, but I'm happy to provide feedback
+

@@ -2,7 +2,7 @@
 name: Bug Report
 about: Create a report to help us improve
 title: '[BUG] '
-labels: ['bug', 'needs-triage']
+labels: bug
 assignees: ''
 ---
 
@@ -11,8 +11,6 @@ assignees: ''
 <!-- A clear and concise description of what the bug is -->
 
 ## Steps to Reproduce
-
-<!-- Steps to reproduce the behavior -->
 
 1. Go to '...'
 2. Click on '....'
@@ -33,17 +31,22 @@ assignees: ''
 
 ## Environment
 
-<!-- Please complete the following information -->
+**Desktop:**
+- OS: [e.g. Windows 10, macOS 13.0]
+- Browser: [e.g. Chrome 120, Firefox 121]
+- Version: [e.g. 22]
 
-- **OS**: [e.g. Windows 10, macOS 12, Ubuntu 20.04]
-- **Browser**: [e.g. Chrome 95, Firefox 94, Safari 15]
-- **Node.js Version**: [e.g. 18.17.0]
-- **npm Version**: [e.g. 9.6.7]
-- **Project Version**: [e.g. 1.0.0]
+**Mobile:**
+- Device: [e.g. iPhone 14, Samsung Galaxy S23]
+- OS: [e.g. iOS 17.0, Android 14]
+- Browser: [e.g. Safari, Chrome]
+- Version: [e.g. 22]
 
-## Additional Context
-
-<!-- Add any other context about the problem here -->
+**Application:**
+- Environment: [e.g. Development, Staging, Production]
+- URL: [e.g. https://develop.cms.itqan.dev]
+- Angular Version: [e.g. 20.3.7]
+- Node Version: [e.g. 20.11.0]
 
 ## Console Errors
 
@@ -53,31 +56,19 @@ assignees: ''
 Paste console errors here
 ```
 
-## Network Tab
+## Network Requests
 
-<!-- If applicable, describe any network-related issues -->
+<!-- If applicable, include any relevant failed network requests -->
 
-- Request URL:
-- Status Code:
-- Response:
+## Additional Context
 
-## Reproduction
+<!-- Add any other context about the problem here -->
 
-<!-- If you can, provide a minimal reproduction -->
+## Possible Solution
 
-- [ ] I can reproduce this issue consistently
-- [ ] This issue happens randomly
-- [ ] This issue only happens in specific conditions
+<!-- Optional: Suggest a fix or reason for the bug -->
 
-## Severity
+## Related Issues
 
-<!-- How severe is this bug? -->
+<!-- Optional: Link to related issues -->
 
-- [ ] Critical (app crashes, data loss)
-- [ ] High (major functionality broken)
-- [ ] Medium (minor functionality affected)
-- [ ] Low (cosmetic issue)
-
-## Workaround
-
-<!-- If you have found a workaround, please describe it here -->
