@@ -1,0 +1,13 @@
+<div class="assets-listing">
+  <app-filters
+    class="assets-listing__filters"
+    (searchQueryChange)="searchQueryChange($event)"
+    (categoriesSelectionChange)="categoriesSelectionChange($event)"
+    (licensesSelectionChange)="licensesSelectionChange($event)"
+  />
+  <div class="assets-listing__grid">
+    @for (asset of assets(); track asset.id) {
+      <app-asset-card [asset]="asset" />
+    }
+  </div>
+</div>

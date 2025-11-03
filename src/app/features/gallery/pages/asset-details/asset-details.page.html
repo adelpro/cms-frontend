@@ -1,0 +1,201 @@
+<div class="asset-details-container">
+  <app-breadcrumb />
+
+  <!-- <nz-spin [nzSpinning]="loading()" nzSize="large"> -->
+    @if (asset()) {
+    <div class="asset-details-content">
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Header Section -->
+        <div class="header-section">
+          <div class="title-row">
+            <h1 class="asset-title">{{ asset()!.name }}</h1>
+            <nz-tag class="category-badge">
+              <i class="bx bx-{{ getCategoryIcon(asset()!.category) }}"></i>
+              <span>{{ 'CATEGORIES.' + asset()!.category | translate }}</span>
+            </nz-tag>
+          </div>
+          <p class="asset-description">{{ asset()!.description }}</p>
+        </div>
+
+        <!-- Content Preview Card -->
+        <div class="preview-card">
+          <div class="preview-card-header">
+            <i class="bx bx-eye-alt"></i>
+            <span>{{ 'UI.CONTENT_PREVIEW' | translate }}</span>
+          </div>
+          <div class="carousel-wrapper">
+            <app-image-carousel [images]="images()" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Actions Card -->
+        <div class="card actions-card">
+          <div class="card-header">
+            <i class="bx bx-cursor"></i>
+            <h3 class="card-title">{{ 'UI.RESOURCE_ACTIONS' | translate }}</h3>
+          </div>
+          
+          <div class="card-content">
+            <div class="actions-list">
+              <a routerLink="/content-standards">
+                <button nz-button nzBlock class="action-button">
+                  <i class="bx bx-file-detail"></i>
+                  {{ 'UI.USAGE_STANDARDS' | translate }}
+                </button>
+              </a>
+              <a [routerLink]="['/license', asset()!.license]">
+                <button nz-button nzBlock class="action-button">
+                  <i class="bx bx-file-detail"></i>
+                  {{ 'GALLERY.VIEW_LICENSE' | translate }}
+                </button>
+              </a>
+              <button nz-button nzBlock class="download-button-secondary" (click)="downloadOriginalResource()">
+                {{ 'UI.DOWNLOAD_ORIGINAL_RESOURCE' | translate }}
+                <i class="bx bx-cloud-download"></i>
+              </button>
+              <button nz-button nzType="primary" nzBlock class="download-button-primary" (click)="downloadResource()">
+                {{ 'UI.DOWNLOAD_RESOURCE' | translate }}
+                <i class="bx bx-cloud-download"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Publisher Card -->
+        <div class="card publisher-card">
+          <div class="card-header">
+            <i class="bx bx-book-open"></i>
+            <h3 class="card-title">{{ 'UI.PUBLISHER_LABEL' | translate }}</h3>
+          </div>
+          
+          <div class="card-content">
+            <a [routerLink]="['/publisher', asset()!.publisher.id]" class="publisher-link">
+              {{ asset()!.publisher.name }}
+            </a>
+            <p class="publisher-description">{{ asset()!.publisher.description }}</p>
+          </div>
+        </div>
+
+        <!-- License Card -->
+        <div class="card license-card">
+          <div class="card-header">
+            <i class="bx bx-file-detail"></i>
+            <h3 class="card-title">{{ 'UI.LICENSE_INFO' | translate }}</h3>
+          </div>
+          
+          <div class="card-content">
+            <p class="license-name">{{ asset()!.license }}</p>
+            <app-license-tag [license]="getLicenseType(asset()!.license)" />
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  <!-- </nz-spin> -->
+
+  <!-- Access Request Modal -->
+  <nz-modal
+    [nzVisible]="isModalVisible()"
+    [nzTitle]="'ACCESS_REQUEST.TITLE' | translate"
+    [nzOkText]="'ACCESS_REQUEST.PROCEED' | translate"
+    [nzCancelText]="'COMMON.CANCEL' | translate"
+    (nzOnCancel)="handleModalCancel()"
+    (nzOnOk)="handleModalOk()">
+    <div *nzModalContent>
+      <p class="modal-caption">{{ asset()?.name }}</p>
+      
+      <form [formGroup]="accessRequestForm" nz-form>
+        <nz-form-item>
+          <nz-form-label [nzRequired]="true">
+            {{ 'ACCESS_REQUEST.USAGE_LABEL' | translate }}
+          </nz-form-label>
+          <nz-form-control 
+            [nzErrorTip]="accessRequestForm.get('intended_use')?.hasError('required') && accessRequestForm.get('intended_use')?.touched ? ('FORMS.VALIDATION.REQUIRED' | translate) : ''">
+            <nz-select
+              formControlName="intended_use"
+              [nzPlaceHolder]="'ACCESS_REQUEST.USAGE_PLACEHOLDER' | translate">
+              @for (option of usageOptions; track option.value) {
+                <nz-option [nzValue]="option.value" [nzLabel]="('ACCESS_REQUEST.USAGE_OPTIONS.' + option.value | translate)"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzRequired]="true">
+            {{ 'ACCESS_REQUEST.REASON_LABEL' | translate }}
+          </nz-form-label>
+          <nz-form-control 
+            [nzErrorTip]="accessRequestForm.get('purpose')?.hasError('required') && accessRequestForm.get('purpose')?.touched ? ('FORMS.VALIDATION.REQUIRED' | translate) : ''">
+            <textarea
+              nz-input
+              formControlName="purpose"
+              [nzAutosize]="{ minRows: 3, maxRows: 3 }"
+              [placeholder]="'ACCESS_REQUEST.REASON_PLACEHOLDER' | translate">
+            </textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+  </nz-modal>
+
+  <!-- License Terms Modal -->
+  <nz-modal
+    [nzVisible]="isLicenseModalVisible()"
+    [nzTitle]="'ACCESS_REQUEST.LICENSE_TERMS_TITLE' | translate"
+    [nzOkText]="'ACCESS_REQUEST.CONFIRM' | translate"
+    [nzCancelText]="'COMMON.CANCEL' | translate"
+    [nzOkDisabled]="!canConfirmLicense()"
+    (nzOnCancel)="closeLicenseModal()"
+    (nzOnOk)="handleLicenseConfirm()">
+    <div *nzModalContent>
+      <div class="license-modal-content">
+        <div class="license-header">
+          <p class="license-subtitle">{{ asset()?.name }} - {{ asset()?.license }} {{ 'ACCESS_REQUEST.LICENSE_INFO' | translate }}</p>
+        </div>
+        
+        <div class="license-card">
+          <div class="license-terms-scroll" (scroll)="handleLicenseScroll($event)">
+            <pre class="license-text">اتفاقية الترخيص لـ {{ asset()?.name }}
+
+نوع الترخيص: {{ asset()?.license }}
+
+الشروط والأحكام
+
+1. منح الترخيص
+بتحميل هذا المورد، فإنك توافق على الالتزام بشروط ترخيص {{ asset()?.license }}.
+
+2. الاستخدامات المسموحة
+- يمكنك استخدام هذا المورد للمشاريع الشخصية والتجارية
+- يمكنك تعديل وتكييف المورد لاحتياجاتك
+- يجب عليك تقديم الإسناد المناسب عند الحاجة
+
+3. القيود
+- لا يمكنك إعادة توزيع الملفات الأصلية دون إذن
+- لا يمكنك المطالبة بملكية العمل الأصلي
+- قد يتطلب الاستخدام التجاري أذونات إضافية
+
+4. الضمانات والمسؤولية
+يتم توفير هذا المورد "كما هو" دون ضمانات من أي نوع.
+الناشر غير مسؤول عن أي أضرار ناتجة عن استخدام هذا المورد.
+
+5. الإنهاء
+ينتهي هذا الترخيص تلقائياً إذا انتهكت أي شروط.
+عند الإنهاء، يجب عليك التوقف عن جميع الاستخدامات وحذف جميع النسخ.
+
+بالنقر على "تأكيد"، فإنك تقر بأنك قد قرأت ووافقت على هذه الشروط.</pre>
+          </div>
+          @if (showScrollHint) {
+            <div class="license-scroll-hint">
+              {{ 'ACCESS_REQUEST.SCROLL_HINT' | translate }}
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </nz-modal>
+</div>
