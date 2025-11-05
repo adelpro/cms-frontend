@@ -1,17 +1,17 @@
 # Production environment (main/master branch)
 [build]
   command = "npm run build:production"
-  publish = "dist"
+  publish = "dist/browser"
 
 # Staging environment
 [context.staging]
   command = "npm run build:staging"
-  publish = "dist"
+  publish = "dist/browser"
 
 # Develop environment
 [context.develop]
   command = "npm run build:develop"
-  publish = "dist"
+  publish = "dist/browser"
 
 # Shared redirects for all environments
 [[redirects]]
