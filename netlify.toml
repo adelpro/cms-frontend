@@ -1,0 +1,20 @@
+# Production environment (main/master branch)
+[build]
+  command = "npm run build:production"
+  publish = "dist"
+
+# Staging environment
+[context.staging]
+  command = "npm run build:staging"
+  publish = "dist"
+
+# Develop environment
+[context.develop]
+  command = "npm run build:develop"
+  publish = "dist"
+
+# Shared redirects for all environments
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
