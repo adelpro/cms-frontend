@@ -1,0 +1,358 @@
+.asset-details-container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding-top: 2rem;
+}
+
+.asset-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    gap: 2rem;
+  }
+}
+
+// Main Content
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.asset-title {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--color-neutral-600);
+  margin: 0;
+  line-height: 1.2;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+}
+
+.category-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: white;
+  border: 1px solid var(--color-neutral-200);
+
+  i {
+    font-size: 1rem;
+  }
+}
+
+.asset-description {
+  color: var(--color-neutral-400);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+// Preview Card - original structure
+.preview-card {
+  background: transparent;
+  box-shadow: none;
+}
+
+.preview-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  margin-inline-start: 52px;
+  color: var(--color-neutral-600);
+
+  @media (max-width: 768px) {
+    margin-inline-start: 0;
+  }
+
+  i {
+    font-size: 1.25rem;
+  }
+}
+
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+}
+
+// Sidebar
+.sidebar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media (min-width: 1024px) {
+    width: 320px;
+    flex-shrink: 0;
+  }
+}
+
+// Generic card structure (shared with filters component style)
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 16px;
+
+  i {
+    font-size: 28px;
+  }
+}
+
+.card-title {
+  margin: 0;
+  font-size: 16px;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+// Actions Card
+.actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  a {
+    display: block;
+  }
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  height: 36px;
+  background-color: var(--color-neutral-50);
+  border-color: var(--color-neutral-200);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-neutral-200) !important;
+    border-color: var(--color-neutral-200) !important;
+  }
+
+  i {
+    font-size: 1rem;
+    margin-inline-end: 0.5rem;
+  }
+}
+
+.download-button-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 40px;
+  margin-top: 0.5rem;
+  cursor: pointer;
+
+  i {
+    font-size: 1rem;
+    margin-inline-start: 0.5rem;
+  }
+}
+
+.download-button-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 40px;
+  cursor: pointer;
+
+  i {
+    font-size: 1rem;
+    margin-inline-start: 0.5rem;
+  }
+}
+
+// Publisher Card
+
+.publisher-link {
+  display: block;
+  max-width: max-content;
+  color: var(--color-neutral-400);
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--color-primary-700);
+    text-decoration: underline;
+  }
+}
+
+.publisher-description {
+  color: var(--color-neutral-400);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+// License Card
+
+.license-name {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: var(--color-neutral-600);
+}
+
+// Loading state
+nz-spin {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Modal styles - labels above inputs
+::ng-deep .ant-modal {
+  // Form styles - labels above inputs
+  .ant-form-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important; // RTL-aware: stretches to full width
+    margin-bottom: 24px;
+
+    // Reset any row layout
+    &-row {
+      flex-direction: column !important;
+    }
+
+    .ant-form-item-label {
+      display: block !important;
+      position: static !important;
+      text-align: start !important; // RTL-aware: left in LTR, right in RTL
+      padding: 0 0 8px 0 !important;
+      margin: 0 !important;
+      margin-bottom: 0 !important;
+      width: 100% !important;
+      flex: none !important;
+      max-width: 100% !important;
+
+      label {
+        height: auto !important;
+        line-height: 1.5 !important;
+        position: static !important;
+        display: block !important;
+        margin: 0 !important;
+        width: 100% !important;
+        text-align: start !important; // RTL-aware
+        
+        // Remove trailing colon
+        &::after {
+          content: none !important;
+        }
+      }
+    }
+
+    .ant-form-item-control {
+      width: 100% !important;
+      flex: none !important;
+      margin: 0 !important;
+    }
+  }
+
+  .ant-select-focused .ant-select-selector {
+    box-shadow: 0 0 0 2px var(--color-primary-200) !important;
+    border-color: var(--color-neutral-200) !important;
+  }
+}
+
+.modal-caption {
+  font-size: 1rem;
+  color: var(--color-neutral-600);
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+// License Modal styles
+.license-modal-content {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.license-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+
+  .license-subtitle {
+    font-size: 0.875rem;
+    color: var(--color-neutral-400);
+    margin: 0;
+  }
+}
+
+.license-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.license-terms-scroll {
+  height: 384px; // h-96 = 24rem = 384px
+  overflow-y: auto;
+  padding: 0;
+  text-align: start;
+}
+
+.license-text {
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  margin: 0;
+  color: var(--color-neutral-600);
+}
+
+.license-scroll-hint {
+  text-align: center;
+  padding: 0.75rem 0;
+  background-color: var(--color-neutral-100);
+  font-size: 0.875rem;
+  color: var(--color-neutral-400);
+  margin-top: 0.5rem;
+  border-radius: 8px;
+}

@@ -1,0 +1,301 @@
+{
+  "APP_TITLE": "إتقان لإدارة المحتوى",
+  "WELCOME": "مرحباً بك في المتجر",
+  "AUTH": {
+    "LOGIN": {
+      "TITLE": "مرحباً بعودتك",
+      "SUBTITLE": "سجّل دخولك للمتابعة إلى إتقان",
+      "EMAIL_LABEL": "البريد الإلكتروني",
+      "PASSWORD_LABEL": "كلمة المرور",
+      "SUBMIT_BUTTON": "تسجيل الدخول",
+      "SUBMIT_LOADING": "جاري تسجيل الدخول...",
+      "NO_ACCOUNT": "ليس لديك حساب؟",
+      "CREATE_ACCOUNT_LINK": "إنشاء حساب",
+      "RETURN_TO_WEBSITE": "العودة إلى الرئيسية",
+      "LOGIN_WITH_GOOGLE": "المتابعة بجوجل",
+      "LOGIN_WITH_GITHUB": "المتابعة بجيت هاب",
+      "ERRORS": {
+        "EMAIL_REQUIRED": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+        "PASSWORD_REQUIRED": "كلمة المرور مطلوبة",
+        "LOGIN_FAILED": "فشل تسجيل الدخول. يرجى المحاولة مرة أخرى."
+      }
+    },
+    "REGISTER": {
+      "TITLE": "إنشاء حسابك",
+      "SUBTITLE": "انضم إلى إتقان للوصول إلى مواردنا",
+      "FIRST_NAME_LABEL": "الاسم الأول",
+      "LAST_NAME_LABEL": "اسم العائلة",
+      "EMAIL_LABEL": "البريد الإلكتروني",
+      "PASSWORD_LABEL": "كلمة المرور",
+      "PHONE_LABEL": "رقم الهاتف",
+      "TITLE_LABEL": "المسمى الوظيفي",
+      "SUBMIT_BUTTON": "إنشاء الحساب",
+      "SUBMIT_LOADING": "جاري إنشاء الحساب...",
+      "ALREADY_HAVE_ACCOUNT": "لديك حساب بالفعل؟",
+      "SIGN_IN_LINK": "تسجيل الدخول",
+      "LOGIN_WITH_GOOGLE": "التسجيل بجوجل",
+      "LOGIN_WITH_GITHUB": "التسجيل بجيت هاب",
+      "ERRORS": {
+        "FIRST_NAME_REQUIRED": "الاسم الأول مطلوب",
+        "LAST_NAME_REQUIRED": "اسم العائلة مطلوب",
+        "EMAIL_REQUIRED": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+        "PASSWORD_REQUIRED": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+        "REGISTER_FAILED": "فشل إنشاء الحساب. يرجى المحاولة مرة أخرى."
+      }
+    },
+    "OAUTH": {
+      "PROCESSING": "جاري معالجة المصادقة...",
+      "SUCCESS": "تم التسجيل بنجاح! جاري التحويل...",
+      "ERROR": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
+      "INVALID_STATE": "حالة مصادقة غير صحيحة. يرجى المحاولة مرة أخرى."
+    }
+  },
+  "NAVIGATION": {
+    "HOME": "الرئيسية",
+    "GALLERY": "مكتبة الموارد",
+    "CONTENT_STANDARDS": "معايير المحتوى والتقنية",
+    "PUBLISHERS": "الناشرون",
+    "ABOUT_PROJECT": "حول المشروع",
+    "LICENSES": "التراخيص",
+    "LOGIN": "تسجيل الدخول",
+    "LOGOUT": "تسجيل الخروج"
+  },
+  "SETTINGS": "الإعدادات",
+  "REGISTER": "إنشاء حساب",
+  "COMMON": {
+    "LOADING": "جاري التحميل...",
+    "ERROR": "خطأ",
+    "SUCCESS": "نجح",
+    "CANCEL": "إلغاء",
+    "SAVE": "حفظ",
+    "CONTINUE": "متابعة",
+    "BACK": "رجوع",
+    "NEXT": "التالي",
+    "SUBMIT": "إرسال",
+    "CLOSE": "إغلاق"
+  },
+  "FORMS": {
+    "PLACEHOLDERS": {
+      "EMAIL": "أدخل بريدك الإلكتروني",
+      "PASSWORD": "أدخل كلمة المرور",
+      "FIRST_NAME": "أدخل اسمك الأول",
+      "LAST_NAME": "أدخل اسم العائلة",
+      "PHONE_NUMBER": "أدخل رقم هاتفك",
+      "TITLE": "مثل: مهندس برمجيات، باحث",
+      "PROJECT_LINK": "https://example.com"
+    },
+    "VALIDATION": {
+      "REQUIRED": "هذا الحقل مطلوب",
+      "EMAIL_INVALID": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+      "PASSWORD_MIN_LENGTH": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+      "PHONE_INVALID": "يرجى إدخال رقم هاتف صحيح",
+      "FIELD_TOO_SHORT": "هذا الحقل قصير جداً",
+      "INVALID_URL": "يرجى إدخال رابط صحيح"
+    }
+  },
+  "ERRORS": {
+    "NETWORK_ERROR": "خطأ في الشبكة. يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
+    "SERVER_ERROR": "خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقاً.",
+    "VALIDATION_ERROR": "يرجى تصحيح الأخطاء والمحاولة مرة أخرى.",
+    "UNAUTHORIZED": "غير مخول للقيام بهذا الإجراء.",
+    "FORBIDDEN": "الوصول محظور.",
+    "NOT_FOUND": "المورد المطلوب غير موجود."
+  },
+  "PROFILE": {
+    "COMPLETE_PROFILE_TITLE": "أكمل ملفك الشخصي",
+    "COMPLETE_PROFILE_DESCRIPTION": "ساعدنا في فهم المزيد عنك وعن مشروعك",
+    "PROJECT_QUESTION": "ما الذي تعمل عليه؟ أخبرنا عن مشروعك؟",
+    "PROJECT_LINK_LABEL": "رابط المشروع (اختياري)",
+    "ORGANIZATION": "المؤسسة (اختياري)",
+    "LOCATION": "الموقع (اختياري)",
+    "BUSINESS_MODEL_PLACEHOLDER": "صف مشروعك وأهدافه وكيف تخطط لاستخدام محتوانا...",
+    "ORGANIZATION_PLACEHOLDER": "مثل: جامعة القاهرة، جوجل، عمل حر",
+    "LOCATION_PLACEHOLDER": "مثل: القاهرة، مصر",
+    "SAVE_AND_CONTINUE": "حفظ والمتابعة",
+    "DO_IT_LATER": "افعل ذلك لاحقاً"
+  },
+  "NAV": {
+    "HOME": "الرئيسية",
+    "DASHBOARD": "لوحة التحكم",
+    "GALLERY": "المكتبة",
+    "DOCS": "التوثيق",
+    "GALLERY_FULL": "مكتبة الأصول والموارد",
+    "PUBLISHERS": "الناشرين",
+    "ABOUT": "عن المشروع",
+    "CONTENT_STANDARDS": "معايير المحتوى والتقنية"
+  },
+  "HOME": {
+    "WELCOME": "مرحبًا بك في إتقان CMS",
+    "DESCRIPTION": "تجربة إدارة محتوى حديثة مبنية بـ Angular",
+    "GET_STARTED": "ابدأ الآن",
+    "LEARN_MORE": "اعرف المزيد",
+    "AUTH_DEMO": "تجربة المصادقة",
+    "GO_TO_DASHBOARD": "الانتقال إلى لوحة التحكم (يتطلب تسجيل الدخول)"
+  },
+  "DASHBOARD": {
+    "TITLE": "لوحة التحكم",
+    "DESCRIPTION": "إدارة المشاريع والموارد"
+  },
+  "GALLERY": {
+    "TITLE": "مكتبة الموارد",
+    "VIEW": "عرض",
+    "VIEW_DETAILS": "عرض التفاصيل",
+    "VIEW_LICENSE": "عرض الترخيص",
+    "DETAILS_TITLE": "تفاصيل الأصل",
+    "ASSET_ID": "معرّف الأصل",
+    "DETAILS_DESC": "نص مؤقت لتفاصيل الأصل."
+  },
+  "UI": {
+    "SEARCH_IN_RESOURCES": "البحث في الموارد",
+    "CATEGORY_FILTERS": "الفئات",
+    "LICENSE_FILTERS": "التراخيص (CreativeCommons)",
+    "LOADING_ASSETS": "جاري تحميل الأصول...",
+    "NO_RESULTS_FOUND": "لم يتم العثور على نتائج",
+    "PUBLISHER_LABEL": "الناشر:",
+    "LOADING_ASSET_DETAILS": "جاري تحميل تفاصيل الأصل...",
+    "ASSET_NOT_FOUND": "الأصل غير موجود",
+    "TRY_AGAIN": "إعادة المحاولة",
+    "CONTENT_PREVIEW": "نظرة على المحتوى",
+    "NO_PREVIEW_AVAILABLE": "لا توجد نظرة مُسبقة متاحة",
+    "VERIFIED_PUBLISHER": "ناشر موثق",
+    "WEBSITE": "الموقع الإلكتروني",
+    "JOINED_ON": "انضم في",
+    "RESOURCES": "الموارد",
+    "ASSETS": "الأصول",
+    "TOTAL_DOWNLOADS": "إجمالي التحميلات",
+    "PUBLISHER_ASSETS": "موارد الناشر",
+    "HAS_ACCESS": "لديه وصول",
+    "DOWNLOADS": "تحميل",
+    "NO_ASSETS_AVAILABLE": "لا توجد أصول متاحة",
+    "RESOURCE_ACTIONS": "إجراءات المورد",
+    "USAGE_STANDARDS": "معايير الاستخدام",
+    "DOWNLOAD_ORIGINAL_RESOURCE": "تحميل المورد الأصلي",
+    "DOWNLOAD_RESOURCE": "تحميل المورد",
+    "DOWNLOADING": "جاري التحميل...",
+    "LICENSE_INFO": "معلومات الترخيص",
+    "TECHNICAL_DETAILS": "التفاصيل التقنية",
+    "STATISTICS": "الإحصائيات",
+    "FILE_SIZE": "حجم الملف",
+    "FORMAT": "الصيغة",
+    "VERSION": "الإصدار",
+    "LANGUAGE": "اللغة",
+    "VIEWS": "المشاهدات",
+    "CREATED": "تاريخ الإنشاء"
+  },
+  "CATEGORIES": {
+    "mushaf": "المصحف",
+    "tafsir": "التفسير",
+    "recitation": "التلاوات"
+  },
+  "LICENSES": {
+    "CC0": "CC0 / الملكية العامة",
+    "CC_BY": "CC BY",
+    "CC_BY_SA": "CC BY-SA",
+    "CC_BY_ND": "CC BY-ND",
+    "CC_BY_NC": "CC BY-NC",
+    "CC_BY_NC_SA": "CC BY-NC-SA",
+    "CC_BY_NC_ND": "CC BY-NC-ND"
+  },
+  "LICENSES_LABELS": {
+    "CC0": "مفتوح بالكامل",
+    "CC-BY": "مع إسناد",
+    "CC-BY-SA": "إسناد ومشاركة بالمثل",
+    "CC-BY-ND": "إسناد بلا اشتقاق",
+    "CC-BY-NC": "إسناد واستخدام غير تجاري",
+    "CC-BY-NC-SA": "إسناد غير تجاري ومشاركة بالمثل",
+    "CC-BY-NC-ND": "إسناد غير تجاري بلا اشتقاق"
+  },
+  "DOCS": {
+    "STANDARDS_TITLE": "المعايير",
+    "STANDARDS_DESC": "مكان مؤقت لمعايير الهندسة والمحتوى."
+  },
+  "PUBLISHER": {
+    "TITLE": "ملف المزود",
+    "ID": "معرّف المزود"
+  },
+  "LICENSE": {
+    "TITLE": "تفاصيل الترخيص",
+    "ID": "معرّف الترخيص",
+    "VIEW_DOCUMENT": "عرض وثيقة الرخصة"
+  },
+  "PUBLISHERS": {
+    "DESCRIPTION": "استكشف شبكة الناشرين والمزودين المعتمدين في منصة إتقان.",
+    "COMING_SOON": "قريباً - سيتم عرض قائمة الناشرين هنا"
+  },
+  "ABOUT": {
+    "PROJECT_TITLE": "حول مشروع إتقان",
+    "PROJECT_DESCRIPTION": "إتقان هو نظام إدارة محتوى حديث مصمم لتوفير تجربة متميزة في إدارة الأصول الرقمية والموارد التعليمية.",
+    "VISION_TITLE": "الرؤية",
+    "VISION_DESCRIPTION": "أن نكون المنصة الرائدة في إدارة المحتوى الرقمي والموارد التعليمية في المنطقة.",
+    "MISSION_TITLE": "الرسالة",
+    "MISSION_DESCRIPTION": "تمكين المؤسسات التعليمية من إدارة محتواها الرقمي بكفاءة وفعالية عالية."
+  },
+  "ACCESS_REQUEST": {
+    "TITLE": "طلب الوصول",
+    "REASON_LABEL": "يرجى وصف سبب حاجتك للوصول إلى هذا المورد؟",
+    "REASON_PLACEHOLDER": "أدخل سبب طلبك للوصول...",
+    "USAGE_LABEL": "كيف تخطط لاستخدام هذا المورد؟",
+    "USAGE_PLACEHOLDER": "اختر نوع الاستخدام",
+    "PROCEED": "متابعة",
+    "LICENSE_TERMS_TITLE": "شروط الترخيص",
+    "LICENSE_INFO": "معلومات الترخيص",
+    "CONFIRM": "تأكيد",
+    "SCROLL_HINT": "يرجى التمرير لأسفل لقراءة المحتوى كاملاً",
+    "USAGE_OPTIONS": {
+      "commercial": "تجاري",
+      "non-commercial": "غير تجاري"
+    }
+  },
+  "CONTENT_STANDARDS": {
+    "TITLE": "الوثائق: معايير الوصول إلى البيانات",
+    "DESCRIPTION": "يوضح هذا المستند معايير الوصول إلى البيانات في الملفات. يرجى اتباع الإرشادات أدناه لكل فئة.",
+    "ON_THIS_PAGE": "في هذه الصفحة",
+    "EXAMPLE": "مثال",
+    "GO_BACK": "العودة",
+    "GUIDELINES": "الإرشادات",
+    "VERSION": "الإصدار",
+    "LAST_UPDATED": "آخر تحديث",
+    "FOOTER_COPYRIGHT": "© معايير البيانات لعام 2023، كل الحقوق محفوظة",
+    "VERSE_USAGE": {
+      "TITLE": "معايير استخدام الآية",
+      "DESCRIPTION": "للوصول إلى الآيات، اتبع المعايير التالية:",
+      "POINT_1": "استخدم تنسيق معرف الآية الصحيح",
+      "POINT_2": "تأكد من فهرسة الآية بشكل صحيح",
+      "POINT_3": "تحقق من آخر التحديثات في قاعدة بيانات الآيات",
+      "EXAMPLE_TEXT": "مثال: للوصول إلى الآية 2: 255، استخدم getVerse('2:255')",
+      "EXAMPLE_CODE": "getVerse('2:255')"
+    },
+    "WORD_USAGE": {
+      "TITLE": "معايير استخدام الكلمات",
+      "DESCRIPTION": "للوصول إلى الكلمات، التزم بما يلي",
+      "POINT_1": "استخدم مفاتيح الكلمات المحددة",
+      "POINT_2": "تأكد من تحديث قائمة الكلمات",
+      "POINT_3": "الحفاظ على الاتساق في تنسيق الكلمات",
+      "EXAMPLE_TEXT": "مثال: لاسترجاع كلمة \"الله\"، استخدم getWord(\"الله\")",
+      "EXAMPLE_CODE": "getWord(\"الله\")"
+    },
+    "TAFSIR_USAGE": {
+      "TITLE": "معايير استخدام تفسير",
+      "DESCRIPTION": "عند الوصول إلى تفسير، اتبع الإرشادات التالية",
+      "POINT_1": "استخدم مرجع تفسير الصحيح",
+      "POINT_2": "تأكد من دقة الترجمات",
+      "POINT_3": "تحقق من وجود تفسيرات محدثة لتفسير",
+      "EXAMPLE_TEXT": "مثال: للوصول إلى تفسير للآية 2: 255، استخدم getTafsir('2:255')",
+      "EXAMPLE_CODE": "getTafsir('2:255')"
+    },
+    "ADDITIONAL_GUIDELINES": {
+      "TITLE": "إرشادات إضافية",
+      "POINT_1": "اتبع معايير الترميز UTF-8 لضمان عرض النصوص العربية بشكل صحيح",
+      "POINT_2": "تحقق من صحة البيانات قبل الاستخدام في التطبيقات الإنتاجية",
+      "POINT_3": "في حالة وجود مشاكل أو أخطاء، يرجى الإبلاغ عنها للناشر المختص"
+    },
+    "FILE_FORMATS": {
+      "TITLE": "صيغ الملفات",
+      "SUPPORTED": "الصيغ المدعومة",
+      "RECOMMENDED": "الصيغ الموصى بها",
+      "SPECIFICATIONS": "مواصفات الصيغ",
+      "SCHEMA_DOCS": "توثيق المخطط",
+      "EXAMPLE_FILE": "ملف مثال"
+    }
+  }
+}

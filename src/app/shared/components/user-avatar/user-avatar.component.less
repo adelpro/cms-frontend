@@ -1,0 +1,24 @@
+.user-avatar__img {
+  border-radius: 9999px; // rounded-full
+  object-fit: cover;
+}
+
+.user-avatar__img--sm { width: 24px; height: 24px; }
+.user-avatar__img--md { width: 32px; height: 32px; }
+.user-avatar__img--lg { width: 48px; height: 48px; }
+
+.user-avatar__fallback {
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  background-image: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700));
+}
+
+.user-avatar__fallback--sm { width: 24px; height: 24px; font-size: 12px; }
+.user-avatar__fallback--md { width: 32px; height: 32px; font-size: 14px; }
+.user-avatar__fallback--lg { width: 48px; height: 48px; font-size: 18px; }
+
+
