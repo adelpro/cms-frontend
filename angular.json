@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "outputPath": "dist",
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
@@ -58,6 +59,11 @@
                 }
               ]
             },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            },
             "staging": {
               "budgets": [
                 {
@@ -79,7 +85,7 @@
                 }
               ]
             },
-            "development": {
+            "develop": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
@@ -99,11 +105,14 @@
             "production": {
               "buildTarget": "cms-frontend:build:production"
             },
+            "development": {
+              "buildTarget": "cms-frontend:build:development"
+            },
             "staging": {
               "buildTarget": "cms-frontend:build:staging"
             },
-            "development": {
-              "buildTarget": "cms-frontend:build:development"
+            "develop": {
+              "buildTarget": "cms-frontend:build:develop"
             }
           },
           "defaultConfiguration": "development"

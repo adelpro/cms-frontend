@@ -183,7 +183,7 @@ npm run format:check
 
 Pre-commit hooks ensure code is formatted before committing.
 
-## 🤝 Contributing
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
 We welcome contributions from the community! Please read our [Contributing Guide](CONTRIBUTING.md) to get started.
 
@@ -219,6 +219,8 @@ Thanks to all our contributors! See the [Contributors](https://github.com/Itqan-
 - **Website**: https://itqan.dev
 - **GitHub**: https://github.com/Itqan-community
 
----
+```bash
+ng test
+```
 
 Made with ❤️ by the Itqan Community
