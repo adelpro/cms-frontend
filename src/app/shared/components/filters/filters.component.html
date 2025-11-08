@@ -1,0 +1,44 @@
+<div class="filters__container">
+  <!-- Search Filter -->
+  <div class="card filters__card">
+    <div class="filters__card-header">
+      <i class="bx bx-scan-search"></i>
+      <h3 class="filters__card-title">{{ 'UI.SEARCH_IN_RESOURCES' | translate }}</h3>
+    </div>
+
+    <div class="filters__card-content">
+      <input type="text" nz-input [(ngModel)]="searchQuery" (ngModelChange)="onSearchQueryChange($event)" [placeholder]="'UI.SEARCH_IN_RESOURCES' | translate" />
+    </div>
+  </div>
+  
+  <!-- Category Filter -->
+  <div class="card filters__card">
+    <div class="filters__card-header">
+      <i class="bx bx-categories"></i>
+      <h3 class="filters__card-title">{{ 'UI.CATEGORY_FILTERS' | translate }}</h3>
+    </div>
+
+    <div class="filters__card-content">
+      <nz-checkbox-group [nzOptions]="categoriesOptions" [(ngModel)]="categoriesSelection" (ngModelChange)="onCategoriesSelectionChange($event)" />
+    </div>
+  </div>
+  
+  <!-- License Filter -->
+  <div class="card filters__card">
+    <div class="filters__card-header">
+      <i class="bx bx-receipt"></i>
+      <h3 class="filters__card-title">{{ 'UI.LICENSE_FILTERS' | translate }}</h3>
+    </div>
+
+    <div class="filters__card-content">
+      <nz-checkbox-group [(ngModel)]="licensesSelection" (ngModelChange)="onLicensesSelectionChange($event)">
+        @for (license of licensesOptions; track license.value) {
+          <div class="filters__card-content-license">
+            <label nz-checkbox [nzValue]="license.value">{{ license.label | translate }}</label>
+            <app-license-tag [license]="license.value" />
+          </div>
+        }
+      </nz-checkbox-group>
+    </div>
+  </div>
+</div>
