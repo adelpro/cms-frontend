@@ -1,0 +1,301 @@
+{
+  "APP_TITLE": "Itqan CMS",
+  "WELCOME": "Welcome to the Store",
+  "AUTH": {
+    "LOGIN": {
+      "TITLE": "Welcome back",
+      "SUBTITLE": "Sign in to continue to Itqan",
+      "EMAIL_LABEL": "Email",
+      "PASSWORD_LABEL": "Password",
+      "SUBMIT_BUTTON": "Sign in",
+      "SUBMIT_LOADING": "Signing in...",
+      "NO_ACCOUNT": "Don't have an account?",
+      "CREATE_ACCOUNT_LINK": "Sign up",
+      "RETURN_TO_WEBSITE": "Return Home",
+      "LOGIN_WITH_GOOGLE": "Continue with Google",
+      "LOGIN_WITH_GITHUB": "Continue with GitHub",
+      "ERRORS": {
+        "EMAIL_REQUIRED": "Please enter a valid email address",
+        "PASSWORD_REQUIRED": "Password is required",
+        "LOGIN_FAILED": "Login failed. Please try again."
+      }
+    },
+    "REGISTER": {
+      "TITLE": "Create your account",
+      "SUBTITLE": "Join Itqan to access our resources",
+      "FIRST_NAME_LABEL": "First Name",
+      "LAST_NAME_LABEL": "Last Name",
+      "EMAIL_LABEL": "Email",
+      "PASSWORD_LABEL": "Password",
+      "PHONE_LABEL": "Phone Number",
+      "TITLE_LABEL": "Professional Title",
+      "SUBMIT_BUTTON": "Create account",
+      "SUBMIT_LOADING": "Creating account...",
+      "ALREADY_HAVE_ACCOUNT": "Already have an account?",
+      "SIGN_IN_LINK": "Sign in",
+      "LOGIN_WITH_GOOGLE": "Sign up with Google",
+      "LOGIN_WITH_GITHUB": "Sign up with GitHub",
+      "ERRORS": {
+        "FIRST_NAME_REQUIRED": "First name is required",
+        "LAST_NAME_REQUIRED": "Last name is required",
+        "EMAIL_REQUIRED": "Please enter a valid email address",
+        "PASSWORD_REQUIRED": "Password must be at least 6 characters",
+        "REGISTER_FAILED": "Registration failed. Please try again."
+      }
+    },
+    "OAUTH": {
+      "PROCESSING": "Processing authentication...",
+      "SUCCESS": "Authentication successful! Redirecting...",
+      "ERROR": "Authentication failed. Please try again.",
+      "INVALID_STATE": "Invalid authentication state. Please try again."
+    }
+  },
+  "NAVIGATION": {
+    "HOME": "Home",
+    "GALLERY": "Assets Library",
+    "CONTENT_STANDARDS": "Content and Technical Standards",
+    "PUBLISHERS": "Publishers",
+    "ABOUT_PROJECT": "About the Project",
+    "LICENSES": "Licenses",
+    "LOGIN": "Login",
+    "LOGOUT": "Logout"
+  },
+  "SETTINGS": "Settings",
+  "REGISTER": "Register",
+  "COMMON": {
+    "LOADING": "Loading...",
+    "ERROR": "Error",
+    "SUCCESS": "Success",
+    "CANCEL": "Cancel",
+    "SAVE": "Save",
+    "CONTINUE": "Continue",
+    "BACK": "Back",
+    "NEXT": "Next",
+    "SUBMIT": "Submit",
+    "CLOSE": "Close"
+  },
+  "FORMS": {
+    "PLACEHOLDERS": {
+      "EMAIL": "Enter your email",
+      "PASSWORD": "Enter your password",
+      "FIRST_NAME": "Enter your first name",
+      "LAST_NAME": "Enter your last name",
+      "PHONE_NUMBER": "Enter your phone number",
+      "TITLE": "e.g., Software Engineer, Researcher",
+      "PROJECT_LINK": "https://example.com"
+    },
+    "VALIDATION": {
+      "REQUIRED": "This field is required",
+      "EMAIL_INVALID": "Please enter a valid email address",
+      "PASSWORD_MIN_LENGTH": "Password must be at least 6 characters",
+      "PHONE_INVALID": "Please enter a valid phone number",
+      "FIELD_TOO_SHORT": "This field is too short",
+      "INVALID_URL": "Please enter a valid URL"
+    }
+  },
+  "ERRORS": {
+    "NETWORK_ERROR": "Network error. Please check your connection and try again.",
+    "SERVER_ERROR": "Server error. Please try again later.",
+    "VALIDATION_ERROR": "Please correct the errors and try again.",
+    "UNAUTHORIZED": "You are not authorized to perform this action.",
+    "FORBIDDEN": "Access forbidden.",
+    "NOT_FOUND": "The requested resource was not found."
+  },
+  "PROFILE": {
+    "COMPLETE_PROFILE_TITLE": "Complete Your Profile",
+    "COMPLETE_PROFILE_DESCRIPTION": "Help us understand more about you and your project",
+    "PROJECT_QUESTION": "What are you working on? Tell us about your project?",
+    "PROJECT_LINK_LABEL": "Project Link (Optional)",
+    "ORGANIZATION": "Organization (Optional)",
+    "LOCATION": "Location (Optional)",
+    "BUSINESS_MODEL_PLACEHOLDER": "Describe your project, its goals, and how you plan to use our content...",
+    "ORGANIZATION_PLACEHOLDER": "e.g., University of Cairo, Google, Freelance",
+    "LOCATION_PLACEHOLDER": "e.g., Cairo, Egypt",
+    "SAVE_AND_CONTINUE": "Save and Continue",
+    "DO_IT_LATER": "Do it Later"
+  },
+  "NAV": {
+    "HOME": "Home",
+    "DASHBOARD": "Dashboard",
+    "GALLERY": "Library",
+    "DOCS": "Documentation",
+    "GALLERY_FULL": "Assets Library",
+    "PUBLISHERS": "Publishers",
+    "ABOUT": "About",
+    "CONTENT_STANDARDS": "Content Standards"
+  },
+  "HOME": {
+    "WELCOME": "Welcome to Itqan CMS",
+    "DESCRIPTION": "A modern CMS experience built with Angular.",
+    "GET_STARTED": "Get Started",
+    "LEARN_MORE": "Learn More",
+    "AUTH_DEMO": "Authentication Demo",
+    "GO_TO_DASHBOARD": "Go to Dashboard (requires login)"
+  },
+  "DASHBOARD": {
+    "TITLE": "Dashboard",
+    "DESCRIPTION": "Manage projects and resources"
+  },
+  "GALLERY": {
+    "TITLE": "Assets Library",
+    "VIEW": "View",
+    "VIEW_DETAILS": "View Details",
+    "VIEW_LICENSE": "View License",
+    "DETAILS_TITLE": "Asset Details",
+    "ASSET_ID": "Asset ID",
+    "DETAILS_DESC": "This is a placeholder for asset details."
+  },
+  "UI": {
+    "SEARCH_IN_RESOURCES": "Search in resources",
+    "CATEGORY_FILTERS": "Categories",
+    "LICENSE_FILTERS": "Licenses (CreativeCommons)",
+    "LOADING_ASSETS": "Loading assets...",
+    "NO_RESULTS_FOUND": "No results found",
+    "PUBLISHER_LABEL": "Publisher:",
+    "LOADING_ASSET_DETAILS": "Loading asset details...",
+    "ASSET_NOT_FOUND": "Asset not found",
+    "TRY_AGAIN": "Try Again",
+    "CONTENT_PREVIEW": "Content Preview",
+    "NO_PREVIEW_AVAILABLE": "No preview available",
+    "VERIFIED_PUBLISHER": "Verified Publisher",
+    "WEBSITE": "Website",
+    "JOINED_ON": "Joined on",
+    "RESOURCES": "Resources",
+    "ASSETS": "Assets",
+    "TOTAL_DOWNLOADS": "Total Downloads",
+    "PUBLISHER_ASSETS": "Publisher Assets",
+    "HAS_ACCESS": "Has Access",
+    "DOWNLOADS": "downloads",
+    "NO_ASSETS_AVAILABLE": "No assets available",
+    "RESOURCE_ACTIONS": "Resource Actions",
+    "USAGE_STANDARDS": "Usage Standards",
+    "DOWNLOAD_ORIGINAL_RESOURCE": "Download Original Resource",
+    "DOWNLOAD_RESOURCE": "Download Resource",
+    "DOWNLOADING": "Downloading...",
+    "LICENSE_INFO": "License Information",
+    "TECHNICAL_DETAILS": "Technical Details",
+    "STATISTICS": "Statistics",
+    "FILE_SIZE": "File Size",
+    "FORMAT": "Format",
+    "VERSION": "Version",
+    "LANGUAGE": "Language",
+    "VIEWS": "Views",
+    "CREATED": "Created"
+  },
+  "CATEGORIES": {
+    "mushaf": "Mushaf",
+    "tafsir": "Tafsir",
+    "recitation": "Recitation"
+  },
+  "LICENSES": {
+    "CC0": "CC0 / Public Domain",
+    "CC_BY": "CC BY",
+    "CC_BY_SA": "CC BY-SA",
+    "CC_BY_ND": "CC BY-ND",
+    "CC_BY_NC": "CC BY-NC",
+    "CC_BY_NC_SA": "CC BY-NC-SA",
+    "CC_BY_NC_ND": "CC BY-NC-ND"
+  },
+  "LICENSES_LABELS": {
+    "CC0": "Fully Open",
+    "CC-BY": "Attribution",
+    "CC-BY-SA": "Attribution ShareAlike",
+    "CC-BY-ND": "Attribution No Derivatives",
+    "CC-BY-NC": "Attribution Non-Commercial",
+    "CC-BY-NC-SA": "Attribution Non-Commercial ShareAlike",
+    "CC-BY-NC-ND": "Attribution Non-Commercial No Derivatives"
+  },
+  "DOCS": {
+    "STANDARDS_TITLE": "Standards",
+    "STANDARDS_DESC": "Engineering and content standards placeholder."
+  },
+  "PUBLISHER": {
+    "TITLE": "Publisher Profile",
+    "ID": "Publisher ID"
+  },
+  "LICENSE": {
+    "TITLE": "License Details",
+    "ID": "License ID",
+    "VIEW_DOCUMENT": "View License Document"
+  },
+  "PUBLISHERS": {
+    "DESCRIPTION": "Explore the network of certified publishers and providers on the Itqan platform.",
+    "COMING_SOON": "Coming Soon - Publishers list will be displayed here"
+  },
+  "ABOUT": {
+    "PROJECT_TITLE": "About Itqan Project",
+    "PROJECT_DESCRIPTION": "Itqan is a modern content management system designed to provide an exceptional experience in managing digital assets and educational resources.",
+    "VISION_TITLE": "Vision",
+    "VISION_DESCRIPTION": "To be the leading platform for digital content management and educational resources in the region.",
+    "MISSION_TITLE": "Mission",
+    "MISSION_DESCRIPTION": "Empowering educational institutions to manage their digital content efficiently and effectively."
+  },
+  "ACCESS_REQUEST": {
+    "TITLE": "Access Request",
+    "REASON_LABEL": "Please describe why you need access to this resource?",
+    "REASON_PLACEHOLDER": "Enter your reason for requesting access...",
+    "USAGE_LABEL": "How do you plan to use this resource?",
+    "USAGE_PLACEHOLDER": "Select usage type",
+    "PROCEED": "Proceed",
+    "LICENSE_TERMS_TITLE": "License Terms",
+    "LICENSE_INFO": "License Information",
+    "CONFIRM": "Confirm",
+    "SCROLL_HINT": "Please scroll down to read the full content",
+    "USAGE_OPTIONS": {
+      "commercial": "Commercial",
+      "non-commercial": "Non-Commercial"
+    }
+  },
+  "CONTENT_STANDARDS": {
+    "TITLE": "Documents: Data Access Standards",
+    "DESCRIPTION": "This document outlines the standards for accessing data in files. Please follow the guidelines below for each category.",
+    "ON_THIS_PAGE": "On this page",
+    "EXAMPLE": "Example",
+    "GO_BACK": "Go Back",
+    "GUIDELINES": "Guidelines",
+    "VERSION": "Version",
+    "LAST_UPDATED": "Last updated",
+    "FOOTER_COPYRIGHT": "© 2023 Data Standards, All rights reserved",
+    "VERSE_USAGE": {
+      "TITLE": "Verse Usage Standards",
+      "DESCRIPTION": "To access verses, follow these standards:",
+      "POINT_1": "Use the correct verse ID format",
+      "POINT_2": "Ensure proper verse indexing",
+      "POINT_3": "Check for the latest updates in the verse database",
+      "EXAMPLE_TEXT": "To access verse 2:255, use",
+      "EXAMPLE_CODE": "getVerse('2:255')"
+    },
+    "WORD_USAGE": {
+      "TITLE": "Word Usage Standards",
+      "DESCRIPTION": "To access words, adhere to the following:",
+      "POINT_1": "Use the defined word keys",
+      "POINT_2": "Ensure the word list is up to date",
+      "POINT_3": "Maintain consistency in word formatting",
+      "EXAMPLE_TEXT": "To retrieve the word \"الله\", use",
+      "EXAMPLE_CODE": "getWord(\"الله\")"
+    },
+    "TAFSIR_USAGE": {
+      "TITLE": "Tafsir Usage Standards",
+      "DESCRIPTION": "To access tafsir, adhere to the following:",
+      "POINT_1": "Use the defined tafsir keys",
+      "POINT_2": "Ensure the tafsir list is up to date",
+      "POINT_3": "Maintain consistency in tafsir formatting",
+      "EXAMPLE_TEXT": "To retrieve tafsir for verse 2:255, use",
+      "EXAMPLE_CODE": "getTafsir('2:255')"
+    },
+    "ADDITIONAL_GUIDELINES": {
+      "TITLE": "Additional Guidelines",
+      "POINT_1": "Follow UTF-8 encoding standards to ensure proper display of Arabic text",
+      "POINT_2": "Validate data before use in production applications",
+      "POINT_3": "In case of issues or errors, report them to the responsible publisher"
+    },
+    "FILE_FORMATS": {
+      "TITLE": "File Formats",
+      "SUPPORTED": "Supported Formats",
+      "RECOMMENDED": "Recommended Formats",
+      "SPECIFICATIONS": "Format Specifications",
+      "SCHEMA_DOCS": "Schema Documentation",
+      "EXAMPLE_FILE": "Example File"
+    }
+  }
+}

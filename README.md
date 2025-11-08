@@ -1,217 +1,226 @@
-# Itqan CMS
+# CMS Frontend
 
-<div align="center">
+> An open-source Content Management System frontend built with Angular 20, designed for the Itqan community to manage and showcase creative assets.
 
-**A Modern, Multilingual Digital Asset Management System**
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Angular](https://img.shields.io/badge/Angular-20.3-red.svg)](https://angular.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-BADGE-ID/deploy-status)](https://app.netlify.com/sites/YOUR-SITE/deploys)
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.5-black)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.1-blue)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)](https://www.typescriptlang.org/)
-[![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
+## 🌟 Features
 
-[Features](#-features) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Contributing](#-contributing)
-
-</div>
-
----
-
-## 📖 Overview
-
-Itqan CMS is a modern, production-ready content management system built for managing and distributing Islamic digital assets. It features a full multilingual interface with native RTL (Right-to-Left) support, sophisticated access control, and a user-friendly asset discovery experience.
-
-### Built With
-
-- **Framework:** Next.js 15 (App Router) with React 19
-- **Language:** TypeScript with strict mode
-- **Styling:** Tailwind CSS 4 with CSS logical properties
-- **UI Components:** shadcn/ui (Radix UI primitives)
-- **Internationalization:** next-intl
-
-## ✨ Features
-
-### 🌍 Multilingual & Accessibility
-- **Native i18n Support:** Arabic (default) and English with seamless language switching
-- **RTL/LTR Layouts:** Automatic layout direction based on language
-- **CSS Logical Properties:** Future-proof, direction-agnostic styling
-- **WCAG Compliant:** Accessible design patterns throughout
-
-### 📚 Asset Management
-- **Advanced Search & Filtering:** Category, license, and keyword-based discovery
-- **Rich Metadata:** Comprehensive asset information with preview snapshots
-- **License Management:** Clear license information and terms display
-- **Access Control:** Request-based access for restricted content
-
-### 🔐 Authentication & Security
-- **Email/Password Auth:** Secure user registration and login
-- **OAuth2 Integration:** Google and GitHub authentication (ready)
-- **Profile Management:** Complete user profile with project information
-- **Token-based Auth:** JWT access and refresh token flow
-
-### 🎨 Modern UX
-- **Dark/Light Modes:** System-aware theme with manual override
-- **Responsive Design:** Mobile-first, optimized for all screen sizes
-- **Loading States:** Skeleton screens and optimistic UI updates
-- **Error Handling:** User-friendly error messages with recovery options
+- **Asset Management** - Browse, search, and manage creative assets from the gallery
+- **Publisher Portal** - View and manage content publishers and their contributions
+- **Content Standards** - Access content guidelines and standards documentation
+- **Internationalization** - Multi-language support (English & Arabic)
+- **Authentication** - Secure login, registration, and profile management
+- **Responsive Design** - Modern UI built with Ng-Zorro (Ant Design for Angular)
+- **License Management** - Track and display content licenses
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Node.js** 20.x or higher
-- **npm** 9.x or higher (or yarn/pnpm)
+- **Node.js** 20 or higher
+- **npm** 9 or higher (comes with Node.js)
 - **Git**
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Itqan-community/cms-frontend.git
-   cd cms-frontend
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/Itqan-community/cms-frontend.git
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+# Navigate to the project directory
+cd cms-frontend
 
-3. **Set up environment variables**
-   ```bash
-   # Copy the example environment file
-   cp .env.example .env.local
-   
-   # Edit .env.local with your configuration
-   # Required: NEXT_PUBLIC_BACKEND_URL
-   ```
+# Install dependencies
+npm install
 
-4. **Run the development server**
-   ```bash
-   npm run dev
-   ```
-
-5. **Open your browser**
-   ```
-   http://localhost:3000
-   ```
-   
-   The app will redirect to `/ar/store` (Arabic store page) by default.
-
-### Environment Variables
-
-| Variable | Description | Required | Default |
-|----------|-------------|----------|---------|
-| `NEXT_PUBLIC_BACKEND_URL` | Backend API URL | ✅ Yes | - |
-
-See `.env.example` for a complete list of environment variables.
-
-## 📁 Project Structure
-
-```
-itqan-cms/
-├── src/
-│   ├── app/                      # Next.js App Router
-│   │   ├── [locale]/            # Internationalized routes
-│   │   │   ├── auth/            # Authentication pages
-│   │   │   ├── store/           # Asset store pages
-│   │   │   ├── dashboard/       # User dashboard
-│   │   │   └── layout.tsx       # Root layout with i18n
-│   │   └── globals.css          # Global styles with theme
-│   │
-│   ├── components/              # React components
-│   │   ├── ui/                  # Base UI components (shadcn/ui)
-│   │   ├── auth/                # Authentication components
-│   │   ├── store/               # Store/asset components
-│   │   └── providers/           # React context providers
-│   │
-│   ├── lib/                     # Core library code
-│   │   ├── api/                 # API client & services
-│   │   │   ├── client/          # HTTP client utilities
-│   │   │   └── services/        # API service functions
-│   │   ├── types/               # TypeScript types
-│   │   │   ├── api/             # API contract types
-│   │   │   └── models/          # Domain models
-│   │   ├── utils/               # Utility functions
-│   │   │   ├── conversion.utils.ts
-│   │   │   └── validation.utils.ts
-│   │   ├── styles/              # Style utilities
-│   │   └── auth.ts              # Auth helpers
-│   │
-│   ├── messages/                # i18n translations
-│   │   ├── ar.json             # Arabic translations
-│   │   └── en.json             # English translations
-│   │
-│   ├── i18n.ts                 # i18n configuration
-│   └── middleware.ts           # Next.js middleware (routing, security)
-│
-├── public/                      # Static assets
-├── docs/                        # Documentation
-└── .temp/                       # Temporary files (gitignored)
+# Start the development server
+npm start
 ```
 
-## 📚 Documentation
+The application will be available at `http://localhost:4200/`
 
-- **[Contributing Guide](./CONTRIBUTING.md)** - How to contribute to this project
-- **[Development Guidelines](./GUIDELINES.md)** - Coding standards and best practices
-- **[API Documentation](./docs/API.md)** - API integration guide
-- **[Architecture Overview](./docs/ARCHITECTURE.md)** - System architecture and design decisions
+## 📦 Tech Stack
+
+- **Framework**: [Angular 20](https://angular.dev)
+- **UI Library**: [Ng-Zorro (Ant Design)](https://ng.ant.design/)
+- **Styling**: LESS
+- **Internationalization**: [@ngx-translate](https://github.com/ngx-translate/core)
+- **Build Tool**: Angular CLI
+- **Testing**: Karma + Jasmine
 
 ## 🛠️ Development
 
 ### Available Scripts
 
-```bash
-# Development
-npm run dev          # Start development server with Turbopack
-npm run build        # Build for production
-npm run start        # Start production server
+| Command | Description |
+|---------|-------------|
+| `npm start` | Start development server on `http://localhost:4200` |
+| `npm run build` | Build for production |
+| `npm run watch` | Build in watch mode with development configuration |
+| `npm run test` | Run unit tests with Karma |
+| `npm run lint` | Lint the codebase |
+| `npm run format` | Format code with Prettier |
 
-# Code Quality
-npm run lint         # Run ESLint
-npm run lint:fix     # Fix ESLint issues
-npm run type-check   # Run TypeScript type checking
+### Project Structure
+
+```
+cms-frontend/
+├── public/                   # Static assets
+│   ├── assets/              # Images, icons, fonts
+│   └── i18n/                # Translation files
+├── src/
+│   ├── app/
+│   │   ├── core/            # Core functionality (auth, constants, enums)
+│   │   ├── features/        # Feature modules (gallery, publishers, etc.)
+│   │   └── shared/          # Shared components and services
+│   ├── environments/        # Environment configurations
+│   └── styles/              # Global styles
+├── angular.json             # Angular CLI configuration
+├── netlify.toml            # Netlify deployment configuration
+└── package.json            # Dependencies and scripts
 ```
 
-### Code Quality Standards
+### Angular Configuration
 
-- **TypeScript:** Strict mode enabled
-- **ESLint:** Next.js recommended rules
-- **Formatting:** Consistent code style
-- **i18n:** All user-facing text must be translated
-- **RTL:** All layouts must support RTL/LTR
+The project uses Angular 20 with:
+- **Build System**: Application builder (`@angular/build:application`)
+- **Style Preprocessor**: LESS
+- **Routing**: Standalone components with Angular Router
+- **State Management**: RxJS + Angular Signals
+- **HTTP Client**: Angular HttpClient with interceptors
 
-## 🤝 Contributing
+### Code Generation
 
-We welcome contributions from the community! Please read our [Contributing Guide](./CONTRIBUTING.md) to get started.
+```bash
+# Generate a new component
+ng generate component component-name
 
-### Quick Contribution Workflow
+# Generate a new service
+ng generate service service-name
+
+# Generate a new module
+ng generate module module-name
+
+# For more options
+ng generate --help
+```
+
+## 🌍 Environments
+
+The application supports three deployment environments:
+
+| Environment | Branch | URL | Config File |
+|------------|--------|-----|-------------|
+| **Development** | `develop` | https://develop.cms.itqan.dev | `environment.develop.ts` |
+| **Staging** | `staging` | https://staging.cms.itqan.dev | `environment.staging.ts` |
+| **Production** | `master` | https://cms.itqan.dev | `environment.prod.ts` |
+
+### Building for Different Environments
+
+```bash
+# Development build
+npm run build -- --configuration=development
+
+# Staging build
+npm run build -- --configuration=staging
+
+# Production build
+npm run build -- --configuration=production
+```
+
+## 🚢 Deployment
+
+The project is configured for automatic deployment on Netlify:
+
+- **Develop Branch** → Development environment
+- **Staging Branch** → Staging environment
+- **Master Branch** → Production environment
+
+Deployment is handled automatically via `netlify.toml` configuration.
+
+### Manual Deployment
+
+```bash
+# Build for production
+npm run build
+
+# Deploy the dist/cms-frontend/browser directory to your hosting provider
+```
+
+## 🧪 Testing
+
+```bash
+# Run unit tests
+npm run test
+
+# Run tests in headless mode (CI)
+npm run test -- --browsers=ChromeHeadless --watch=false
+
+# Run tests with code coverage
+npm run test -- --code-coverage
+```
+
+## 🎨 Code Style
+
+This project uses:
+- **Prettier** for code formatting
+- **EditorConfig** for consistent editor settings
+- **ESLint** for linting (if configured)
+
+### Format Code
+
+```bash
+# Format all files
+npm run format
+
+# Check formatting
+npm run format:check
+```
+
+Pre-commit hooks ensure code is formatted before committing.
+
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+
+We welcome contributions from the community! Please read our [Contributing Guide](CONTRIBUTING.md) to get started.
+
+### Development Workflow
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes following our [guidelines](./GUIDELINES.md)
-4. Commit your changes (`git commit -m 'Add some amazing feature'`)
-5. Push to the branch (`git push origin feature/amazing-feature`)
-6. Open a Pull Request
+2. Create a feature branch from `develop`
+3. Make your changes
+4. Write/update tests as needed
+5. Ensure all tests pass
+6. Submit a Pull Request to `develop` branch
 
-## 📄 License
+Please read [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) before contributing.
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+## 📝 License
 
-## 🙏 Acknowledgments
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-- [Next.js](https://nextjs.org/) - The React Framework
-- [shadcn/ui](https://ui.shadcn.com/) - Beautiful UI components
-- [Radix UI](https://www.radix-ui.com/) - Unstyled, accessible components
-- [next-intl](https://next-intl-docs.vercel.app/) - Internationalization for Next.js
+## 🔗 Links
 
-## 📞 Support
+- **Documentation**: [Angular Docs](https://angular.dev)
+- **UI Components**: [Ng-Zorro Documentation](https://ng.ant.design/)
+- **Community**: [GitHub Discussions](https://github.com/Itqan-community/cms-frontend/discussions)
+- **Issues**: [Report a Bug](https://github.com/Itqan-community/cms-frontend/issues)
 
-- **Issues:** [GitHub Issues](https://github.com/Itqan-community/cms-frontend/issues)
+## 👥 Contributors
 
----
+Thanks to all our contributors! See the [Contributors](https://github.com/Itqan-community/cms-frontend/graphs/contributors) page.
 
-<div align="center">
+## 📧 Contact
 
-**Made with ❤️ by the Itqan Team**
+- **Email**: support@itqan.dev
+- **Website**: https://itqan.dev
+- **GitHub**: https://github.com/Itqan-community
 
-[Website](https://cms.itqan.dev) • [Documentation](./docs) • [Report Bug](https://github.com/Itqan-community/cms-frontend/issues)
+```bash
+ng test
+```
 
-</div>
+Made with ❤️ by the Itqan Community
