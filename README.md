@@ -1,21 +1,22 @@
-# CMS Frontend
+# Itqan CMS Frontend
 
-> An open-source Content Management System frontend built with Angular 20, designed for the Itqan community to manage and showcase creative assets.
+> An open-source Quranic Content Management System frontend built with Angular 20. Itqan CMS empowers developers and publishers by providing a comprehensive platform to access, manage, and distribute Quranic assets with proper licensing. Built for the global Islamic tech community to create innovative Quranic applications and services.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Angular](https://img.shields.io/badge/Angular-20.3-red.svg)](https://angular.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-BADGE-ID/deploy-status)](https://app.netlify.com/sites/YOUR-SITE/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8eb96aae-c93e-478d-8f56-f4172392251c/deploy-status)](https://app.netlify.com/projects/itqan-cms/deploys)
 
 ## 🌟 Features
 
-- **Asset Management** - Browse, search, and manage creative assets from the gallery
-- **Publisher Portal** - View and manage content publishers and their contributions
-- **Content Standards** - Access content guidelines and standards documentation
-- **Internationalization** - Multi-language support (English & Arabic)
-- **Authentication** - Secure login, registration, and profile management
-- **Responsive Design** - Modern UI built with Ng-Zorro (Ant Design for Angular)
-- **License Management** - Track and display content licenses
+- **Quranic Asset Management** - Browse, search, and manage Quranic content including recitations, translations, tafsir, and more
+- **Publisher Portal** - Empowers publishers to safely publish and manage their Quranic content with proper licensing
+- **Developer-Friendly API** - Provides structured access to Quranic assets for building apps and services
+- **Content Standards** - Comprehensive guidelines ensuring quality and authenticity of Quranic content
+- **License Management** - Track, manage, and enforce content licenses to protect intellectual property
+- **Internationalization** - Multi-language support (English & Arabic) with RTL support
+- **Authentication & Authorization** - Secure user management with role-based access control
+- **Responsive Design** - Modern, accessible UI built with Ng-Zorro (Ant Design for Angular)
 
 ## 🚀 Quick Start
 
@@ -60,10 +61,13 @@ The application will be available at `http://localhost:4200/`
 |---------|-------------|
 | `npm start` | Start development server on `http://localhost:4200` |
 | `npm run build` | Build for production |
-| `npm run watch` | Build in watch mode with development configuration |
+| `npm run build:develop` | Build for development environment |
+| `npm run build:staging` | Build for staging environment |
+| `npm run build:production` | Build for production environment |
 | `npm run test` | Run unit tests with Karma |
 | `npm run lint` | Lint the codebase |
 | `npm run format` | Format code with Prettier |
+| `npm run format:check` | Check code formatting without modifying files |
 
 ### Project Structure
 
@@ -181,9 +185,16 @@ npm run format
 npm run format:check
 ```
 
-Pre-commit hooks ensure code is formatted before committing.
+### Automated Quality Checks
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+This project uses Git hooks to maintain code quality:
+- **Pre-commit**: Auto-formats code with Prettier and runs ESLint
+- **Commit-msg**: Validates commit messages follow Conventional Commits
+- **Pre-push**: Validates branch naming convention
+
+These hooks are automatically installed when you run `npm install`.
+
+## 🤝 Contributing
 
 We welcome contributions from the community! Please read our [Contributing Guide](CONTRIBUTING.md) to get started.
 
@@ -204,23 +215,24 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **Documentation**: [Angular Docs](https://angular.dev)
-- **UI Components**: [Ng-Zorro Documentation](https://ng.ant.design/)
-- **Community**: [GitHub Discussions](https://github.com/Itqan-community/cms-frontend/discussions)
+- **Backend Repository**: [cms-backend](https://github.com/Itqan-community/cms-backend)
+- **Production Site**: [https://cms.itqan.dev](https://cms.itqan.dev)
+- **Community Forum**: [community.itqan.dev](https://community.itqan.dev)
+- **Documentation**: [Angular Docs](https://angular.dev) | [Ng-Zorro Docs](https://ng.ant.design/)
 - **Issues**: [Report a Bug](https://github.com/Itqan-community/cms-frontend/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Itqan-community/cms-frontend/discussions)
 
 ## 👥 Contributors
 
 Thanks to all our contributors! See the [Contributors](https://github.com/Itqan-community/cms-frontend/graphs/contributors) page.
 
-## 📧 Contact
+## 🤝 Community
 
-- **Email**: support@itqan.dev
-- **Website**: https://itqan.dev
-- **GitHub**: https://github.com/Itqan-community
+- **Website**: [https://itqan.dev](https://itqan.dev)
+- **Community Forum**: [community.itqan.dev](https://community.itqan.dev)
+- **LinkedIn**: [Itqan Community](https://www.linkedin.com/company/itqan-community/)
+- **GitHub**: [Itqan Community](https://github.com/Itqan-community)
 
-```bash
-ng test
-```
+---
 
 Made with ❤️ by the Itqan Community

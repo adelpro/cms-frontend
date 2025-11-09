@@ -19,13 +19,16 @@ The Itqan community takes the security of our software seriously. If you believe
 
 ### Please DO:
 
-1. **Email us directly** at [security@itqan.dev](mailto:security@itqan.dev) with:
-   - A description of the vulnerability
-   - Steps to reproduce the issue
-   - Potential impact of the vulnerability
-   - Suggested fix (if you have one)
+1. **Report privately through GitHub Security Advisories**:
+   - Go to the [Security tab](https://github.com/Itqan-community/cms-frontend/security) of this repository
+   - Click "Report a vulnerability"
+   - Fill out the vulnerability report form with:
+     - A description of the vulnerability
+     - Steps to reproduce the issue
+     - Potential impact of the vulnerability
+     - Suggested fix (if you have one)
 
-2. **Allow us time to respond** - We will acknowledge your email within 48 hours and will send a more detailed response within 7 days indicating the next steps in handling your report.
+2. **Allow us time to respond** - We will acknowledge your report within 48 hours and will send a more detailed response within 7 days indicating the next steps in handling your report.
 
 3. **Give us reasonable time to fix** - We will work to fix confirmed vulnerabilities as quickly as possible, and will keep you informed of our progress.
 
