@@ -20,23 +20,24 @@ This project adheres to a Code of Conduct that all contributors are expected to 
 
 This project uses automated tools to maintain code quality and consistency:
 
-| Check | When | Tool | What It Does |
-|-------|------|------|--------------|
-| **Code Formatting** | Pre-commit | Prettier | Automatically formats your code |
-| **Code Linting** | Pre-commit | Angular ESLint | Catches code quality issues |
-| **Commit Messages** | On commit | commitlint | Enforces Conventional Commits format |
-| **Branch Names** | Pre-push | Custom script | Validates branch naming convention |
-| **Tests & Build** | CI/CD | GitHub Actions | Runs tests and builds on PR |
+| Check               | When       | Tool           | What It Does                         |
+| ------------------- | ---------- | -------------- | ------------------------------------ |
+| **Code Formatting** | Pre-commit | Prettier       | Automatically formats your code      |
+| **Commit Messages** | On commit  | commitlint     | Enforces Conventional Commits format |
+| **Branch Names**    | Pre-push   | Custom script  | Validates branch naming convention   |
+| **Tests & Build**   | CI/CD      | GitHub Actions | Runs tests and builds on PR          |
 
 ### What This Means for You
 
 ✅ **Benefits:**
+
 - Your code is automatically formatted - no style debates!
 - Catch errors before committing
 - Clean, searchable commit history
 - Organized branch structure
 
 ⚠️ **What to Expect:**
+
 - Commits will be rejected if messages don't follow the format
 - Pushes will be rejected if branch names are invalid
 - Pre-commit hooks may take 3-10 seconds to run
@@ -101,6 +102,7 @@ The project uses multiple environments:
 ### Code Contributions
 
 1. **Create a branch** from `develop`:
+
    ```bash
    git checkout develop
    git pull upstream develop
@@ -114,18 +116,21 @@ The project uses multiple environments:
    - Update documentation
 
 3. **Test your changes**:
+
    ```bash
    npm run test
    npm run build
    ```
 
 4. **Commit your changes**:
+
    ```bash
    git add .
    git commit -m "feat: add new feature"
    ```
 
 5. **Push to your fork**:
+
    ```bash
    git push origin feature/your-feature-name
    ```
@@ -146,6 +151,7 @@ The project uses multiple environments:
 ### PR Title Format
 
 Follow conventional commits format:
+
 - `feat: add new feature`
 - `fix: resolve bug in component`
 - `docs: update README`
@@ -177,17 +183,13 @@ Follow the [Angular Style Guide](https://angular.dev/style-guide) for all Angula
 @Component({
   selector: 'app-component-name',
   templateUrl: './component-name.component.html',
-  styleUrls: ['./component-name.component.less']
+  styleUrls: ['./component-name.component.less'],
 })
 export class ComponentNameComponent implements OnInit {
   // Properties
-
   // Constructor
-
   // Lifecycle hooks
-
   // Public methods
-
   // Private methods
 }
 ```
@@ -238,6 +240,7 @@ These branches are always allowed: `master`, `develop`, `staging`
 ### Examples
 
 ✅ **Good:**
+
 ```bash
 feature/add-surah-details
 fix/resolve-translation-bug
@@ -245,6 +248,7 @@ docs/update-api-documentation
 ```
 
 ❌ **Bad:**
+
 ```bash
 my-branch
 fix_bug
@@ -291,6 +295,7 @@ All commits must follow the [Conventional Commits](https://www.conventionalcommi
 ### Examples
 
 ✅ **Good:**
+
 ```
 feat(auth): add login functionality
 
@@ -319,6 +324,7 @@ refactor(api): improve error handling in asset service
 ```
 
 ❌ **Bad:**
+
 ```
 updated stuff
 fix bug
@@ -329,6 +335,7 @@ WIP
 ### Bypassing Hooks (Not Recommended)
 
 If you absolutely need to bypass the commit hooks (e.g., emergency hotfix):
+
 ```bash
 git commit --no-verify -m "your message"
 ```
@@ -364,4 +371,3 @@ By contributing, you agree that your contributions will be licensed under the MI
 Contributors will be recognized in our README.md and release notes.
 
 Thank you for contributing to CMS Frontend! 🎉
-

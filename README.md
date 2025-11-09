@@ -57,17 +57,17 @@ The application will be available at `http://localhost:4200/`
 
 ### Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm start` | Start development server on `http://localhost:4200` |
-| `npm run build` | Build for production |
-| `npm run build:develop` | Build for development environment |
-| `npm run build:staging` | Build for staging environment |
-| `npm run build:production` | Build for production environment |
-| `npm run test` | Run unit tests with Karma |
-| `npm run lint` | Lint the codebase |
-| `npm run format` | Format code with Prettier |
-| `npm run format:check` | Check code formatting without modifying files |
+| Command                    | Description                                         |
+| -------------------------- | --------------------------------------------------- |
+| `npm start`                | Start development server on `http://localhost:4200` |
+| `npm run build`            | Build for production                                |
+| `npm run build:develop`    | Build for development environment                   |
+| `npm run build:staging`    | Build for staging environment                       |
+| `npm run build:production` | Build for production environment                    |
+| `npm run test`             | Run unit tests with Karma                           |
+| `npm run lint`             | Lint the codebase                                   |
+| `npm run format`           | Format code with Prettier                           |
+| `npm run format:check`     | Check code formatting without modifying files       |
 
 ### Project Structure
 
@@ -91,6 +91,7 @@ cms-frontend/
 ### Angular Configuration
 
 The project uses Angular 20 with:
+
 - **Build System**: Application builder (`@angular/build:application`)
 - **Style Preprocessor**: LESS
 - **Routing**: Standalone components with Angular Router
@@ -117,11 +118,11 @@ ng generate --help
 
 The application supports three deployment environments:
 
-| Environment | Branch | URL | Config File |
-|------------|--------|-----|-------------|
+| Environment     | Branch    | URL                           | Config File              |
+| --------------- | --------- | ----------------------------- | ------------------------ |
 | **Development** | `develop` | https://develop.cms.itqan.dev | `environment.develop.ts` |
-| **Staging** | `staging` | https://staging.cms.itqan.dev | `environment.staging.ts` |
-| **Production** | `master` | https://cms.itqan.dev | `environment.prod.ts` |
+| **Staging**     | `staging` | https://staging.cms.itqan.dev | `environment.staging.ts` |
+| **Production**  | `master`  | https://cms.itqan.dev         | `environment.prod.ts`    |
 
 ### Building for Different Environments
 
@@ -171,6 +172,7 @@ npm run test -- --code-coverage
 ## 🎨 Code Style
 
 This project uses:
+
 - **Prettier** for code formatting
 - **EditorConfig** for consistent editor settings
 - **ESLint** for linting (if configured)
@@ -188,7 +190,8 @@ npm run format:check
 ### Automated Quality Checks
 
 This project uses Git hooks to maintain code quality:
-- **Pre-commit**: Auto-formats code with Prettier and runs ESLint
+
+- **Pre-commit**: Auto-formats code with Prettier
 - **Commit-msg**: Validates commit messages follow Conventional Commits
 - **Pre-push**: Validates branch naming convention
 
