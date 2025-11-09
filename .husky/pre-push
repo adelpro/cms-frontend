@@ -1,0 +1,41 @@
+# Get the current branch name
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+# Define valid branch name pattern
+# Allowed: feature/, fix/, docs/, style/, refactor/, perf/, test/, build/, ci/, chore/, revert/
+valid_branch_regex="^(feature|fix|docs|style|refactor|perf|test|build|ci|chore|revert)\/[a-z0-9._-]+$|^(master|develop|staging)$"
+
+# Check if branch name matches the pattern
+if ! echo "$branch" | grep -qE "$valid_branch_regex"; then
+  echo ""
+  echo "❌ Invalid branch name: '$branch'"
+  echo ""
+  echo "Branch names must follow this pattern:"
+  echo "  type/description-in-kebab-case"
+  echo ""
+  echo "Valid types:"
+  echo "  • feature/  - New features"
+  echo "  • fix/      - Bug fixes"
+  echo "  • docs/     - Documentation changes"
+  echo "  • style/    - Code style changes (formatting)"
+  echo "  • refactor/ - Code refactoring"
+  echo "  • perf/     - Performance improvements"
+  echo "  • test/     - Adding or updating tests"
+  echo "  • build/    - Build system changes"
+  echo "  • ci/       - CI/CD changes"
+  echo "  • chore/    - Maintenance tasks"
+  echo "  • revert/   - Reverting changes"
+  echo ""
+  echo "Examples:"
+  echo "  ✅ feature/quranic-search"
+  echo "  ✅ fix/api-timeout-issue"
+  echo "  ✅ docs/update-readme"
+  echo ""
+  echo "Protected branches (always allowed):"
+  echo "  • master, develop, staging"
+  echo ""
+  exit 1
+fi
+
+exit 0
+
