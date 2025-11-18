@@ -1,24 +1,23 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
-import { ImageCarouselComponent } from '../../../../shared/components/image-carousel/image-carousel.component';
-import { AssetsService } from '../../services/assets.service';
-import { AssetDetails } from '../../models/assets.model';
-import { ActivatedRoute } from '@angular/router';
-import { environment } from '../../../../../environments/environment';
-import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
-import { LicenseTagComponent } from '../../../../shared/components/license-tag/license-tag.component';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { environment } from '../../../../../environments/environment';
 import { AuthService } from '../../../../core/auth/services/auth.service';
-import { HttpClient } from '@angular/common/http';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
+import { ImageCarouselComponent } from '../../../../shared/components/image-carousel/image-carousel.component';
+import { LicenseTagComponent } from '../../../../shared/components/license-tag/license-tag.component';
+import { AssetDetails } from '../../models/assets.model';
+import { AssetsService } from '../../services/assets.service';
 
 @Component({
   selector: 'app-asset-details-page',
@@ -57,7 +56,7 @@ export class AssetDetailsPage {
   isModalVisible = signal<boolean>(false);
   isLicenseModalVisible = signal<boolean>(false);
   canConfirmLicense = signal<boolean>(false);
-  
+
   accessRequestForm: FormGroup;
 
   usageOptions = [
@@ -71,7 +70,7 @@ export class AssetDetailsPage {
       purpose: ['', [Validators.required]]
     });
   }
-  
+
   ngOnInit() {
     this.getAssetDetails(this.id);
   }
@@ -175,7 +174,7 @@ export class AssetDetailsPage {
     const scrollTop = element.scrollTop;
     const scrollHeight = element.scrollHeight;
     const clientHeight = element.clientHeight;
-    
+
     // Check if scrolled to bottom (with 5px threshold)
     if (scrollTop + clientHeight >= scrollHeight - 5) {
       this.canConfirmLicense.set(true);
@@ -192,7 +191,7 @@ export class AssetDetailsPage {
     // Proceed with download
     const asset = this.asset();
     if (asset?.id) {
-      this.downloadFile(`${environment.API_BASE_URL}/assets/${asset.id}/download/`, `${asset.name || 'asset'}.zip`);
+      this.downloadAsset(asset.id);
     }
   }
 
@@ -207,50 +206,58 @@ export class AssetDetailsPage {
       return;
     }
 
-    this.downloadFile(`${environment.API_BASE_URL}/resources/${asset.resource.id}/download/`, `${asset.name || 'resource'}_original.zip`);
+    this.performResourceDownload(asset.resource.id);
   }
 
-  private downloadFile(url: string, filename: string): void {
-    const token = this.authService.getToken();
-    if (!token) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    // Authorization header is automatically added by global interceptor
-    this.http.get(url, { 
-      responseType: 'blob',
-      observe: 'response'
-    }).subscribe({
+  private downloadAsset(assetId: number): void {
+    // Step 1: Get the download_url from backend
+    this.http.get<{ download_url: string }>(`${environment.API_BASE_URL}/assets/${assetId}/download/`).subscribe({
       next: (response) => {
-        const blob = response.body;
-        if (!blob) {
-          return;
-        }
-
-        // Get filename from Content-Disposition header if available
-        const contentDisposition = response.headers.get('Content-Disposition');
-        if (contentDisposition) {
-          const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
-          if (filenameMatch && filenameMatch[1]) {
-            filename = filenameMatch[1].replace(/['"]/g, '');
-          }
-        }
-
-        // Create blob URL and download
-        const blobUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(blobUrl);
+        const downloadUrl = response.download_url;
+        // Extract filename from URL path
+        const filename = this.extractFilenameFromPath(downloadUrl);
+        // Step 2: Download the actual file
+        this.downloadFileFromUrl(downloadUrl, filename);
       },
       error: (error) => {
-        console.error('Download failed:', error);
+        console.error('Failed to get download URL:', error);
       }
     });
+  }
+
+  private performResourceDownload(resourceId: number): void {
+    // Step 1: Get the download_url from backend
+    this.http.get<{ download_url: string }>(`${environment.API_BASE_URL}/resources/${resourceId}/download/`).subscribe({
+      next: (response) => {
+        const downloadUrl = response.download_url;
+        // Extract filename from URL path
+        const filename = this.extractFilenameFromPath(downloadUrl);
+        // Step 2: Download the actual file
+        this.downloadFileFromUrl(downloadUrl, filename);
+      },
+      error: (error) => {
+        console.error('Failed to get download URL:', error);
+      }
+    });
+  }
+
+  private downloadFileFromUrl(fileUrl: string, filename: string): void {
+    // Build full URL
+    const fullUrl = `${environment.API_BASE_URL}${fileUrl}`;
+
+    // Create link and trigger download
+    const link = document.createElement('a');
+    link.href = fullUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  private extractFilenameFromPath(path: string): string {
+    // Extract filename from a full path (e.g., "media/uploads/resources/15/versions/100/tr-ab-en_hilali.csv" -> "tr-ab-en_hilali.csv")
+    const parts = path.split('/');
+    return parts[parts.length - 1] || path;
   }
 
   getLicenseType(license: string): any {
