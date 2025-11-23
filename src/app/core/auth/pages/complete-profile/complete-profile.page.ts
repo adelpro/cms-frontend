@@ -1,18 +1,19 @@
-import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { AuthService } from '../../services/auth.service';
-import { UpdateProfileRequest } from '../../models/auth.model';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { getErrorMessage } from '../../../../shared/utils/error.utils';
+import { UpdateProfileRequest } from '../../models/auth.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-complete-profile-page',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, TranslateModule, NzButtonComponent],
   templateUrl: './complete-profile.page.html',
-  styleUrls: ['./complete-profile.page.less']
+  styleUrls: ['./complete-profile.page.less'],
 })
 export class CompleteProfilePage {
   private readonly authService = inject(AuthService);
@@ -40,18 +41,20 @@ export class CompleteProfilePage {
       const profileData: UpdateProfileRequest = {
         bio: this.profileForm.value.bio,
         project_summary: this.profileForm.value.project_summary || undefined,
-        project_url: this.profileForm.value.project_url || undefined
+        project_url: this.profileForm.value.project_url || undefined,
       };
 
       this.authService.updateProfile(profileData).subscribe({
-        next: (_response: any) => {
+        next: () => {
           this.isLoading.set(false);
           this.router.navigate(['/gallery']);
         },
-        error: (error: any) => {
+        error: (error: unknown) => {
           this.isLoading.set(false);
-          this.errorMessage.set(error?.error?.error?.message || this.translate.instant('ERRORS.SERVER_ERROR'));
-        }
+          this.errorMessage.set(
+            getErrorMessage(error) || this.translate.instant('ERRORS.SERVER_ERROR'),
+          );
+        },
       });
     }
   }
@@ -74,5 +77,3 @@ export class CompleteProfilePage {
     return '';
   }
 }
-
-

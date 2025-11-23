@@ -7,10 +7,16 @@
     </div>
 
     <div class="filters__card-content">
-      <input type="text" nz-input [(ngModel)]="searchQuery" (ngModelChange)="onSearchQueryChange($event)" [placeholder]="'UI.SEARCH_IN_RESOURCES' | translate" />
+      <input
+        type="text"
+        nz-input
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchQueryChange($event)"
+        [placeholder]="'UI.SEARCH_IN_RESOURCES' | translate"
+      />
     </div>
   </div>
-  
+
   <!-- Category Filter -->
   <div class="card filters__card">
     <div class="filters__card-header">
@@ -19,10 +25,14 @@
     </div>
 
     <div class="filters__card-content">
-      <nz-checkbox-group [nzOptions]="categoriesOptions" [(ngModel)]="categoriesSelection" (ngModelChange)="onCategoriesSelectionChange($event)" />
+      <nz-checkbox-group
+        [nzOptions]="categoriesOptions"
+        [(ngModel)]="categoriesSelection"
+        (ngModelChange)="onCategoriesSelectionChange($event)"
+      />
     </div>
   </div>
-  
+
   <!-- License Filter -->
   <div class="card filters__card">
     <div class="filters__card-header">
@@ -31,11 +41,16 @@
     </div>
 
     <div class="filters__card-content">
-      <nz-checkbox-group [(ngModel)]="licensesSelection" (ngModelChange)="onLicensesSelectionChange($event)">
+      <nz-checkbox-group
+        [(ngModel)]="licensesSelection"
+        (ngModelChange)="onLicensesSelectionChange($event)"
+      >
         @for (license of licensesOptions; track license.value) {
           <div class="filters__card-content-license">
-            <label nz-checkbox [nzValue]="license.value">{{ license.label | translate }}</label>
-            <app-license-tag [license]="license.value" />
+            <label nz-checkbox [nzValue]="license.value" [htmlFor]="license.value">{{
+              license.label | translate
+            }}</label>
+            <app-license-tag [license]="license.value" id="license.value" />
           </div>
         }
       </nz-checkbox-group>

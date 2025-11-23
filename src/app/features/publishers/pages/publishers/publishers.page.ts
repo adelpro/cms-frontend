@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-publishers-page',
   templateUrl: './publishers.page.html',
-  styleUrl: './publishers.page.less'
+  styleUrl: './publishers.page.less',
 })
-export class PublishersPage {
-}
+export class PublishersPage {}

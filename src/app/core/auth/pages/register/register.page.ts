@@ -1,18 +1,19 @@
-import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { AuthService } from '../../services/auth.service';
 import { LangSwitchComponent } from '../../../../shared/components/lang-switch/lang-switch.component';
+import { getErrorMessage } from '../../../../shared/utils/error.utils';
 import { RegisterRequest } from '../../models/auth.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register-page',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslateModule, LangSwitchComponent],
   templateUrl: './register.page.html',
-  styleUrls: ['./register.page.less']
+  styleUrls: ['./register.page.less'],
 })
 export class RegisterPage {
   readonly authService = inject(AuthService);
@@ -30,7 +31,7 @@ export class RegisterPage {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       phone: [''],
-      title: ['']
+      title: [''],
     });
   }
 
@@ -44,21 +45,21 @@ export class RegisterPage {
         email: this.registerForm.value.email,
         password: this.registerForm.value.password,
         phone: this.registerForm.value.phone || undefined,
-        job_title: this.registerForm.value.title || undefined
+        job_title: this.registerForm.value.title || undefined,
       };
 
       this.authService.register(registerData).subscribe({
-        next: (response) => {
-          // if ((response as any)?.user?.is_profile_completed) {
+        next: () => {
           this.router.navigate(['/gallery']);
-          // } else {
-          //   this.router.navigate(['/complete-profile']);
-          // }
         },
-        error: (error: any) => {
+        error: (error: unknown) => {
           this.authService.isLoading.set(false);
-          this.errorMessage.set(error?.error?.error?.message || this.translate.instant('AUTH.REGISTER.ERRORS.REGISTER_FAILED'));
-        }
+
+          this.errorMessage.set(
+            getErrorMessage(error) ||
+              this.translate.instant('AUTH.REGISTER.ERRORS.REGISTER_FAILED'),
+          );
+        },
       });
     }
   }

@@ -5,15 +5,16 @@ export enum Licenses {
   CC_BY_ND = 'CC-BY-ND',
   CC_BY_NC = 'CC-BY-NC',
   CC_BY_NC_SA = 'CC-BY-NC-SA',
-  CC_BY_NC_ND = 'CC-BY-NC-ND'
+  CC_BY_NC_ND = 'CC-BY-NC-ND',
 }
 
+/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 export enum LicensesColors {
-  CC0 = '#00bc7d',
+  'CC0' = '#00bc7d',
   'CC-BY' = '#00bc7d',
   'CC-BY-SA' = '#fe9a00',
   'CC-BY-ND' = '#fe9a00',
   'CC-BY-NC' = '#fe9a00',
   'CC-BY-NC-SA' = '#fb2c36',
-  'CC-BY-NC-ND' = '#fb2c36'
+  'CC-BY-NC-ND' = '#fb2c36',
 }

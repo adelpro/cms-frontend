@@ -1,11 +1,11 @@
-import { Component, inject, OnInit, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, NavigationEnd, RouterModule } from '@angular/router';
-import { filter } from 'rxjs/operators';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { filter } from 'rxjs/operators';
 
 interface Breadcrumb {
   label: string;
@@ -34,8 +34,8 @@ export class BreadcrumbComponent implements OnInit {
     // Update breadcrumbs on navigation
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
-        takeUntilDestroyed(this.destroyRef)
+        filter((event) => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
         this.generateBreadcrumbs();
@@ -44,7 +44,7 @@ export class BreadcrumbComponent implements OnInit {
 
   private generateBreadcrumbs(): void {
     const url = this.router.url.split('?')[0]; // Remove query params
-    const urlSegments = url.split('/').filter(segment => segment);
+    const urlSegments = url.split('/').filter((segment) => segment);
 
     if (urlSegments.length === 0) {
       this.breadcrumbs = [];
@@ -69,19 +69,19 @@ export class BreadcrumbComponent implements OnInit {
       // If the next segment is an ID, combine them
       if (isNextSegmentId && nextSegment) {
         currentUrl += `/${nextSegment}`;
-        const combinedLabel = `${this.getSegmentLabel(segment, index, urlSegments)} ${this.formatSegment(nextSegment)}`;
-        const isCombinedLast = (index + 2) === urlSegments.length;
+        const combinedLabel = `${this.getSegmentLabel(segment)} ${this.formatSegment(nextSegment)}`;
+        const isCombinedLast = index + 2 === urlSegments.length;
         breadcrumbs.push({
           label: combinedLabel,
           url: currentUrl,
-          isActive: isCombinedLast
+          isActive: isCombinedLast,
         });
         skipNext = true;
       } else {
         breadcrumbs.push({
-          label: this.getSegmentLabel(segment, index, urlSegments),
+          label: this.getSegmentLabel(segment),
           url: currentUrl,
-          isActive: isLast
+          isActive: isLast,
         });
       }
     });
@@ -89,10 +89,10 @@ export class BreadcrumbComponent implements OnInit {
     this.breadcrumbs = breadcrumbs;
   }
 
-  private getSegmentLabel(segment: string, index: number, allSegments: string[]): string {
+  private getSegmentLabel(segment: string): string {
     // Check if it's a known route segment
-    const translationKey = this.getTranslationKey(segment, index, allSegments);
-    
+    const translationKey = this.getTranslationKey(segment);
+
     if (translationKey) {
       const translated = this.translate.instant(translationKey);
       // If translation exists and is different from the key, use it
@@ -105,7 +105,7 @@ export class BreadcrumbComponent implements OnInit {
     return this.formatSegment(segment);
   }
 
-  private getTranslationKey(segment: string, index: number, allSegments: string[]): string | null {
+  private getTranslationKey(segment: string): string | null {
     // Handle main navigation routes
     switch (segment) {
       case 'gallery':
@@ -137,14 +137,16 @@ export class BreadcrumbComponent implements OnInit {
     return segment
       .replace(/[-_]/g, ' ')
       .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   }
 
   private isId(segment: string): boolean {
     // Check if segment looks like an ID (GUID, number, or long alphanumeric)
-    return /^[0-9a-f]{8,}(-[0-9a-f]{4,})*$/i.test(segment) || 
-           /^\d+$/.test(segment) ||
-           segment.length > 20;
+    return (
+      /^[0-9a-f]{8,}(-[0-9a-f]{4,})*$/i.test(segment) ||
+      /^\d+$/.test(segment) ||
+      segment.length > 20
+    );
   }
 }

@@ -30,6 +30,7 @@
     "build:develop": "ng build --configuration develop",
     "test": "ng test",
     "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky install"

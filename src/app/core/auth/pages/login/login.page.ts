@@ -1,18 +1,19 @@
-import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { AuthService } from '../../services/auth.service';
-import { LoginRequest } from '../../models/auth.model';
 import { LangSwitchComponent } from '../../../../shared/components/lang-switch/lang-switch.component';
+import { getErrorMessage } from '../../../../shared/utils/error.utils';
+import { LoginRequest } from '../../models/auth.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink, TranslateModule, LangSwitchComponent],
   styleUrls: ['./login.page.less'],
-  templateUrl: './login.page.html'
+  templateUrl: './login.page.html',
 })
 export class LoginPage {
   readonly authService = inject(AuthService);
@@ -26,7 +27,7 @@ export class LoginPage {
   constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -37,24 +38,20 @@ export class LoginPage {
 
       const loginData: LoginRequest = {
         email: this.loginForm.value.email,
-        password: this.loginForm.value.password
+        password: this.loginForm.value.password,
       };
 
       this.authService.login(loginData).subscribe({
-        next: (response) => {
-          // if ((response as any)?.user?.profile_completed) {
+        next: () => {
           this.router.navigate(['/gallery']);
-          // } else {
-          //   this.router.navigate(['/complete-profile']);
-          // }
         },
         error: (error) => {
           this.authService.isLoading.set(false);
-          this.errorMessage.set(error?.error?.error?.message || this.translate.instant('AUTH.LOGIN.ERRORS.LOGIN_FAILED'));
-        }
+          this.errorMessage.set(
+            getErrorMessage(error) || this.translate.instant('AUTH.LOGIN.ERRORS.LOGIN_FAILED'),
+          );
+        },
       });
     }
   }
 }
-
-
