@@ -3,11 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, BehaviorSubject, tap, catchError, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { 
-  User, 
-  AuthResponse, 
-  LoginRequest, 
-  RegisterRequest, 
+import {
+  User,
+  AuthResponse,
+  LoginRequest,
+  RegisterRequest,
   RefreshTokenRequest,
   RefreshTokenResponse,
   UpdateProfileRequest,
@@ -41,7 +41,7 @@ export class AuthService {
   private initializeAuth(): void {
     const token = this.getToken();
     const user = this.getStoredUser();
-    
+
     if (token && user) {
       this.isAuthenticated.set(true);
       this.currentUser.set(user);
@@ -51,7 +51,7 @@ export class AuthService {
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
     this.isLoading.set(true);
-    
+
     return this.http.post<AuthResponse>(`${this.API_BASE_URL}/auth/login/`, credentials)
       .pipe(
         tap(response => {
@@ -70,7 +70,7 @@ export class AuthService {
 
   register(userData: RegisterRequest): Observable<AuthResponse> {
     this.isLoading.set(true);
-    
+
     return this.http.post<AuthResponse>(`${this.API_BASE_URL}/auth/register/`, userData)
       .pipe(
         tap(response => {
@@ -89,7 +89,7 @@ export class AuthService {
 
   logout(): Observable<void> {
     // const token = this.getToken();
-    
+
     // Call logout endpoint if token exists
     // if (token) {
     //   return this.http.post<void>(`${this.API_BASE_URL}/auth/logout/`, {})
@@ -131,7 +131,9 @@ export class AuthService {
     return this.http.post<RefreshTokenResponse>(`${this.API_BASE_URL}/auth/token/refresh/`, refreshData)
       .pipe(
         tap(response => {
+          // Update both access and refresh tokens
           this.setToken(response.access);
+          this.setRefreshToken(response.refresh);
         }),
         catchError(error => {
           this.performLogout();
@@ -201,6 +203,10 @@ export class AuthService {
 
   private setToken(token: string): void {
     localStorage.setItem(this.TOKEN_KEY, token);
+  }
+
+  private setRefreshToken(refreshToken: string): void {
+    localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
   }
 
   private setUser(user: User): void {
