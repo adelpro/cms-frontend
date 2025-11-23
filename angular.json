@@ -5,11 +5,11 @@
   "projects": {
     "cms-frontend": {
       "projectType": "application",
-          "schematics": {
-            "@schematics/angular:component": {
-              "style": "less"
-            }
-          },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "less"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -141,8 +141,23 @@
               "public/assets/icons/boxicons.min.css"
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false,
+    "schematicCollections": [
+      "angular-eslint"
+    ]
   }
 }
