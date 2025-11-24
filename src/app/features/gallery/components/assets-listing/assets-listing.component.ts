@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FiltersComponent } from '../../../../shared/components/filters/filters.component';
+import { Asset } from '../../models/assets.model';
 import { AssetsService } from '../../services/assets.service';
 import { AssetCardComponent } from '../asset-card/asset-card.component';
 
@@ -7,25 +8,27 @@ import { AssetCardComponent } from '../asset-card/asset-card.component';
   selector: 'app-assets-listing',
   imports: [FiltersComponent, AssetCardComponent],
   templateUrl: './assets-listing.component.html',
-  styleUrl: './assets-listing.component.less'
+  styleUrl: './assets-listing.component.less',
 })
 export class AssetsListingComponent {
   private readonly assetsService = inject(AssetsService);
 
-  assets = signal<any[]>([]);
+  assets = signal<Asset[]>([]);
   categoriesSelection = signal<string[]>([]);
   searchQuery = signal<string>('');
   licensesSelection = signal<string[]>([]);
-  
+
   constructor() {
     this.getAssets();
   }
 
   getAssets() {
-    this.assetsService.getAssets(this.categoriesSelection(), this.searchQuery(), this.licensesSelection()).subscribe((assets) => {
-      this.assets.set(assets.results);
-      console.log(this.assets());
-    });
+    this.assetsService
+      .getAssets(this.categoriesSelection(), this.searchQuery(), this.licensesSelection())
+      .subscribe((assets) => {
+        this.assets.set(assets.results);
+        console.log(this.assets());
+      });
   }
 
   searchQueryChange(event: string) {

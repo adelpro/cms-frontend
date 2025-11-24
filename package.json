@@ -30,6 +30,7 @@
     "build:develop": "ng build --configuration develop",
     "test": "ng test",
     "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky install"
@@ -78,6 +79,8 @@
     "@commitlint/cli": "^19.0.0",
     "@commitlint/config-conventional": "^19.0.0",
     "@types/jasmine": "~5.1.0",
+    "angular-eslint": "21.0.0",
+    "eslint": "^9.39.1",
     "husky": "^9.0.0",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
@@ -88,6 +91,7 @@
     "less": "^4.2.0",
     "lint-staged": "^15.0.0",
     "prettier": "^3.0.0",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "typescript-eslint": "8.46.4"
   }
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -17,7 +17,7 @@ export interface Publisher {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PublisherService {
   private readonly http = inject(HttpClient);
@@ -40,25 +40,26 @@ export class PublisherService {
    *   console.log(assets.results);
    * });
    */
-  getPublisherAssets(publisherId: string, categories: string[] = [], searchQuery: string = '', licenses: string[] = []): Observable<ApiAssets> {
-    let params: any = {};
-    
-    // Add publisher_id query parameter
-    params.publisher_id = publisherId;
-    
-    if (categories && categories.length > 0) {
-      params.category = categories;
-    }
-    
-    if (searchQuery && searchQuery.trim() !== '') {
-      params.search = searchQuery;
-    }
-    
-    if (licenses && licenses.length > 0) {
-      params.license_code = licenses;
+  getPublisherAssets(
+    publisherId: string,
+    categories: string[] = [],
+    searchQuery = '',
+    licenses: string[] = [],
+  ): Observable<ApiAssets> {
+    let params = new HttpParams().set('publisher_id', publisherId);
+
+    categories.forEach((category) => {
+      params = params.append('category', category);
+    });
+
+    licenses.forEach((license) => {
+      params = params.append('license_code', license);
+    });
+
+    if (searchQuery.trim()) {
+      params = params.set('search', searchQuery.trim());
     }
 
     return this.http.get<ApiAssets>(`${this.BASE_URL}/assets/`, { params });
   }
 }
-

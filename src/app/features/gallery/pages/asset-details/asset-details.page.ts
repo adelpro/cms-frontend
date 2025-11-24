@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -13,6 +13,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { environment } from '../../../../../environments/environment';
 import { AuthService } from '../../../../core/auth/services/auth.service';
+import { Licenses } from '../../../../core/enums/licenses.enum';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { ImageCarouselComponent } from '../../../../shared/components/image-carousel/image-carousel.component';
 import { LicenseTagComponent } from '../../../../shared/components/license-tag/license-tag.component';
@@ -36,12 +37,12 @@ import { AssetsService } from '../../services/assets.service';
     NzFormModule,
     NzInputModule,
     NzSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './asset-details.page.html',
-  styleUrl: './asset-details.page.less'
+  styleUrl: './asset-details.page.less',
 })
-export class AssetDetailsPage {
+export class AssetDetailsPage implements OnInit {
   private readonly assetsService = inject(AssetsService);
   private readonly route = inject(ActivatedRoute);
   private readonly authService = inject(AuthService);
@@ -59,15 +60,12 @@ export class AssetDetailsPage {
 
   accessRequestForm: FormGroup;
 
-  usageOptions = [
-    { value: 'commercial' },
-    { value: 'non-commercial' }
-  ];
+  usageOptions = [{ value: 'commercial' }, { value: 'non-commercial' }];
 
   constructor() {
     this.accessRequestForm = this.fb.group({
       intended_use: ['', [Validators.required]],
-      purpose: ['', [Validators.required]]
+      purpose: ['', [Validators.required]],
     });
   }
 
@@ -80,16 +78,19 @@ export class AssetDetailsPage {
     this.assetsService.getAssetDetails(id).subscribe({
       next: (asset) => {
         this.asset.set(asset);
-        this.images.set(asset.snapshots.map((snapshot) => environment.API_BASE_URL + snapshot.image_url));
+        this.images.set(
+          asset.snapshots.map((snapshot) => environment.API_BASE_URL + snapshot.image_url),
+        );
         this.loading.set(false);
       },
       error: () => {
         this.loading.set(false);
-      }
+      },
     });
   }
 
-  getCategoryIcon(category: string): string { // TODO: move this function to a shared utility
+  getCategoryIcon(category: string): string {
+    // TODO: move this function to a shared utility
     switch (category) {
       case 'mushaf':
         return 'book-bookmark';
@@ -139,21 +140,23 @@ export class AssetDetailsPage {
 
       const formData = {
         intended_use: this.accessRequestForm.value.intended_use,
-        purpose: this.accessRequestForm.value.purpose
+        purpose: this.accessRequestForm.value.purpose,
       };
 
-      this.http.post(`${environment.API_BASE_URL}/assets/${asset.id}/request-access/`, formData).subscribe({
-        next: () => {
-          this.closeAccessRequestModal();
-          this.openLicenseModal();
-        },
-        error: (error) => {
-          console.error('Access request failed:', error);
-        }
-      });
+      this.http
+        .post(`${environment.API_BASE_URL}/assets/${asset.id}/request-access/`, formData)
+        .subscribe({
+          next: () => {
+            this.closeAccessRequestModal();
+            this.openLicenseModal();
+          },
+          error: (error) => {
+            console.error('Access request failed:', error);
+          },
+        });
     } else {
       // Mark all fields as touched to show validation errors
-      Object.keys(this.accessRequestForm.controls).forEach(key => {
+      Object.keys(this.accessRequestForm.controls).forEach((key) => {
         this.accessRequestForm.get(key)?.markAsTouched();
       });
     }
@@ -211,34 +214,40 @@ export class AssetDetailsPage {
 
   private downloadAsset(assetId: number): void {
     // Step 1: Get the download_url from backend
-    this.http.get<{ download_url: string }>(`${environment.API_BASE_URL}/assets/${assetId}/download/`).subscribe({
-      next: (response) => {
-        const downloadUrl = response.download_url;
-        // Extract filename from URL path
-        const filename = this.extractFilenameFromPath(downloadUrl);
-        // Step 2: Download the actual file
-        this.downloadFileFromUrl(downloadUrl, filename);
-      },
-      error: (error) => {
-        console.error('Failed to get download URL:', error);
-      }
-    });
+    this.http
+      .get<{ download_url: string }>(`${environment.API_BASE_URL}/assets/${assetId}/download/`)
+      .subscribe({
+        next: (response) => {
+          const downloadUrl = response.download_url;
+          // Extract filename from URL path
+          const filename = this.extractFilenameFromPath(downloadUrl);
+          // Step 2: Download the actual file
+          this.downloadFileFromUrl(downloadUrl, filename);
+        },
+        error: (error) => {
+          console.error('Failed to get download URL:', error);
+        },
+      });
   }
 
   private performResourceDownload(resourceId: number): void {
     // Step 1: Get the download_url from backend
-    this.http.get<{ download_url: string }>(`${environment.API_BASE_URL}/resources/${resourceId}/download/`).subscribe({
-      next: (response) => {
-        const downloadUrl = response.download_url;
-        // Extract filename from URL path
-        const filename = this.extractFilenameFromPath(downloadUrl);
-        // Step 2: Download the actual file
-        this.downloadFileFromUrl(downloadUrl, filename);
-      },
-      error: (error) => {
-        console.error('Failed to get download URL:', error);
-      }
-    });
+    this.http
+      .get<{
+        download_url: string;
+      }>(`${environment.API_BASE_URL}/resources/${resourceId}/download/`)
+      .subscribe({
+        next: (response) => {
+          const downloadUrl = response.download_url;
+          // Extract filename from URL path
+          const filename = this.extractFilenameFromPath(downloadUrl);
+          // Step 2: Download the actual file
+          this.downloadFileFromUrl(downloadUrl, filename);
+        },
+        error: (error) => {
+          console.error('Failed to get download URL:', error);
+        },
+      });
   }
 
   private downloadFileFromUrl(fileUrl: string, filename: string): void {
@@ -260,7 +269,7 @@ export class AssetDetailsPage {
     return parts[parts.length - 1] || path;
   }
 
-  getLicenseType(license: string): any {
-    return license;
+  getLicenseType(license: string): Licenses {
+    return license as Licenses;
   }
 }
