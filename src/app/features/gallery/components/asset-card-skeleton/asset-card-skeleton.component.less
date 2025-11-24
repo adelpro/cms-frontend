@@ -1,0 +1,45 @@
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+}
+
+.skeleton {
+  background: #e2e2e2;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-image {
+  height: 140px;
+}
+
+.skeleton-title {
+  height: 16px;
+  width: 90%;
+}
+
+.skeleton-subtitle {
+  height: 14px;
+  width: 70%;
+}
+
+.skeleton-button {
+  height: 36px;
+  width: 100%;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
