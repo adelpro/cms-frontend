@@ -47,6 +47,9 @@ export class PublisherDetailsPage implements OnInit {
   }
 
   getSkeletonArray() {
+    if (this.isServer) {
+      return [];
+    }
     const count = window.innerWidth < 768 ? 4 : 8;
     return Array.from({ length: count });
   }
@@ -56,6 +59,7 @@ export class PublisherDetailsPage implements OnInit {
     this.publisherService.getPublisher(this.id).subscribe({
       next: (publisher) => this.publisher.set(publisher),
       complete: () => this.publisherLoading.set(false),
+      error: () => this.publisherLoading.set(false),
     });
   }
 
@@ -71,6 +75,7 @@ export class PublisherDetailsPage implements OnInit {
       .subscribe({
         next: (response) => this.assets.set(response.results),
         complete: () => this.assetsLoading.set(false),
+        error: () => this.assetsLoading.set(false),
       });
   }
 

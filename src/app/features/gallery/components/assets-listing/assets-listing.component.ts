@@ -29,6 +29,9 @@ export class AssetsListingComponent {
   }
 
   getSkeletonArray() {
+    if (this.isServer) {
+      return [];
+    }
     const count = window.innerWidth < 768 ? 4 : 8;
     return Array.from({ length: count });
   }
@@ -40,6 +43,7 @@ export class AssetsListingComponent {
       .subscribe({
         next: (response) => this.assets.set(response.results),
         complete: () => this.loading.set(false),
+        error: () => this.loading.set(false),
       });
   }
 
