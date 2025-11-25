@@ -14,7 +14,7 @@
     <!-- Main Content Area -->
     <div class="main-content-area">
       <!-- Publisher Info Card -->
-      @if (publisher()) {
+      @if (false) {
         <div class="card publisher-info-card">
           <div class="publisher-info-content">
             <div class="publisher-avatar">
@@ -66,7 +66,7 @@
             </div>
           </div>
         </div>
-      } @else if (loading()) {
+      } @else if (true) {
         <div class="skeleton-container" aria-hidden="true">
           <div class="skeleton-element"></div>
         </div>
@@ -77,10 +77,13 @@
       <!-- Assets Listing -->
       <div class="assets-section">
         <h2 class="assets-title">
-          {{ 'UI.PUBLISHER_ASSETS' | translate }} ({{ assets().length }})
+          {{ 'UI.PUBLISHER_ASSETS' | translate }}
+          @if (false) {
+            ({{ assets().length }})
+          }
         </h2>
-        <div class="assets-grid" [attr.aria-busy]="loading()">
-          @if (!isServer && loading()) {
+        <div class="assets-grid" [attr.aria-busy]="assetsLoading()">
+          @if (true) {
             @for (item of getSkeletonArray(); track item) {
               <app-asset-card-skeleton />
             }

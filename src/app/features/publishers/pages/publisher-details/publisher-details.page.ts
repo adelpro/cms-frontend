@@ -34,7 +34,8 @@ export class PublisherDetailsPage implements OnInit {
   readonly id = this.route.snapshot.params['id'];
   publisher = signal<Publisher | null>(null);
   assets = signal<Asset[]>([]);
-  loading = signal<boolean>(true);
+  publisherLoading = signal<boolean>(true);
+  assetsLoading = signal<boolean>(true);
 
   categoriesSelection = signal<string[]>([]);
   searchQuery = signal<string>('');
@@ -51,15 +52,15 @@ export class PublisherDetailsPage implements OnInit {
   }
 
   getPublisherDetails() {
-    this.loading.set(true);
+    this.publisherLoading.set(true);
     this.publisherService.getPublisher(this.id).subscribe({
       next: (publisher) => this.publisher.set(publisher),
-      complete: () => this.loading.set(false),
+      complete: () => this.publisherLoading.set(false),
     });
   }
 
   getAssets() {
-    this.loading.set(true);
+    this.assetsLoading.set(true);
     this.publisherService
       .getPublisherAssets(
         this.id,
@@ -68,10 +69,8 @@ export class PublisherDetailsPage implements OnInit {
         this.licensesSelection(),
       )
       .subscribe({
-        next: (response) => {
-          this.assets.set(response.results);
-        },
-        complete: () => this.loading.set(false),
+        next: (response) => this.assets.set(response.results),
+        complete: () => this.assetsLoading.set(false),
       });
   }
 
