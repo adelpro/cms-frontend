@@ -5,9 +5,15 @@
     (categoriesSelectionChange)="categoriesSelectionChange($event)"
     (licensesSelectionChange)="licensesSelectionChange($event)"
   />
-  <div class="assets-listing__grid">
-    @for (asset of assets(); track asset.id) {
-      <app-asset-card [asset]="asset" />
+  <div class="assets-listing__grid" [attr.aria-busy]="loading()">
+    @if (!isServer && loading()) {
+      @for (item of getSkeletonArray(); track item) {
+        <app-asset-card-skeleton />
+      }
+    } @else {
+      @for (asset of assets(); track asset.id) {
+        <app-asset-card [asset]="asset" />
+      }
     }
   </div>
 </div>

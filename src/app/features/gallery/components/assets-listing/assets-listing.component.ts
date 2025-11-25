@@ -1,19 +1,25 @@
-import { Component, inject, signal } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Component, inject, PLATFORM_ID, signal } from '@angular/core';
 import { FiltersComponent } from '../../../../shared/components/filters/filters.component';
 import { Asset } from '../../models/assets.model';
 import { AssetsService } from '../../services/assets.service';
+import { AssetCardSkeletonComponent } from '../asset-card-skeleton/asset-card-skeleton.component';
 import { AssetCardComponent } from '../asset-card/asset-card.component';
 
 @Component({
   selector: 'app-assets-listing',
-  imports: [FiltersComponent, AssetCardComponent],
+  imports: [FiltersComponent, AssetCardComponent, AssetCardSkeletonComponent],
   templateUrl: './assets-listing.component.html',
   styleUrl: './assets-listing.component.less',
 })
 export class AssetsListingComponent {
   private readonly assetsService = inject(AssetsService);
+  private readonly platformId = inject(PLATFORM_ID);
+
+  isServer = isPlatformServer(this.platformId);
 
   assets = signal<Asset[]>([]);
+  loading = signal<boolean>(false);
   categoriesSelection = signal<string[]>([]);
   searchQuery = signal<string>('');
   licensesSelection = signal<string[]>([]);
@@ -22,12 +28,18 @@ export class AssetsListingComponent {
     this.getAssets();
   }
 
+  getSkeletonArray() {
+    const count = window.innerWidth < 768 ? 4 : 8;
+    return Array.from({ length: count });
+  }
+
   getAssets() {
+    this.loading.set(true);
     this.assetsService
       .getAssets(this.categoriesSelection(), this.searchQuery(), this.licensesSelection())
-      .subscribe((assets) => {
-        this.assets.set(assets.results);
-        console.log(this.assets());
+      .subscribe({
+        next: (response) => this.assets.set(response.results),
+        complete: () => this.loading.set(false),
       });
   }
 

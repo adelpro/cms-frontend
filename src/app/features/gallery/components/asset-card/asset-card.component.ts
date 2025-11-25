@@ -1,10 +1,10 @@
 import { Component, input } from '@angular/core';
-import { Asset } from '../../models/assets.model';
-import { LicenseTagComponent } from '../../../../shared/components/license-tag/license-tag.component';
-import { Categories } from '../../../../core/enums/categories.enum';
-import { TranslatePipe } from '@ngx-translate/core';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
+import { Categories } from '../../../../core/enums/categories.enum';
+import { LicenseTagComponent } from '../../../../shared/components/license-tag/license-tag.component';
+import { Asset } from '../../models/assets.model';
 
 @Component({
   selector: 'app-asset-card',
@@ -26,7 +26,9 @@ import { NzButtonComponent } from 'ng-zorro-antd/button';
             <div class="publisher-info">
               <div class="publisher-text">
                 <span class="label">{{ 'UI.PUBLISHER_LABEL' | translate }}</span>
-                <a routerLink="/publisher/{{ asset().publisher.id }}">{{ asset().publisher.name }}</a>
+                <a routerLink="/publisher/{{ asset().publisher.id }}">{{
+                  asset().publisher.name
+                }}</a>
               </div>
             </div>
           </div>
