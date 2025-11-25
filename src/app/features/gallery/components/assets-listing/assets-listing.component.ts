@@ -1,9 +1,9 @@
 import { isPlatformServer } from '@angular/common';
 import { Component, inject, PLATFORM_ID, signal } from '@angular/core';
+import { AssetCardSkeletonComponent } from '../../../../shared/components/asset-card-skeleton/asset-card-skeleton.component';
 import { FiltersComponent } from '../../../../shared/components/filters/filters.component';
 import { Asset } from '../../models/assets.model';
 import { AssetsService } from '../../services/assets.service';
-import { AssetCardSkeletonComponent } from '../asset-card-skeleton/asset-card-skeleton.component';
 import { AssetCardComponent } from '../asset-card/asset-card.component';
 
 @Component({
