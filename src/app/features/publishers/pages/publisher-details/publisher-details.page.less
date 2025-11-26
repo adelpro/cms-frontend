@@ -50,7 +50,7 @@
 
 .publisher-avatar {
   flex-shrink: 0;
-  
+
   img {
     width: 96px;
     height: 96px;
@@ -166,3 +166,40 @@
   }
 }
 
+// skeleton
+.skeleton-container {
+  display: block;
+}
+
+.skeleton-element {
+  background: #e2e2e2;
+  border-radius: 8px;
+  height: 100px;
+  width: 100%;
+  padding: 1rem;
+  animation: pulse 1.5s infinite ease-in-out;
+
+  @media (min-width: 768px) {
+    height: 150px;
+  }
+}
+
+/* Correct reduced-motion behavior */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-element {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}

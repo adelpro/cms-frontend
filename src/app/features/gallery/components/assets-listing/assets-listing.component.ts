@@ -1,9 +1,9 @@
 import { isPlatformServer } from '@angular/common';
 import { Component, inject, PLATFORM_ID, signal } from '@angular/core';
+import { AssetCardSkeletonComponent } from '../../../../shared/components/asset-card-skeleton/asset-card-skeleton.component';
 import { FiltersComponent } from '../../../../shared/components/filters/filters.component';
 import { Asset } from '../../models/assets.model';
 import { AssetsService } from '../../services/assets.service';
-import { AssetCardSkeletonComponent } from '../asset-card-skeleton/asset-card-skeleton.component';
 import { AssetCardComponent } from '../asset-card/asset-card.component';
 
 @Component({
@@ -29,6 +29,9 @@ export class AssetsListingComponent {
   }
 
   getSkeletonArray() {
+    if (this.isServer) {
+      return [];
+    }
     const count = window.innerWidth < 768 ? 4 : 8;
     return Array.from({ length: count });
   }
@@ -40,6 +43,7 @@ export class AssetsListingComponent {
       .subscribe({
         next: (response) => this.assets.set(response.results),
         complete: () => this.loading.set(false),
+        error: () => this.loading.set(false),
       });
   }
 

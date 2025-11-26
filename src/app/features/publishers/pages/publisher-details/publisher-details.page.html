@@ -43,7 +43,12 @@
                   @if (publisher()!.website) {
                     <div class="meta-item">
                       <i class="bx bx-globe"></i>
-                      <a [href]="publisher()!.website" target="_blank" rel="noopener noreferrer" class="website-link">
+                      <a
+                        [href]="publisher()!.website"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="website-link"
+                      >
                         {{ 'UI.WEBSITE' | translate }}
                       </a>
                     </div>
@@ -61,14 +66,31 @@
             </div>
           </div>
         </div>
+      } @else if (publisherLoading()) {
+        <div class="skeleton-container" aria-hidden="true">
+          <div class="skeleton-element"></div>
+        </div>
+      } @else {
+        <p>{{ 'UI.PUBLISHER_NOT_FOUND' | translate }}</p>
       }
 
       <!-- Assets Listing -->
       <div class="assets-section">
-        <h2 class="assets-title">{{ 'UI.PUBLISHER_ASSETS' | translate }} ({{ assets().length }})</h2>
-        <div class="assets-grid">
-          @for (asset of assets(); track asset.id) {
-            <app-asset-card [asset]="asset" />
+        <h2 class="assets-title">
+          {{ 'UI.PUBLISHER_ASSETS' | translate }}
+          @if (!assetsLoading()) {
+            ({{ assets().length }})
+          }
+        </h2>
+        <div class="assets-grid" [attr.aria-busy]="assetsLoading()">
+          @if (!isServer && assetsLoading()) {
+            @for (item of getSkeletonArray(); track item) {
+              <app-asset-card-skeleton />
+            }
+          } @else {
+            @for (asset of assets(); track asset.id) {
+              <app-asset-card [asset]="asset" />
+            }
           }
         </div>
       </div>

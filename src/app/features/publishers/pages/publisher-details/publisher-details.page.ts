@@ -1,8 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { environment } from '../../../../../environments/environment';
 import { AssetCardComponent } from '../../../../features/gallery/components/asset-card/asset-card.component';
+import { AssetCardSkeletonComponent } from '../../../../shared/components/asset-card-skeleton/asset-card-skeleton.component';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { FiltersComponent } from '../../../../shared/components/filters/filters.component';
 import { Asset } from '../../../gallery/models/assets.model';
@@ -11,7 +13,13 @@ import { Publisher, PublisherService } from '../../services/publisher.service';
 @Component({
   selector: 'app-publisher-details-page',
   standalone: true,
-  imports: [FiltersComponent, AssetCardComponent, TranslateModule, BreadcrumbComponent],
+  imports: [
+    FiltersComponent,
+    AssetCardComponent,
+    TranslateModule,
+    BreadcrumbComponent,
+    AssetCardSkeletonComponent,
+  ],
   templateUrl: './publisher-details.page.html',
   styleUrl: './publisher-details.page.less',
 })
@@ -19,10 +27,15 @@ export class PublisherDetailsPage implements OnInit {
   private readonly publisherService = inject(PublisherService);
   private readonly route = inject(ActivatedRoute);
 
+  private readonly platformId = inject(PLATFORM_ID);
+
+  isServer = isPlatformServer(this.platformId);
+
   readonly id = this.route.snapshot.params['id'];
   publisher = signal<Publisher | null>(null);
   assets = signal<Asset[]>([]);
-  loading = signal<boolean>(true);
+  publisherLoading = signal<boolean>(true);
+  assetsLoading = signal<boolean>(true);
 
   categoriesSelection = signal<string[]>([]);
   searchQuery = signal<string>('');
@@ -33,20 +46,25 @@ export class PublisherDetailsPage implements OnInit {
     this.getAssets();
   }
 
+  getSkeletonArray() {
+    if (this.isServer) {
+      return [];
+    }
+    const count = window.innerWidth < 768 ? 4 : 8;
+    return Array.from({ length: count });
+  }
+
   getPublisherDetails() {
-    this.loading.set(true);
+    this.publisherLoading.set(true);
     this.publisherService.getPublisher(this.id).subscribe({
-      next: (publisher) => {
-        this.publisher.set(publisher);
-        this.loading.set(false);
-      },
-      error: () => {
-        this.loading.set(false);
-      },
+      next: (publisher) => this.publisher.set(publisher),
+      complete: () => this.publisherLoading.set(false),
+      error: () => this.publisherLoading.set(false),
     });
   }
 
   getAssets() {
+    this.assetsLoading.set(true);
     this.publisherService
       .getPublisherAssets(
         this.id,
@@ -55,9 +73,9 @@ export class PublisherDetailsPage implements OnInit {
         this.licensesSelection(),
       )
       .subscribe({
-        next: (response) => {
-          this.assets.set(response.results);
-        },
+        next: (response) => this.assets.set(response.results),
+        complete: () => this.assetsLoading.set(false),
+        error: () => this.assetsLoading.set(false),
       });
   }
 
