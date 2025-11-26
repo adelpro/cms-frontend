@@ -194,16 +194,23 @@
     "CC_BY_ND": "CC BY-ND",
     "CC_BY_NC": "CC BY-NC",
     "CC_BY_NC_SA": "CC BY-NC-SA",
-    "CC_BY_NC_ND": "CC BY-NC-ND"
+    "CC_BY_NC_ND": "CC BY-NC-ND",
+
+    "CC-BY": "CC BY",
+    "CC-BY-SA": "CC BY-SA",
+    "CC-BY-ND": "CC BY-ND",
+    "CC-BY-NC": "CC BY-NC",
+    "CC-BY-NC-SA": "CC BY-NC-SA",
+    "CC-BY-NC-ND": "CC BY-NC-ND"
   },
   "LICENSES_LABELS": {
     "CC0": "مفتوح بالكامل",
     "CC_BY": "مع إسناد",
-    "CC_BY-SA": "إسناد ومشاركة بالمثل",
-    "CC_BY-ND": "إسناد بلا اشتقاق",
-    "CC_BY-NC": "إسناد واستخدام غير تجاري",
-    "CC_BY-NC-SA": "إسناد غير تجاري ومشاركة بالمثل",
-    "CC_BY-NC-ND": "إسناد غير تجاري بلا اشتقاق"
+    "CC_BY_SA": "إسناد ومشاركة بالمثل",
+    "CC_BY_ND": "إسناد بلا اشتقاق",
+    "CC_BY_NC": "إسناد واستخدام غير تجاري",
+    "CC_BY_NC_SA": "إسناد غير تجاري ومشاركة بالمثل",
+    "CC_BY_NC_ND": "إسناد غير تجاري بلا اشتقاق"
   },
   "LICENSES_DESCRIPTIONS": {
     "CC0": "تنازل المنشئ عن جميع حقوق النشر والحقوق المرتبطة. يمكنك نسخ وتعديل وتوزيع واستخدام العمل، حتى للأغراض التجارية، دون طلب إذن.",

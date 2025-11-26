@@ -2,19 +2,19 @@
   [nzColor]="nzColor"
   [ngClass]="{ muted: muted() }"
   [nz-popover]="!isMobileView() ? licenseContent : undefined"
-  [nzPopoverTitle]="!isMobileView() ? license() : undefined"
+  [nzPopoverTitle]="!isMobileView() ? licenseTitle : undefined"
   [nzPopoverContent]="!isMobileView() ? licenseContent : undefined"
   nzPopoverTrigger="hover"
   (click)="isMobileView() ? togglePopover() : null"
 >
   <nz-icon nzType="info-circle" nzTheme="outline" class="tag-icon"></nz-icon>
-  {{ license() }}
+  {{ licenseTitle }}
 </nz-tag>
 
 @if (isMobileView()) {
   <nz-drawer
     [nzVisible]="showPopover()"
-    [nzTitle]="license()"
+    [nzTitle]="licenseTitle"
     nzPlacement="bottom"
     nzHeight="auto"
     (nzOnClose)="showPopover.set(false)"
@@ -35,7 +35,7 @@
       class="license-link"
     >
       <i class="bx bx-arrow-out-up-left-stroke-square"></i>
-      <span>{{ getLearnMoreText() }}</span>
+      <span>{{ LearnMoreText }}</span>
     </a>
   </div>
 </ng-template>

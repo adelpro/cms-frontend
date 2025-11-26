@@ -194,7 +194,14 @@
     "CC_BY_ND": "CC BY-ND",
     "CC_BY_NC": "CC BY-NC",
     "CC_BY_NC_SA": "CC BY-NC-SA",
-    "CC_BY_NC_ND": "CC BY-NC-ND"
+    "CC_BY_NC_ND": "CC BY-NC-ND",
+
+    "CC-BY": "CC BY",
+    "CC-BY-SA": "CC BY-SA",
+    "CC-BY-ND": "CC BY-ND",
+    "CC-BY-NC": "CC BY-NC",
+    "CC-BY-NC-SA": "CC BY-NC-SA",
+    "CC-BY-NC-ND": "CC BY-NC-ND"
   },
   "LICENSES_LABELS": {
     "CC0": "Fully Open",

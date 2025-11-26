@@ -44,23 +44,27 @@ export class LicenseTagComponent implements OnInit {
     return LicensesColors[this.license()];
   }
 
+  get licenseTitle() {
+    return this.translate.instant(`LICENSES.${this.license()}`);
+  }
+
   get description() {
     return this.translate.instant(`LICENSES_DESCRIPTIONS.${this.license()}`);
   }
 
-  getLearnMoreText() {
+  get LearnMoreText() {
     return this.translate.instant('HOME.LEARN_MORE');
   }
 
   getLicenseUrl(licenseCode: string): string | null {
     const licenseMap: Record<string, string> = {
       CC0: 'https://creativecommons.org/publicdomain/zero/1.0/',
-      'CC-BY': 'https://creativecommons.org/licenses/by/4.0/',
-      'CC-BY-SA': 'https://creativecommons.org/licenses/by-sa/4.0/',
-      'CC-BY-ND': 'https://creativecommons.org/licenses/by-nd/4.0/',
-      'CC-BY-NC': 'https://creativecommons.org/licenses/by-nc/4.0/',
-      'CC-BY-NC-SA': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
-      'CC-BY-NC-ND': 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
+      CC_BY: 'https://creativecommons.org/licenses/by/4.0/',
+      CC_BY_SA: 'https://creativecommons.org/licenses/by-sa/4.0/',
+      CC_BY_ND: 'https://creativecommons.org/licenses/by-nd/4.0/',
+      CC_BY_NC: 'https://creativecommons.org/licenses/by-nc/4.0/',
+      CC_BY_NC_SA: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+      CC_BY_NC_ND: 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
     };
     return licenseMap[licenseCode] || null;
   }
