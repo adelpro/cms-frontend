@@ -206,13 +206,13 @@
     "CC-BY-NC-ND": "Attribution Non-Commercial No Derivatives"
   },
   "LICENSES_DESCRIPTIONS": {
-    "CC0": "Fully Open",
-    "CC-BY": "Attribution",
-    "CC-BY-SA": "Attribution ShareAlike",
-    "CC-BY-ND": "Attribution No Derivatives",
-    "CC-BY-NC": "Attribution Non-Commercial",
-    "CC-BY-NC-SA": "Attribution Non-Commercial ShareAlike",
-    "CC-BY-NC-ND": "Attribution Non-Commercial No Derivatives"
+    "CC0": "The creator has waived all copyright and related rights. You can copy, modify, distribute and use the work, even for commercial purposes, all without asking permission.",
+    "CC-BY": "You are free to share and adapt the material for any purpose, even commercially. You must give appropriate credit to the creator, provide a link to the license, and indicate if changes were made.",
+    "CC-BY-SA": "You are free to share and adapt the material for any purpose, even commercially. You must give appropriate credit, and if you remix or build upon the material, you must distribute your contributions under the same license.",
+    "CC-BY-ND": "You are free to share the material for any purpose, even commercially. You must give appropriate credit, and if you remix, transform, or build upon the material, you may not distribute the modified material.",
+    "CC-BY-NC": "You are free to share and adapt the material for non-commercial purposes only. You must give appropriate credit to the creator, provide a link to the license, and indicate if changes were made.",
+    "CC-BY-NC-SA": "You are free to share and adapt the material for non-commercial purposes only. You must give appropriate credit, and if you remix or build upon the material, you must distribute your contributions under the same license.",
+    "CC-BY-NC-ND": "You are free to share the material for non-commercial purposes only. You must give appropriate credit, and if you remix, transform, or build upon the material, you may not distribute the modified material."
   },
   "DOCS": {
     "STANDARDS_TITLE": "Standards",
