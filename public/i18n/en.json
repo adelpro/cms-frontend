@@ -205,6 +205,15 @@
     "CC-BY-NC-SA": "Attribution Non-Commercial ShareAlike",
     "CC-BY-NC-ND": "Attribution Non-Commercial No Derivatives"
   },
+  "LICENSES_DESCRIPTIONS": {
+    "CC0": "Fully Open",
+    "CC-BY": "Attribution",
+    "CC-BY-SA": "Attribution ShareAlike",
+    "CC-BY-ND": "Attribution No Derivatives",
+    "CC-BY-NC": "Attribution Non-Commercial",
+    "CC-BY-NC-SA": "Attribution Non-Commercial ShareAlike",
+    "CC-BY-NC-ND": "Attribution Non-Commercial No Derivatives"
+  },
   "DOCS": {
     "STANDARDS_TITLE": "Standards",
     "STANDARDS_DESC": "Engineering and content standards placeholder."

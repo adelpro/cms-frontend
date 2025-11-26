@@ -1,0 +1,23 @@
+<!-- license-tag.component.html -->
+<nz-tag [nzColor]="nzColor" (click)="togglePopover()" [ngClass]="{ muted: muted() }">
+  <nz-icon nzType="info-circle" nzTheme="outline"></nz-icon>
+  {{ license }}
+
+  @if (isMobileView) {
+    <!-- Mobile Bottom Sheet -->
+    <nz-drawer
+      [nzVisible]="showPopover"
+      nzPlacement="bottom"
+      nzHeight="200px"
+      (click)="togglePopover()"
+      (nzOnClose)="showPopover = false"
+    >
+      <p class="text-lg font-semibold">{{ license }}</p>
+      <p>{{ description }}</p>
+    </nz-drawer>
+  } @else {
+    <!-- Desktop Popover -->
+    <nz-popover nzPopoverTitle="license" nzPopoverContent="description" nzPopoverTrigger="hover">
+    </nz-popover>
+  }
+</nz-tag>
