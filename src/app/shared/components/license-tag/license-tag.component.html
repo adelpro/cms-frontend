@@ -28,7 +28,12 @@
 <ng-template #licenseContent>
   <div class="license-content">
     <p class="license-description">{{ description }}</p>
-    <a [href]="getLicenseUrl(license())" target="_blank" class="license-link">
+    <a
+      [href]="getLicenseUrl(license())"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="license-link"
+    >
       <span>{{ getLearnMoreText() }}</span>
       <nz-icon nzType="arrow-right" nzTheme="outline"></nz-icon>
     </a>
