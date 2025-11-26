@@ -1,5 +1,5 @@
-import { NgClass } from '@angular/common';
-import { Component, HostListener, Input, OnInit, inject, input } from '@angular/core';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { Component, HostListener, OnInit, inject, input, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -10,41 +10,58 @@ import { Licenses, LicensesColors } from '../../../core/enums/licenses.enum';
 @Component({
   selector: 'app-license-tag',
   standalone: true,
-  imports: [NgClass, NzTagModule, NzIconModule, NzPopoverModule, NzDrawerModule],
+  imports: [NgClass, NgTemplateOutlet, NzTagModule, NzIconModule, NzPopoverModule, NzDrawerModule],
   templateUrl: './license-tag.component.html',
   styleUrls: ['./license-tag.component.less'],
 })
 export class LicenseTagComponent implements OnInit {
-  @Input() license!: Licenses;
-
-  showPopover = false;
-  isMobileView = false;
+  license = input.required<Licenses>();
   muted = input<boolean>(false);
+
+  showPopover = signal(false);
+  isMobileView = signal(false);
 
   private translate = inject(TranslateService);
 
   ngOnInit() {
     if (typeof window !== 'undefined') {
-      this.isMobileView = window.innerWidth <= 768;
+      this.isMobileView.set(window.innerWidth <= 768);
     }
   }
 
   @HostListener('window:resize')
   onResize() {
     if (typeof window !== 'undefined') {
-      this.isMobileView = window.innerWidth <= 768;
+      this.isMobileView.set(window.innerWidth <= 768);
     }
   }
 
   togglePopover() {
-    this.showPopover = !this.showPopover;
+    this.showPopover.update((v) => !v);
   }
 
   get nzColor() {
-    return LicensesColors[this.license];
+    return LicensesColors[this.license()];
   }
 
   get description() {
-    return this.translate.instant(`LICENSES_DESCRIPTIONS.${this.license}`);
+    return this.translate.instant(`LICENSES_DESCRIPTIONS.${this.license()}`);
+  }
+
+  getLearnMoreText() {
+    return this.translate.instant('HOME.LEARN_MORE');
+  }
+
+  getLicenseUrl(licenseCode: string): string | null {
+    const licenseMap: Record<string, string> = {
+      CC0: 'https://creativecommons.org/publicdomain/zero/1.0/',
+      'CC-BY': 'https://creativecommons.org/licenses/by/4.0/',
+      'CC-BY-SA': 'https://creativecommons.org/licenses/by-sa/4.0/',
+      'CC-BY-ND': 'https://creativecommons.org/licenses/by-nd/4.0/',
+      'CC-BY-NC': 'https://creativecommons.org/licenses/by-nc/4.0/',
+      'CC-BY-NC-SA': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+      'CC-BY-NC-ND': 'https://creativecommons.org/licenses/by-nc-nd/4.0/',
+    };
+    return licenseMap[licenseCode] || null;
   }
 }

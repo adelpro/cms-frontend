@@ -1,23 +1,36 @@
-<!-- license-tag.component.html -->
-<nz-tag [nzColor]="nzColor" (click)="togglePopover()" [ngClass]="{ muted: muted() }">
-  <nz-icon nzType="info-circle" nzTheme="outline"></nz-icon>
-  {{ license }}
-
-  @if (isMobileView) {
-    <!-- Mobile Bottom Sheet -->
-    <nz-drawer
-      [nzVisible]="showPopover"
-      nzPlacement="bottom"
-      nzHeight="200px"
-      (click)="togglePopover()"
-      (nzOnClose)="showPopover = false"
-    >
-      <p class="text-lg font-semibold">{{ license }}</p>
-      <p>{{ description }}</p>
-    </nz-drawer>
-  } @else {
-    <!-- Desktop Popover -->
-    <nz-popover nzPopoverTitle="license" nzPopoverContent="description" nzPopoverTrigger="hover">
-    </nz-popover>
-  }
+<nz-tag
+  [nzColor]="nzColor"
+  [ngClass]="{ muted: muted() }"
+  [nz-popover]="!isMobileView() ? licenseContent : undefined"
+  [nzPopoverTitle]="!isMobileView() ? license() : undefined"
+  [nzPopoverContent]="!isMobileView() ? licenseContent : undefined"
+  nzPopoverTrigger="hover"
+  (click)="isMobileView() ? togglePopover() : null"
+>
+  <nz-icon nzType="info-circle" nzTheme="outline" class="tag-icon"></nz-icon>
+  {{ license() }}
 </nz-tag>
+
+@if (isMobileView()) {
+  <nz-drawer
+    [nzVisible]="showPopover()"
+    [nzTitle]="license()"
+    nzPlacement="bottom"
+    nzHeight="auto"
+    (nzOnClose)="showPopover.set(false)"
+  >
+    <ng-container *nzDrawerContent>
+      <ng-container *ngTemplateOutlet="licenseContent"></ng-container>
+    </ng-container>
+  </nz-drawer>
+}
+
+<ng-template #licenseContent>
+  <div class="license-content">
+    <p class="license-description">{{ description }}</p>
+    <a [href]="getLicenseUrl(license())" target="_blank" class="license-link">
+      <span>{{ getLearnMoreText() }}</span>
+      <nz-icon nzType="arrow-right" nzTheme="outline"></nz-icon>
+    </a>
+  </div>
+</ng-template>
