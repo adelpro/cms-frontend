@@ -2,7 +2,6 @@ import { isPlatformServer } from '@angular/common';
 import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { environment } from '../../../../../environments/environment';
 import { AssetCardComponent } from '../../../../features/gallery/components/asset-card/asset-card.component';
 import { AssetCardSkeletonComponent } from '../../../../shared/components/asset-card-skeleton/asset-card-skeleton.component';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
@@ -96,11 +95,6 @@ export class PublisherDetailsPage implements OnInit {
 
   getPublisherIconUrl(): string {
     const publisher = this.publisher();
-    if (publisher?.icon_url) {
-      return publisher.icon_url.startsWith('http')
-        ? publisher.icon_url
-        : environment.API_BASE_URL + publisher.icon_url;
-    }
-    return '';
+    return publisher?.icon_url || '';
   }
 }

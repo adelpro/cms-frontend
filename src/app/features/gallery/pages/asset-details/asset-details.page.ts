@@ -78,9 +78,7 @@ export class AssetDetailsPage implements OnInit {
     this.assetsService.getAssetDetails(id).subscribe({
       next: (asset) => {
         this.asset.set(asset);
-        this.images.set(
-          asset.snapshots.map((snapshot) => environment.API_BASE_URL + snapshot.image_url),
-        );
+        this.images.set(asset.snapshots.map((snapshot) => snapshot.image_url));
         this.loading.set(false);
       },
       error: () => {
@@ -251,12 +249,9 @@ export class AssetDetailsPage implements OnInit {
   }
 
   private downloadFileFromUrl(fileUrl: string, filename: string): void {
-    // Build full URL
-    const fullUrl = `${environment.API_BASE_URL}${fileUrl}`;
-
     // Create link and trigger download
     const link = document.createElement('a');
-    link.href = fullUrl;
+    link.href = fileUrl;
     link.download = filename;
     document.body.appendChild(link);
     link.click();
