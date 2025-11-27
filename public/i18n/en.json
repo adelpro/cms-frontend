@@ -194,16 +194,32 @@
     "CC_BY_ND": "CC BY-ND",
     "CC_BY_NC": "CC BY-NC",
     "CC_BY_NC_SA": "CC BY-NC-SA",
-    "CC_BY_NC_ND": "CC BY-NC-ND"
+    "CC_BY_NC_ND": "CC BY-NC-ND",
+
+    "CC-BY": "CC BY",
+    "CC-BY-SA": "CC BY-SA",
+    "CC-BY-ND": "CC BY-ND",
+    "CC-BY-NC": "CC BY-NC",
+    "CC-BY-NC-SA": "CC BY-NC-SA",
+    "CC-BY-NC-ND": "CC BY-NC-ND"
   },
   "LICENSES_LABELS": {
     "CC0": "Fully Open",
-    "CC-BY": "Attribution",
-    "CC-BY-SA": "Attribution ShareAlike",
-    "CC-BY-ND": "Attribution No Derivatives",
-    "CC-BY-NC": "Attribution Non-Commercial",
-    "CC-BY-NC-SA": "Attribution Non-Commercial ShareAlike",
-    "CC-BY-NC-ND": "Attribution Non-Commercial No Derivatives"
+    "CC_BY": "Attribution",
+    "CC_BY_SA": "Attribution ShareAlike",
+    "CC_BY_ND": "Attribution No Derivatives",
+    "CC_BY_NC": "Attribution Non-Commercial",
+    "CC_BY_NC_SA": "Attribution Non-Commercial ShareAlike",
+    "CC_BY_NC_ND": "Attribution Non-Commercial No Derivatives"
+  },
+  "LICENSES_DESCRIPTIONS": {
+    "CC0": "The creator has waived all copyright and related rights. You can copy, modify, distribute and use the work, even for commercial purposes, all without asking permission.",
+    "CC_BY": "You are free to share and adapt the material for any purpose, even commercially. You must give appropriate credit to the creator, provide a link to the license, and indicate if changes were made.",
+    "CC_BY_SA": "You are free to share and adapt the material for any purpose, even commercially. You must give appropriate credit, and if you remix or build upon the material, you must distribute your contributions under the same license.",
+    "CC_BY_ND": "You are free to share the material for any purpose, even commercially. You must give appropriate credit, and if you remix, transform, or build upon the material, you may not distribute the modified material.",
+    "CC_BY_NC": "You are free to share and adapt the material for non-commercial purposes only. You must give appropriate credit to the creator, provide a link to the license, and indicate if changes were made.",
+    "CC_BY_NC_SA": "You are free to share and adapt the material for non-commercial purposes only. You must give appropriate credit, and if you remix or build upon the material, you must distribute your contributions under the same license.",
+    "CC_BY_NC_ND": "You are free to share the material for non-commercial purposes only. You must give appropriate credit, and if you remix, transform, or build upon the material, you may not distribute the modified material."
   },
   "DOCS": {
     "STANDARDS_TITLE": "Standards",
