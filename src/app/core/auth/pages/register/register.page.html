@@ -1,77 +1,190 @@
-<div class="login">
-  <header class="login__header">
-    <div class="login__header-row">
-      <a [routerLink]="['/']" class="login__back" [title]="'AUTH.LOGIN.RETURN_TO_WEBSITE' | translate">
-        <i class='bx bx-home-alt-3'></i> 
+<div class="register">
+  <header class="register__header">
+    <div class="register__header-row">
+      <a
+        [routerLink]="['/']"
+        class="register__back"
+        [title]="'AUTH.LOGIN.RETURN_TO_WEBSITE' | translate"
+      >
+        <i class="bx bx-reply-big"></i>
         {{ 'AUTH.LOGIN.RETURN_TO_WEBSITE' | translate }}
       </a>
       <app-lang-switch></app-lang-switch>
     </div>
   </header>
 
-  <div class="login__container">
-    <div class="login__card">
-      <div class="login__logo">
+  <div class="register__container">
+    <div class="register__card">
+      <div class="register__logo">
         <img src="/assets/images/logo.svg" alt="Itqan" width="50" height="50" />
       </div>
 
-      <div class="login__welcome">
-        <h1 class="login__title">{{ 'AUTH.REGISTER.TITLE' | translate }}</h1>
-        <p class="login__subtitle">{{ 'AUTH.REGISTER.SUBTITLE' | translate }}</p>
+      <div class="register__welcome">
+        <h1 class="register__title">{{ 'AUTH.REGISTER.TITLE' | translate }}</h1>
+        <p class="register__subtitle">{{ 'AUTH.REGISTER.SUBTITLE' | translate }}</p>
       </div>
 
-      <form (ngSubmit)="onSubmit()" [formGroup]="registerForm" class="login__form">
+      <form (ngSubmit)="onSubmit()" [formGroup]="registerForm" class="register__form">
         @if (errorMessage()) {
-          <div class="login__alert">{{ errorMessage() }}</div>
+          <div class="register__alert">{{ errorMessage() }}</div>
         }
 
-        <div class="login__grid">
-          <div class="login__field">
-            <label for="first_name" class="login__label">{{ 'AUTH.REGISTER.FIRST_NAME_LABEL' | translate }}</label>
-            <input id="first_name" type="text" formControlName="first_name" [placeholder]="'FORMS.PLACEHOLDERS.FIRST_NAME' | translate" class="login__input" [class.login__input--invalid]="registerForm.get('first_name')?.invalid && registerForm.get('first_name')?.touched" [attr.aria-invalid]="registerForm.get('first_name')?.invalid && registerForm.get('first_name')?.touched" />
-            @if (registerForm.get('first_name')?.invalid && registerForm.get('first_name')?.touched) {
-              <p class="login__error">{{ 'AUTH.REGISTER.ERRORS.FIRST_NAME_REQUIRED' | translate }}</p>
+        <div class="register__grid">
+          <div class="register__field">
+            <label for="first_name" class="register__label">{{
+              'AUTH.REGISTER.FIRST_NAME_LABEL' | translate
+            }}</label>
+            <input
+              id="first_name"
+              type="text"
+              formControlName="first_name"
+              autocomplete="given-name"
+              [placeholder]="'FORMS.PLACEHOLDERS.FIRST_NAME' | translate"
+              class="register__input"
+              [class.register__input--invalid]="
+                registerForm.get('first_name')?.invalid && registerForm.get('first_name')?.touched
+              "
+              [attr.aria-invalid]="
+                registerForm.get('first_name')?.invalid && registerForm.get('first_name')?.touched
+              "
+            />
+            @if (
+              registerForm.get('first_name')?.invalid && registerForm.get('first_name')?.touched
+            ) {
+              <p class="register__error">
+                {{ 'AUTH.REGISTER.ERRORS.FIRST_NAME_REQUIRED' | translate }}
+              </p>
             }
           </div>
 
-          <div class="login__field">
-            <label for="last_name" class="login__label">{{ 'AUTH.REGISTER.LAST_NAME_LABEL' | translate }}</label>
-            <input id="last_name" type="text" formControlName="last_name" [placeholder]="'FORMS.PLACEHOLDERS.LAST_NAME' | translate" class="login__input" [class.login__input--invalid]="registerForm.get('last_name')?.invalid && registerForm.get('last_name')?.touched" [attr.aria-invalid]="registerForm.get('last_name')?.invalid && registerForm.get('last_name')?.touched" />
+          <div class="register__field">
+            <label for="last_name" class="register__label">{{
+              'AUTH.REGISTER.LAST_NAME_LABEL' | translate
+            }}</label>
+            <input
+              id="last_name"
+              type="text"
+              formControlName="last_name"
+              autocomplete="family-name"
+              [placeholder]="'FORMS.PLACEHOLDERS.LAST_NAME' | translate"
+              class="register__input"
+              [class.register__input--invalid]="
+                registerForm.get('last_name')?.invalid && registerForm.get('last_name')?.touched
+              "
+              [attr.aria-invalid]="
+                registerForm.get('last_name')?.invalid && registerForm.get('last_name')?.touched
+              "
+            />
             @if (registerForm.get('last_name')?.invalid && registerForm.get('last_name')?.touched) {
-              <p class="login__error">{{ 'AUTH.REGISTER.ERRORS.LAST_NAME_REQUIRED' | translate }}</p>
+              <p class="register__error">
+                {{ 'AUTH.REGISTER.ERRORS.LAST_NAME_REQUIRED' | translate }}
+              </p>
             }
           </div>
         </div>
 
-        <div class="login__field">
-          <label for="email" class="login__label">{{ 'AUTH.REGISTER.EMAIL_LABEL' | translate }}</label>
-          <input id="email" type="email" formControlName="email" [placeholder]="'FORMS.PLACEHOLDERS.EMAIL' | translate" class="login__input" [class.login__input--invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" [attr.aria-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" />
+        <div class="register__field">
+          <label for="email" class="register__label">{{
+            'AUTH.REGISTER.EMAIL_LABEL' | translate
+          }}</label>
+          <div class="register__input-wrapper">
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email username"
+              formControlName="email"
+              autocomplete="email"
+              [placeholder]="'FORMS.PLACEHOLDERS.EMAIL' | translate"
+              class="register__input"
+              [class.register__input--invalid]="
+                registerForm.get('email')?.invalid && registerForm.get('email')?.touched
+              "
+              [attr.aria-invalid]="
+                registerForm.get('email')?.invalid && registerForm.get('email')?.touched
+              "
+            />
+            <i class="bx bx-envelope register__input-icon"></i>
+          </div>
           @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-            <p class="login__error">{{ 'AUTH.REGISTER.ERRORS.EMAIL_REQUIRED' | translate }}</p>
+            <p class="register__error">{{ 'AUTH.REGISTER.ERRORS.EMAIL_REQUIRED' | translate }}</p>
           }
         </div>
 
-        <div class="login__field">
-          <label for="password" class="login__label">{{ 'AUTH.REGISTER.PASSWORD_LABEL' | translate }}</label>
-          <input id="password" type="password" formControlName="password" [placeholder]="'FORMS.PLACEHOLDERS.PASSWORD' | translate" class="login__input" [class.login__input--invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" [attr.aria-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" />
+        <div class="register__field">
+          <label for="password" class="register__label">{{
+            'AUTH.REGISTER.PASSWORD_LABEL' | translate
+          }}</label>
+          <div class="register__input-wrapper">
+            <input
+              id="password"
+              name="password"
+              [type]="passwordVisible() ? 'text' : 'password'"
+              autocomplete="new-password"
+              formControlName="password"
+              [placeholder]="'FORMS.PLACEHOLDERS.PASSWORD' | translate"
+              class="register__input"
+              [class.register__input--invalid]="
+                registerForm.get('password')?.invalid && registerForm.get('password')?.touched
+              "
+              [attr.aria-invalid]="
+                registerForm.get('password')?.invalid && registerForm.get('password')?.touched
+              "
+            />
+            <button
+              type="button"
+              class="register__password-toggle"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="
+                (passwordVisible() ? 'AUTH.LOGIN.HIDE_PASSWORD' : 'AUTH.LOGIN.SHOW_PASSWORD')
+                  | translate
+              "
+            >
+              <i class="bx" [ngClass]="passwordVisible() ? 'bx-eye-closed' : 'bx-eye'"></i>
+            </button>
+          </div>
           @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
-            <p class="login__error">{{ 'AUTH.REGISTER.ERRORS.PASSWORD_REQUIRED' | translate }}</p>
+            <p class="register__error">
+              {{ 'AUTH.REGISTER.ERRORS.PASSWORD_REQUIRED' | translate }}
+            </p>
           }
         </div>
 
-        <div class="login__field">
-          <label for="title" class="login__label">{{ 'AUTH.REGISTER.TITLE_LABEL' | translate }}</label>
-          <input id="title" type="text" formControlName="title" [placeholder]="'FORMS.PLACEHOLDERS.TITLE' | translate" class="login__input" />
+        <div class="register__field">
+          <label for="title" class="register__label">{{
+            'AUTH.REGISTER.TITLE_LABEL' | translate
+          }}</label>
+          <input
+            id="title"
+            type="text"
+            formControlName="title"
+            autocomplete="organization-title"
+            [placeholder]="'FORMS.PLACEHOLDERS.TITLE' | translate"
+            class="register__input"
+          />
         </div>
 
-        <div class="login__field">
-          <label for="phone" class="login__label">{{ 'AUTH.REGISTER.PHONE_LABEL' | translate }}</label>
-          <input id="phone" type="tel" formControlName="phone" [placeholder]="'FORMS.PLACEHOLDERS.PHONE_NUMBER' | translate" class="login__input" />
+        <div class="register__field">
+          <label for="phone" class="register__label">{{
+            'AUTH.REGISTER.PHONE_LABEL' | translate
+          }}</label>
+          <input
+            id="phone"
+            type="tel"
+            formControlName="phone"
+            autocomplete="tel"
+            [placeholder]="'FORMS.PLACEHOLDERS.PHONE_NUMBER' | translate"
+            class="register__input"
+          />
         </div>
 
-        <button type="submit" [disabled]="registerForm.invalid || authService.isLoading()" class="login__submit">
+        <button
+          type="submit"
+          [disabled]="registerForm.invalid || authService.isLoading()"
+          class="register__submit"
+        >
           @if (authService.isLoading()) {
-            <span class="login__spinner" aria-hidden="true"></span>
+            <span class="register__spinner" aria-hidden="true"></span>
             <span>{{ 'AUTH.REGISTER.SUBMIT_LOADING' | translate }}</span>
           } @else {
             {{ 'AUTH.REGISTER.SUBMIT_BUTTON' | translate }}
@@ -79,10 +192,12 @@
         </button>
       </form>
 
-      <div class="login__footer">
-        <p class="login__footer-text">
+      <div class="register__footer">
+        <p class="register__footer-text">
           {{ 'AUTH.REGISTER.ALREADY_HAVE_ACCOUNT' | translate }}
-          <a [routerLink]="['/login']" class="login__footer-link">{{ 'AUTH.REGISTER.SIGN_IN_LINK' | translate }}</a>
+          <a [routerLink]="['/login']" class="register__footer-link">{{
+            'AUTH.REGISTER.SIGN_IN_LINK' | translate
+          }}</a>
         </p>
       </div>
     </div>

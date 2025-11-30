@@ -21,6 +21,18 @@ export class LoginPage {
   private readonly fb = inject(FormBuilder);
   private readonly translate = inject(TranslateService);
 
+  passwordVisible = signal(false);
+
+  togglePasswordVisibility(): void {
+    this.passwordVisible.set(!this.passwordVisible());
+  }
+
+  get passwordToggleLabel() {
+    return this.passwordVisible()
+      ? this.translate.instant('AUTH.LOGIN.HIDE_PASSWORD')
+      : this.translate.instant('AUTH.LOGIN.SHOW_PASSWORD');
+  }
+
   loginForm: FormGroup;
   errorMessage = signal<string>('');
 
