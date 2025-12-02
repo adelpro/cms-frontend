@@ -1,12 +1,14 @@
+import { NgClass } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { NgClass } from '@angular/common';
 
 export interface NavigationLink {
   link: string;
   label: string;
   disabled?: boolean;
+  isExternal?: boolean;
+  icon?: string;
 }
 
 @Component({
@@ -17,6 +19,7 @@ export interface NavigationLink {
   template: `
     <nav class="nav-menu">
       @for (link of links(); track link.link) {
+        @if (!link.isExternal) {
         <a
           [routerLink]="link.link"
           routerLinkActive="nav-menu__link--active"
@@ -24,7 +27,23 @@ export interface NavigationLink {
           [ngClass]="{'nav-menu__link--disabled': link.disabled}"
         >
           {{ link.label | translate }}
+          @if (link.icon) {
+            <i class="nav-menu__link-icon {{ link.icon }}"></i>
+          }
         </a>
+        } @else {
+        <a
+          [href]="link.link"
+          target="_blank"
+          class="nav-menu__link"
+          [ngClass]="{'nav-menu__link--disabled': link.disabled}"
+        >
+          {{ link.label | translate }}
+          @if (link.icon) {
+            <i class="nav-menu__link-icon {{ link.icon }}"></i>
+          }
+        </a>
+        }
       }
     </nav>
   `

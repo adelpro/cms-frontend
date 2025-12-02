@@ -122,7 +122,8 @@
     "GALLERY_FULL": "Assets Library",
     "PUBLISHERS": "Publishers",
     "ABOUT": "About",
-    "CONTENT_STANDARDS": "Content Standards"
+    "CONTENT_STANDARDS": "Content Standards",
+    "API_DOCS": "API Docs"
   },
   "HOME": {
     "WELCOME": "Welcome to Itqan CMS",

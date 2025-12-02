@@ -122,7 +122,8 @@
     "GALLERY_FULL": "مكتبة الأصول والموارد",
     "PUBLISHERS": "الناشرين",
     "ABOUT": "عن المشروع",
-    "CONTENT_STANDARDS": "معايير المحتوى والتقنية"
+    "CONTENT_STANDARDS": "معايير المحتوى والتقنية",
+    "API_DOCS": "وثائق الواجهات البرمجية (API)"
   },
   "HOME": {
     "WELCOME": "مرحبًا بك في إتقان CMS",
