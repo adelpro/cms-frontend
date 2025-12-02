@@ -81,7 +81,10 @@
               type="button"
               class="login__password-toggle"
               (click)="togglePasswordVisibility()"
-              [attr.aria-label]="passwordToggleLabel"
+              [attr.aria-label]="
+                (passwordVisible() ? 'AUTH.REGISTER.HIDE_PASSWORD' : 'AUTH.REGISTER.SHOW_PASSWORD')
+                  | translate
+              "
             >
               <i class="bx" [ngClass]="passwordVisible() ? 'bx-eye-closed' : 'bx-eye'"></i>
             </button>

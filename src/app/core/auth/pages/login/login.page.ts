@@ -27,12 +27,6 @@ export class LoginPage {
     this.passwordVisible.set(!this.passwordVisible());
   }
 
-  get passwordToggleLabel() {
-    return this.passwordVisible()
-      ? this.translate.instant('AUTH.LOGIN.HIDE_PASSWORD')
-      : this.translate.instant('AUTH.LOGIN.SHOW_PASSWORD');
-  }
-
   loginForm: FormGroup;
   errorMessage = signal<string>('');
 
