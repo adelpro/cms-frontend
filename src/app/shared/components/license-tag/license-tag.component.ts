@@ -48,6 +48,10 @@ export class LicenseTagComponent implements OnInit {
     return this.translate.instant(`LICENSES.${this.license()}`);
   }
 
+  get licenseFullTitle() {
+    return this.translate.instant(`LICENSES.${this.license()}`) + ' - ' + this.translate.instant(`LICENSES_LABELS.${this.license()}`);
+  }
+
   get description() {
     return this.translate.instant(`LICENSES_DESCRIPTIONS.${this.license()}`);
   }

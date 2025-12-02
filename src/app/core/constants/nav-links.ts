@@ -21,7 +21,7 @@ export const NAV_LINKS = [
   },
   {
     label: 'NAV.API_DOCS',
-    link: `${environment.API_BASE_URL}/docs`,
+    link: `${environment.API_DOCS_URL}`,
     isExternal: true,
     icon: 'bx bx-arrow-out-up-left-stroke-square'
   }

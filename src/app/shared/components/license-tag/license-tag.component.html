@@ -2,7 +2,7 @@
   [nzColor]="nzColor"
   [ngClass]="{ muted: muted() }"
   [nz-popover]="!isMobileView() ? licenseContent : undefined"
-  [nzPopoverTitle]="!isMobileView() ? licenseTitle : undefined"
+  [nzPopoverTitle]="!isMobileView() ? licenseFullTitle : undefined"
   [nzPopoverContent]="!isMobileView() ? licenseContent : undefined"
   nzPopoverTrigger="hover"
   (click)="isMobileView() ? togglePopover() : null"
@@ -14,7 +14,7 @@
 @if (isMobileView()) {
   <nz-drawer
     [nzVisible]="showPopover()"
-    [nzTitle]="licenseTitle"
+    [nzTitle]="licenseFullTitle"
     nzPlacement="bottom"
     nzHeight="auto"
     (nzOnClose)="showPopover.set(false)"
