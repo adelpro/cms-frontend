@@ -4,10 +4,10 @@
       <a
         [routerLink]="['/']"
         class="register__back"
-        [title]="'AUTH.LOGIN.RETURN_TO_WEBSITE' | translate"
+        [title]="'AUTH.REGISTER.RETURN_TO_WEBSITE' | translate"
       >
         <i class="bx bx-reply-big"></i>
-        {{ 'AUTH.LOGIN.RETURN_TO_WEBSITE' | translate }}
+        {{ 'AUTH.REGISTER.RETURN_TO_WEBSITE' | translate }}
       </a>
       <app-lang-switch></app-lang-switch>
     </div>
@@ -94,7 +94,6 @@
               type="email"
               autocomplete="email username"
               formControlName="email"
-              autocomplete="email"
               [placeholder]="'FORMS.PLACEHOLDERS.EMAIL' | translate"
               class="register__input"
               [class.register__input--invalid]="

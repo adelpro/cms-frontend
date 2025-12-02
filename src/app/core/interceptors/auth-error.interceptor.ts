@@ -36,10 +36,10 @@ export function authErrorInterceptor(
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       const isAuthRequest =
-        req.url.includes('/login') ||
-        req.url.includes('/register') ||
-        req.url.includes('/forgot-password') ||
-        req.url.includes('/reset-password');
+        req.url.endsWith('/login') ||
+        req.url.endsWith('/register') ||
+        req.url.endsWith('/forgot-password') ||
+        req.url.endsWith('/reset-password');
 
       // Escape auth requests, no need to check token
       if (isAuthRequest) {

@@ -33,6 +33,7 @@
       "SUBMIT_LOADING": "جاري إنشاء الحساب...",
       "ALREADY_HAVE_ACCOUNT": "لديك حساب بالفعل؟",
       "SIGN_IN_LINK": "تسجيل الدخول",
+      "RETURN_TO_WEBSITE": "العودة إلى الرئيسية",
       "LOGIN_WITH_GOOGLE": "التسجيل بجوجل",
       "LOGIN_WITH_GITHUB": "التسجيل بجيت هاب",
       "ERRORS": {

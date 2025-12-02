@@ -33,6 +33,7 @@
       "SUBMIT_LOADING": "Creating account...",
       "ALREADY_HAVE_ACCOUNT": "Already have an account?",
       "SIGN_IN_LINK": "Sign in",
+      "RETURN_TO_WEBSITE": "Return Home",
       "LOGIN_WITH_GOOGLE": "Sign up with Google",
       "LOGIN_WITH_GITHUB": "Sign up with GitHub",
       "ERRORS": {
