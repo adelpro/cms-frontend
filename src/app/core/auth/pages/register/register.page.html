@@ -6,7 +6,7 @@
         class="register__back"
         [title]="'AUTH.REGISTER.RETURN_TO_WEBSITE' | translate"
       >
-        <i class="bx bx-reply-big"></i>
+        <i class="bx bx-reply-big register__back-icon"></i>
         {{ 'AUTH.REGISTER.RETURN_TO_WEBSITE' | translate }}
       </a>
       <app-lang-switch></app-lang-switch>
@@ -92,7 +92,7 @@
               id="email"
               name="email"
               type="email"
-              autocomplete="email username"
+              autocomplete="email"
               formControlName="email"
               [placeholder]="'FORMS.PLACEHOLDERS.EMAIL' | translate"
               class="register__input"
