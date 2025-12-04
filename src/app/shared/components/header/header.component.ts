@@ -42,7 +42,7 @@ import { AuthService } from '../../../core/auth/services/auth.service';
             <!-- Mobile Menu Button -->
             <div class="app-header__actions-mobile">
               <button ((click))="onMobileMenuToggle()" class="app-header__menu-btn">
-                <i class='bx bx-menu'></i> 
+                <i class="bx bx-menu"></i>
               </button>
             </div>
           </div>

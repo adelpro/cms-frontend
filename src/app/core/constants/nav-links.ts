@@ -15,6 +15,6 @@ export const NAV_LINKS = [
   // },
   {
     label: 'NAV.CONTENT_STANDARDS',
-    link: '/content-standards'
-  }
+    link: '/content-standards',
+  },
 ];

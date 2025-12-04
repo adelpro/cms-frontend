@@ -15,12 +15,13 @@ import { NzButtonComponent } from 'ng-zorro-antd/button';
       <div class="user-actions">
         <app-user-avatar [user]="authService.currentUser()" size="md"></app-user-avatar>
         <button
-          nz-button nzDanger
+          nz-button
+          nzDanger
           (click)="onLogout()"
           [title]="'NAVIGATION.LOGOUT' | translate"
           class="btn__icon ant-btn-floating"
         >
-          <i class='bx bx-arrow-out-left-square-half ltr-flip'></i> 
+          <i class="bx bx-arrow-out-left-square-half ltr-flip"></i>
           <span class="sr-only">{{ 'NAVIGATION.LOGOUT' | translate }}</span>
         </button>
       </div>
@@ -29,11 +30,11 @@ import { NzButtonComponent } from 'ng-zorro-antd/button';
         {{ 'AUTH.LOGIN.SUBMIT_BUTTON' | translate }}
       </a>
     }
-  `
+  `,
 })
 export class UserActionsComponent {
   readonly authService = inject(AuthService);
-  
+
   logoutClicked = output<void>();
 
   onLogout(): void {

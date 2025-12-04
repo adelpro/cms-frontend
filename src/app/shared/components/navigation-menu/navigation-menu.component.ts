@@ -21,13 +21,13 @@ export interface NavigationLink {
           [routerLink]="link.link"
           routerLinkActive="nav-menu__link--active"
           class="nav-menu__link"
-          [ngClass]="{'nav-menu__link--disabled': link.disabled}"
+          [ngClass]="{ 'nav-menu__link--disabled': link.disabled }"
         >
           {{ link.label | translate }}
         </a>
       }
     </nav>
-  `
+  `,
 })
 export class NavigationMenuComponent {
   links = input.required<NavigationLink[]>();
