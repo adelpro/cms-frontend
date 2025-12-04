@@ -1,27 +1,40 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { NzButtonComponent } from "ng-zorro-antd/button";
+import { NzButtonComponent } from 'ng-zorro-antd/button';
 
 @Component({
   selector: 'app-lang-switch',
   standalone: true,
   styleUrls: ['./lang-switch.component.less'],
   template: `
-    <button nz-button
+    <button
+      nz-button
       [title]="langTooltip"
       (click)="toggleLang()"
-      class="btn__icon ant-btn-floating"
+      class="lang-switch__btn"
+      [class.--icon-only]="!showLabel()"
+      [class.w-full]="fullWidth()"
     >
-      <i class='lang-switch__icon bx bx-translate'></i> 
+      <i class="lang-switch__icon bx bx-translate"></i>
       <span class="sr-only">{{ langTooltip }}</span>
+      @if (showLabel()) {
+        <span>{{ label }}</span>
+      }
     </button>
   `,
-  imports: [NzButtonComponent]
+  imports: [NzButtonComponent],
 })
 export class LangSwitchComponent {
   private translate = inject(TranslateService);
 
+  showLabel = input(false);
+  fullWidth = input(false);
+
   get langTooltip() {
+    return this.translate.getCurrentLang() === 'ar' ? 'English' : 'العربية';
+  }
+
+  get label() {
     return this.translate.getCurrentLang() === 'ar' ? 'English' : 'العربية';
   }
 
