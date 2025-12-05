@@ -35,6 +35,12 @@ export class RegisterPage {
     });
   }
 
+  passwordVisible = signal(false);
+
+  togglePasswordVisibility(): void {
+    this.passwordVisible.set(!this.passwordVisible());
+  }
+
   onSubmit(): void {
     if (this.registerForm.valid) {
       this.errorMessage.set('');
