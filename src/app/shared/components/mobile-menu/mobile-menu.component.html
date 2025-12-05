@@ -1,0 +1,56 @@
+<nz-drawer
+  [nzVisible]="isOpen()"
+  [nzPlacement]="placement"
+  [nzTitle]="MenuTitle"
+  [nzWidth]="320"
+  nzWrapClassName="mobile-menu-drawer"
+  (nzOnClose)="close()"
+>
+  <ng-container *nzDrawerContent>
+    <div class="mobile-menu__content">
+      <div class="mobile-menu__nav">
+        <ul class="mobile-menu__links">
+          @for (link of links(); track link.link) {
+            <li class="mobile-menu__link-item">
+              @if (!link.isExternal) {
+                <a
+                  [routerLink]="link.link"
+                  routerLinkActive="mobile-menu__link--active"
+                  class="mobile-menu__link"
+                  [ngClass]="{ 'mobile-menu__link--disabled': link.disabled }"
+                  (click)="close()"
+                >
+                  {{ link.label | translate }}
+                  @if (link.icon) {
+                    <i class="mobile-menu__link-icon {{ link.icon }}"></i>
+                  }
+                </a>
+              } @else {
+                <a
+                  [href]="link.link"
+                  target="_blank"
+                  class="mobile-menu__link"
+                  [ngClass]="{ 'mobile-menu__link--disabled': link.disabled }"
+                  (click)="close()"
+                >
+                  {{ link.label | translate }}
+                  @if (link.icon) {
+                    <i class="mobile-menu__link-icon {{ link.icon }}"></i>
+                  }
+                </a>
+              }
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="mobile-menu__divider"></div>
+
+      <div class="mobile-menu__actions">
+        <app-lang-switch [showLabel]="true" [fullWidth]="true"></app-lang-switch>
+
+        <app-user-actions (logoutClicked)="logout.emit()" [mobileMode]="true"></app-user-actions>
+      </div>
+    </div>
+  </ng-container>
+</nz-drawer>
