@@ -2,8 +2,12 @@
   <!-- Transparent Header -->
   <header class="login__header">
     <div class="login__header-row">
-      <a [routerLink]="['/']" class="login__back" [title]="'AUTH.LOGIN.RETURN_TO_WEBSITE' | translate">
-        <i class='bx bx-home-alt-3'></i> 
+      <a
+        [routerLink]="['/']"
+        class="login__back"
+        [title]="'AUTH.LOGIN.RETURN_TO_WEBSITE' | translate"
+      >
+        <i class="bx bx-reply-big login__back-icon"></i>
         {{ 'AUTH.LOGIN.RETURN_TO_WEBSITE' | translate }}
       </a>
 
@@ -30,21 +34,71 @@
 
         <div class="login__field">
           <label for="email" class="login__label">{{ 'AUTH.LOGIN.EMAIL_LABEL' | translate }}</label>
-          <input id="email" name="email" type="email" formControlName="email" [placeholder]="'FORMS.PLACEHOLDERS.EMAIL' | translate" class="login__input" [class.login__input--invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" [attr.aria-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" />
+          <div class="login__input-wrapper">
+            <input
+              id="email"
+              name="email"
+              type="email"
+              formControlName="email"
+              autocomplete="email"
+              [placeholder]="'FORMS.PLACEHOLDERS.EMAIL' | translate"
+              class="login__input"
+              [class.login__input--invalid]="
+                loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+              "
+              [attr.aria-invalid]="
+                loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+              "
+            />
+            <i class="bx bx-envelope login__input-icon"></i>
+          </div>
           @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
             <p class="login__error">{{ 'AUTH.LOGIN.ERRORS.EMAIL_REQUIRED' | translate }}</p>
           }
         </div>
 
         <div class="login__field">
-          <label for="password" class="login__label">{{ 'AUTH.LOGIN.PASSWORD_LABEL' | translate }}</label>
-          <input id="password" name="password" type="password" formControlName="password" [placeholder]="'FORMS.PLACEHOLDERS.PASSWORD' | translate" class="login__input" [class.login__input--invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" [attr.aria-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" />
+          <label for="password" class="login__label">{{
+            'AUTH.LOGIN.PASSWORD_LABEL' | translate
+          }}</label>
+          <div class="login__input-wrapper">
+            <input
+              id="password"
+              name="password"
+              [type]="passwordVisible() ? 'text' : 'password'"
+              formControlName="password"
+              autocomplete="current-password"
+              [placeholder]="'FORMS.PLACEHOLDERS.PASSWORD' | translate"
+              class="login__input"
+              [class.login__input--invalid]="
+                loginForm.get('password')?.invalid && loginForm.get('password')?.touched
+              "
+              [attr.aria-invalid]="
+                loginForm.get('password')?.invalid && loginForm.get('password')?.touched
+              "
+            />
+            <button
+              type="button"
+              class="login__password-toggle"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="
+                (passwordVisible() ? 'AUTH.LOGIN.HIDE_PASSWORD' : 'AUTH.LOGIN.SHOW_PASSWORD')
+                  | translate
+              "
+            >
+              <i class="bx" [ngClass]="passwordVisible() ? 'bx-eye-closed' : 'bx-eye'"></i>
+            </button>
+          </div>
           @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
             <p class="login__error">{{ 'AUTH.LOGIN.ERRORS.PASSWORD_REQUIRED' | translate }}</p>
           }
         </div>
 
-        <button type="submit" [disabled]="loginForm.invalid || authService.isLoading()" class="login__submit">
+        <button
+          type="submit"
+          [disabled]="loginForm.invalid || authService.isLoading()"
+          class="login__submit"
+        >
           @if (authService.isLoading()) {
             <span class="login__spinner" aria-hidden="true"></span>
           } @else {
@@ -56,11 +110,11 @@
       <div class="login__footer">
         <p class="login__footer-text">
           {{ 'AUTH.LOGIN.NO_ACCOUNT' | translate }}
-          <a [routerLink]="['/register']" class="login__footer-link">{{ 'AUTH.LOGIN.CREATE_ACCOUNT_LINK' | translate }}</a>
+          <a [routerLink]="['/register']" class="login__footer-link">{{
+            'AUTH.LOGIN.CREATE_ACCOUNT_LINK' | translate
+          }}</a>
         </p>
       </div>
     </div>
   </div>
 </div>
-
-

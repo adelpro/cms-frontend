@@ -14,6 +14,8 @@
       "RETURN_TO_WEBSITE": "Return Home",
       "LOGIN_WITH_GOOGLE": "Continue with Google",
       "LOGIN_WITH_GITHUB": "Continue with GitHub",
+      "SHOW_PASSWORD": "Show password",
+      "HIDE_PASSWORD": "Hide password",
       "ERRORS": {
         "EMAIL_REQUIRED": "Please enter a valid email address",
         "PASSWORD_REQUIRED": "Password is required",
@@ -33,8 +35,11 @@
       "SUBMIT_LOADING": "Creating account...",
       "ALREADY_HAVE_ACCOUNT": "Already have an account?",
       "SIGN_IN_LINK": "Sign in",
+      "RETURN_TO_WEBSITE": "Return Home",
       "LOGIN_WITH_GOOGLE": "Sign up with Google",
       "LOGIN_WITH_GITHUB": "Sign up with GitHub",
+      "SHOW_PASSWORD": "Show password",
+      "HIDE_PASSWORD": "Hide password",
       "ERRORS": {
         "FIRST_NAME_REQUIRED": "First name is required",
         "LAST_NAME_REQUIRED": "Last name is required",

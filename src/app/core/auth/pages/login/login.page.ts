@@ -21,6 +21,12 @@ export class LoginPage {
   private readonly fb = inject(FormBuilder);
   private readonly translate = inject(TranslateService);
 
+  passwordVisible = signal(false);
+
+  togglePasswordVisibility(): void {
+    this.passwordVisible.set(!this.passwordVisible());
+  }
+
   loginForm: FormGroup;
   errorMessage = signal<string>('');
 
