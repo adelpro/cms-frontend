@@ -1,3 +1,5 @@
+import { environment } from '../../../environments/environment';
+
 export const NAV_LINKS = [
   {
     label: 'NAV.GALLERY_FULL',
@@ -16,5 +18,11 @@ export const NAV_LINKS = [
   {
     label: 'NAV.CONTENT_STANDARDS',
     link: '/content-standards',
+  },
+  {
+    label: 'NAV.API_DOCS',
+    link: `${environment.API_DOCS_URL}`,
+    isExternal: true,
+    icon: 'bx bx-arrow-out-up-left-stroke-square',
   },
 ];
