@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, throwError, BehaviorSubject, filter, take, switchMap, catchError } from 'rxjs';
+import { BehaviorSubject, catchError, filter, Observable, switchMap, take, throwError } from 'rxjs';
 import { AuthService } from '../auth/services/auth.service';
 
 /**
@@ -35,6 +35,17 @@ export function authErrorInterceptor(
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      const isAuthRequest =
+        req.url.endsWith('/login') ||
+        req.url.endsWith('/register') ||
+        req.url.endsWith('/forgot-password') ||
+        req.url.endsWith('/reset-password');
+
+      // Escape auth requests, no need to check token
+      if (isAuthRequest) {
+        return throwError(() => error);
+      }
+
       // Handle 401 Unauthorized and 403 Forbidden errors
       if (error.status === 401 || error.status === 403) {
         return handle401Or403Error(req, next, authService, router);
@@ -59,7 +70,7 @@ function handle401Or403Error(
   if (req.url.includes('/auth/token/refresh')) {
     // If refresh endpoint itself fails, logout
     authService.logout().subscribe(() => {
-      router.navigate(['/auth/login']);
+      router.navigate(['/login']);
     });
     return throwError(() => new Error('Token refresh failed'));
   }
@@ -75,7 +86,7 @@ function handle401Or403Error(
     if (!refreshToken) {
       isRefreshing = false;
       authService.logout().subscribe(() => {
-        router.navigate(['/auth/login']);
+        router.navigate(['/login']);
       });
       return throwError(() => new Error('No refresh token available'));
     }
@@ -97,7 +108,7 @@ function handle401Or403Error(
 
         // If refresh fails, logout and redirect to login
         authService.logout().subscribe(() => {
-          router.navigate(['/auth/login']);
+          router.navigate(['/login']);
         });
 
         return throwError(() => error);
@@ -106,9 +117,9 @@ function handle401Or403Error(
   } else {
     // If already refreshing, queue this request until refresh completes
     return refreshTokenSubject.pipe(
-      filter(token => token !== null), // Wait for a non-null token
+      filter((token) => token !== null), // Wait for a non-null token
       take(1), // Take only the first emitted token
-      switchMap(token => {
+      switchMap((token) => {
         // Retry the request with the new token
         return next(addAuthHeader(req, token!));
       })
@@ -122,8 +133,7 @@ function handle401Or403Error(
 function addAuthHeader(req: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
   return req.clone({
     setHeaders: {
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   });
 }
-

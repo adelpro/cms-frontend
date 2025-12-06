@@ -21,6 +21,12 @@ export class LoginPage {
   private readonly fb = inject(FormBuilder);
   private readonly translate = inject(TranslateService);
 
+  passwordVisible = signal(false);
+
+  togglePasswordVisibility(): void {
+    this.passwordVisible.set(!this.passwordVisible());
+  }
+
   loginForm: FormGroup;
   errorMessage = signal<string>('');
 
@@ -48,7 +54,7 @@ export class LoginPage {
         error: (error) => {
           this.authService.isLoading.set(false);
           this.errorMessage.set(
-            getErrorMessage(error) || this.translate.instant('AUTH.LOGIN.ERRORS.LOGIN_FAILED'),
+            getErrorMessage(error) || this.translate.instant('AUTH.LOGIN.ERRORS.LOGIN_FAILED')
           );
         },
       });

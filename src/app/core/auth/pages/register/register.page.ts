@@ -35,6 +35,12 @@ export class RegisterPage {
     });
   }
 
+  passwordVisible = signal(false);
+
+  togglePasswordVisibility(): void {
+    this.passwordVisible.set(!this.passwordVisible());
+  }
+
   onSubmit(): void {
     if (this.registerForm.valid) {
       this.errorMessage.set('');
@@ -56,8 +62,7 @@ export class RegisterPage {
           this.authService.isLoading.set(false);
 
           this.errorMessage.set(
-            getErrorMessage(error) ||
-              this.translate.instant('AUTH.REGISTER.ERRORS.REGISTER_FAILED'),
+            getErrorMessage(error) || this.translate.instant('AUTH.REGISTER.ERRORS.REGISTER_FAILED')
           );
         },
       });
