@@ -19,8 +19,6 @@ module.exports = defineConfig([
     plugins: {},
     processor: angular.processInlineTemplates,
     rules: {
-      'prettier/prettier': 'error',
-
       '@angular-eslint/directive-selector': [
         'error',
         {
@@ -46,9 +44,7 @@ module.exports = defineConfig([
     files: ['**/*.html'],
     extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
     plugins: {},
-    rules: {
-      'prettier/prettier': 'error',
-    },
+    rules: {},
   },
   eslintConfigPrettier, // MUST come last
 ]);
