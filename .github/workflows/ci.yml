@@ -87,7 +87,7 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: npm run build -- --configuration=production
+        run: npm run build
 
       - name: Lighthouse CI
         uses: treosh/lighthouse-ci-action@v9
