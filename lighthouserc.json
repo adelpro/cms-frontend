@@ -1,0 +1,22 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist/browser",
+      "numberOfRuns": 3
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    },
+    "assert": {
+      "preset": "lighthouse:recommended",
+      "assertions": {
+        "offscreen-images": "off",
+        "uses-webp-images": "off",
+        "performance": ["error", { "minScore": 0.9 }],
+        "accessibility": ["error", { "minScore": 0.9 }],
+        "best-practices": ["error", { "minScore": 0.9 }],
+        "seo": ["error", { "minScore": 0.9 }]
+      }
+    }
+  }
+}
