@@ -89,12 +89,7 @@ jobs:
       - name: Build project
         run: npm run build -- --configuration=production
 
-      - name: Run Lighthouse CI
+      - name: Lighthouse CI
         uses: treosh/lighthouse-ci-action@v9
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ github.token }}
         with:
-          uploadArtifacts: true
-          uploadReport: true
-          staticDistDir: ./dist/browser
-          thresholds: '{"performance":0.9,"accessibility":0.9,"best-practices":0.9,"seo":0.9}'
+          configPath: './.lighthouserc.json'
