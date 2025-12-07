@@ -33,8 +33,7 @@
     "lint:fix": "ng lint --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky install",
-    "lhci": "lhci autorun"
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.{ts,js}": ["eslint --fix", "prettier --write"],
@@ -63,7 +62,6 @@
     "@angular/compiler-cli": "^20.3.7",
     "@commitlint/cli": "^19.0.0",
     "@commitlint/config-conventional": "^19.0.0",
-    "@lhci/cli": "^0.15.1",
     "@types/jasmine": "~5.1.0",
     "angular-eslint": "21.0.0",
     "eslint": "^9.39.1",
