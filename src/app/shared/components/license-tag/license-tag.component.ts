@@ -18,8 +18,10 @@ import { ViewportService } from '../../../core/services/viewport.service';
 export class LicenseTagComponent {
   license = input.required<Licenses>();
   muted = input<boolean>(false);
+  mode = input<'default' | 'inline'>('default');
 
   showPopover = signal(false);
+  expanded = signal(false);
 
   private viewportService = inject(ViewportService);
   isMobileView = this.viewportService.isMobile;
@@ -27,7 +29,11 @@ export class LicenseTagComponent {
   private translate = inject(TranslateService);
 
   togglePopover() {
-    this.showPopover.update((v) => !v);
+    if (this.mode() === 'inline') {
+      this.expanded.update((v) => !v);
+    } else {
+      this.showPopover.update((v) => !v);
+    }
   }
 
   get nzColor() {

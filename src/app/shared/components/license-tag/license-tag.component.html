@@ -1,17 +1,33 @@
 <nz-tag
   [nzColor]="nzColor"
-  [ngClass]="{ muted: muted() }"
-  [nz-popover]="!isMobileView() ? licenseContent : undefined"
-  [nzPopoverTitle]="!isMobileView() ? licenseFullTitle : undefined"
-  [nzPopoverContent]="!isMobileView() ? licenseContent : undefined"
+  [ngClass]="{ muted: muted(), 'cursor-pointer': isMobileView() || mode() === 'inline' }"
+  [nz-popover]="!isMobileView() && mode() !== 'inline' ? licenseContent : undefined"
+  [nzPopoverTitle]="!isMobileView() && mode() !== 'inline' ? licenseFullTitle : undefined"
+  [nzPopoverContent]="!isMobileView() && mode() !== 'inline' ? licenseContent : undefined"
   nzPopoverTrigger="hover"
-  (click)="isMobileView() ? togglePopover() : null"
+  (click)="isMobileView() || mode() === 'inline' ? togglePopover() : null"
+  (click)="isMobileView() || mode() === 'inline' ? togglePopover() : null"
 >
-  <nz-icon nzType="info-circle" nzTheme="outline" class="tag-icon"></nz-icon>
-  {{ licenseTitle }}
+  <span style="display: flex; align-items: center; gap: 4px">
+    <nz-icon nzType="info-circle" nzTheme="outline" class="tag-icon"></nz-icon>
+    {{ licenseTitle }}
+    @if (mode() === 'inline') {
+      <i
+        class="bx"
+        [ngClass]="expanded() ? 'bx-chevron-up' : 'bx-chevron-down'"
+        style="font-size: 1.2em; line-height: 0"
+      ></i>
+    }
+  </span>
 </nz-tag>
 
-@if (isMobileView()) {
+@if (mode() === 'inline' && expanded()) {
+  <div class="inline-details">
+    <ng-container *ngTemplateOutlet="licenseContent"></ng-container>
+  </div>
+}
+
+@if (isMobileView() && mode() !== 'inline') {
   <nz-drawer
     [nzVisible]="showPopover()"
     [nzTitle]="licenseFullTitle"
