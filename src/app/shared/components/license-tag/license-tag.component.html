@@ -5,8 +5,7 @@
   [nzPopoverTitle]="!isMobileView() && mode() !== 'inline' ? licenseFullTitle : undefined"
   [nzPopoverContent]="!isMobileView() && mode() !== 'inline' ? licenseContent : undefined"
   nzPopoverTrigger="hover"
-  (click)="isMobileView() || mode() === 'inline' ? togglePopover() : null"
-  (click)="isMobileView() || mode() === 'inline' ? togglePopover() : null"
+  (click)="handleTagClick()"
 >
   <span style="display: flex; align-items: center; gap: 4px">
     <nz-icon nzType="info-circle" nzTheme="outline" class="tag-icon"></nz-icon>

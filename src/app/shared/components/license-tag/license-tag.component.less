@@ -1,3 +1,14 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
 // Unified content styling for both popover and drawer
 .license-content {
   max-width: 320px;
@@ -43,6 +54,7 @@
   border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 8px;
   animation: slideDown 0.2s ease-out;
+  width: 100%; // Fill width of the host
 
   .license-content {
     max-width: 100%; // Allowed to expand in the inline block

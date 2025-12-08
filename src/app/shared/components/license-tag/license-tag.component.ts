@@ -28,11 +28,13 @@ export class LicenseTagComponent {
 
   private translate = inject(TranslateService);
 
-  togglePopover() {
-    if (this.mode() === 'inline') {
-      this.expanded.update((v) => !v);
-    } else {
-      this.showPopover.update((v) => !v);
+  handleTagClick() {
+    if (this.isMobileView() || this.mode() === 'inline') {
+      if (this.mode() === 'inline') {
+        this.expanded.update((v) => !v);
+      } else {
+        this.showPopover.update((v) => !v);
+      }
     }
   }
 
