@@ -1,27 +1,30 @@
 <nz-tag
   [nzColor]="nzColor"
-  [ngClass]="{ muted: muted(), 'cursor-pointer': isMobileView() || mode() === 'inline' }"
+  [ngClass]="{ muted: muted() }"
   [nz-popover]="!isMobileView() && mode() !== 'inline' ? licenseContent : undefined"
   [nzPopoverTitle]="!isMobileView() && mode() !== 'inline' ? licenseFullTitle : undefined"
   [nzPopoverContent]="!isMobileView() && mode() !== 'inline' ? licenseContent : undefined"
   nzPopoverTrigger="hover"
+  role="button"
+  aria-expanded="{{ expanded() }}"
+  aria-label="License info"
   (click)="handleTagClick()"
 >
-  <span style="display: flex; align-items: center; gap: 4px">
-    <nz-icon nzType="info-circle" nzTheme="outline" class="tag-icon"></nz-icon>
-    {{ licenseTitle }}
+  <span class="tag-label">
+    <i class="bx bx-info-circle tag-icon" aria-hidden="true"></i>
+    <span>{{ licenseTitle }}</span>
     @if (mode() === 'inline') {
       <i
-        class="bx"
+        class="bx toggle-icon"
         [ngClass]="expanded() ? 'bx-chevron-up' : 'bx-chevron-down'"
-        style="font-size: 1.2em; line-height: 0"
+        aria-hidden="true"
       ></i>
     }
   </span>
 </nz-tag>
 
 @if (mode() === 'inline' && expanded()) {
-  <div class="inline-details">
+  <div class="inline-details" role="region" aria-label="License details">
     <ng-container *ngTemplateOutlet="licenseContent"></ng-container>
   </div>
 }
@@ -32,6 +35,8 @@
     [nzTitle]="licenseFullTitle"
     nzPlacement="bottom"
     nzHeight="auto"
+    role="dialog"
+    aria-modal="true"
     (nzOnClose)="showPopover.set(false)"
   >
     <ng-container *nzDrawerContent>
@@ -48,8 +53,10 @@
       target="_blank"
       rel="noopener noreferrer"
       class="license-link"
+      role="link"
+      aria-label="Learn more about {{ licenseTitle }}"
     >
-      <i class="bx bx-arrow-out-up-left-stroke-square"></i>
+      <i class="bx bx-arrow-out-up-left-stroke-square" aria-hidden="true"></i>
       <span>{{ LearnMoreText }}</span>
     </a>
   </div>
